@@ -1,376 +1,706 @@
-# PLAN.md — OpenClaw Minimal
+# 🎯 PicoClaw - Plan de Refactoring Détaillé
 
-**Projet :** OpenClaw Minimal  
+**Version :** 1.0  
 **Date :** 2026-02-11  
-**Auteur :** Luca + Claudia
+**Objectif :** Version minimaliste avec Telegram uniquement
 
 ---
 
-## 🎯 Vision
+## 📋 RÉSUMÉ - Fichiers à MODIFIER (pas juste supprimer)
 
-Transformer OpenClaw (multi-channel AI gateway) en version **minimaliste** optimisée pour un usage personnel avec :
+| # | Fichier | Type de modif | Complexité |
+|---|---------|---------------|------------|
+| 1 | `src/plugins/runtime/index.ts` | Supprimer ~80 lignes imports + refs | 🔴 Haute |
+| 2 | `src/channels/dock.ts` | Supprimer imports + DOCKS entries | 🔴 Haute |
+| 3 | `src/channels/registry.ts` | Réduire CHAT_CHANNEL_ORDER | 🟡 Moyenne |
+| 4 | `src/infra/outbound/deliver.ts` | Supprimer types + imports | 🟡 Moyenne |
+| 5 | `src/infra/outbound/outbound-session.ts` | Supprimer imports channels | 🟡 Moyenne |
+| 6 | `src/config/types.channels.ts` | Supprimer imports types | 🟢 Simple |
+| 7 | `src/config/types.ts` | Supprimer exports | 🟢 Simple |
+| 8 | `src/gateway/server-http.ts` | Supprimer Slack handler (2 lignes) | 🟢 Simple |
+| 9 | `src/cli/deps.ts` | Supprimer import Slack | 🟢 Simple |
+| 10 | `src/plugin-sdk/index.ts` | Supprimer exports Slack | 🟢 Simple |
+| 11 | `src/auto-reply/reply/commands-allowlist.ts` | Supprimer imports channels | 🟡 Moyenne |
+| 12 | `src/auto-reply/reply/normalize-reply.ts` | Supprimer Line refs | 🟢 Simple |
+| 13 | `src/channels/plugins/group-mentions.ts` | Supprimer fonctions channels | 🟡 Moyenne |
+| 14 | `src/agents/openclaw-tools.ts` | Supprimer TTS tool | 🟢 Simple |
+| 15 | `src/plugins/runtime/types.ts` | Supprimer type TTS | 🟢 Simple |
+| 16 | `src/config/types.messages.ts` | Supprimer import TTS | 🟢 Simple |
+| 17 | Autres fichiers TTS (5 fichiers) | Supprimer imports TTS | 🟢 Simple |
 
-- **Telegram** comme unique channel
-- **Gateway** pour l'orchestration
-- **Agent** avec pi-coding-agent (read/write/bash/edit)
-- **Memory** style Clawdbot (SOUL/IDENTITY/MEMORY.md)
-- **web_search** via Brave API
-- **Browser** Playwright (optionnel)
-- **UI/TUI** conservés
+**Total : ~20 fichiers à modifier manuellement**
 
 ---
 
-## 📊 Objectifs chiffrés
+## 📊 Vue d'ensemble
 
-| Métrique | Avant | Cible | Réduction |
+### Objectif final
+- **1 seul channel** : Telegram
+- **Core tools** : read/write/bash/edit, web_search (Brave), browser (Playwright)
+- **Memory** : SOUL/IDENTITY/MEMORY.md
+- **Libs pi-*** : pi-agent-core, pi-ai, pi-coding-agent
+
+### Métriques cibles
+| Métrique | Avant | Après | Réduction |
 |----------|-------|-------|-----------|
-| Code source | ~477K LOC | ~200K LOC | -58% |
-| Dépendances npm | ~62 | ~35 | -44% |
-| Extensions | 37 | 2 | -95% |
-| Skills | 52 | 2-5 | -95% |
 | Channels | 17 | 1 | -94% |
+| Extensions | 37 | 2 | -95% |
+| Code LOC | ~477K | ~200K | -58% |
 
 ---
 
-## 📁 Documentation détaillée
+## 🔴 PHASE 1 : Modifications Code CRITIQUES
 
-- **Architecture :** `work/CODEBASE.md`
-- **Stack technique :** `work/STACK.md`
-- **Liste des suppressions :** `work/TODO.md`
-- **Plan centralisé :** `work/TODO_PLAN.md`
-- **Phases détaillées :** `work/phases/phase_*.md`
+> ⚠️ Ces fichiers ont des imports multi-channels. Ils doivent être modifiés AVANT de supprimer les dossiers channels.
 
----
+### 1.1 `src/plugins/runtime/index.ts` (HUB CENTRAL)
 
-## 🔄 Phase 1 — Préparation
+**Localisation :** Lignes 1-150 (imports)
 
-> Détails : `work/phases/phase_1.md`  
-> **Durée :** 1-2h | **Risque :** Faible
+**SUPPRIMER ces imports :**
+```typescript
+// Ligne 5-6 : Actions channels
+import { handleSlackAction } from "../../agents/tools/slack-actions.js";
+import { handleWhatsAppAction } from "../../agents/tools/whatsapp-actions.js";
 
-### Tâches
+// Ligne 42-45 : Message actions
+import { discordMessageActions } from "../../channels/plugins/actions/discord.js";
+import { signalMessageActions } from "../../channels/plugins/actions/signal.js";
+import { createWhatsAppLoginTool } from "../../channels/plugins/agent-tools/whatsapp-login.js";
 
-- [ ] 1.1 — Exécuter `git checkout -b feature/minimal`
-- [ ] 1.2 — Exécuter `find src -name "*.ts" | xargs wc -l | tail -1` et noter le résultat
-- [ ] 1.3 — Exécuter `find extensions -name "*.ts" | xargs wc -l | tail -1` et noter le résultat
-- [ ] 1.4 — Exécuter `find skills -type d -maxdepth 1 | wc -l` et noter le résultat
-- [ ] 1.5 — Exécuter `du -sh src/ extensions/ skills/ apps/ ui/` et noter les résultats
-- [ ] 1.6 — Créer `work/METRICS_BEFORE.md` avec toutes les métriques collectées
-- [ ] 1.7 — Exécuter `git add -A && git commit -m "chore: snapshot before minimal refactoring"`
-- [ ] 1.8 — Exécuter `git push origin feature/minimal`
+// Ligne 55-62 : Discord
+import { auditDiscordChannelPermissions } from "../../discord/audit.js";
+import { listDiscordDirectoryGroupsLive, listDiscordDirectoryPeersLive } from "../../discord/directory-live.js";
+import { monitorDiscordProvider } from "../../discord/monitor.js";
+import { probeDiscord } from "../../discord/probe.js";
+import { resolveDiscordChannelAllowlist } from "../../discord/resolve-channels.js";
+import { resolveDiscordUserAllowlist } from "../../discord/resolve-users.js";
+import { sendMessageDiscord, sendPollDiscord } from "../../discord/send.js";
 
-**Critères de succès :**
-- Branche `feature/minimal` créée et pushée
-- `work/METRICS_BEFORE.md` existe avec les métriques
+// Ligne 65-68 : iMessage
+import { monitorIMessageProvider } from "../../imessage/monitor.js";
+import { probeIMessage } from "../../imessage/probe.js";
+import { sendMessageIMessage } from "../../imessage/send.js";
 
----
+// Ligne 73-87 : Line
+import { listLineAccountIds, normalizeAccountId as normalizeLineAccountId, ... } from "../../line/accounts.js";
+import { monitorLineProvider } from "../../line/monitor.js";
+import { probeLineBot } from "../../line/probe.js";
+import { createQuickReplyItems, pushMessageLine, ... } from "../../line/send.js";
+import { buildTemplateMessageFromPayload } from "../../line/template-messages.js";
 
-## 🔄 Phase 2 — Suppression Apps Natives
+// Ligne 100-107 : Signal
+import { monitorSignalProvider } from "../../signal/index.js";
+import { probeSignal } from "../../signal/probe.js";
+import { sendMessageSignal } from "../../signal/send.js";
 
-> Détails : `work/phases/phase_2.md`  
-> **Durée :** 30 min | **Risque :** Très faible
+// Ligne 108-115 : Slack
+import { listSlackDirectoryGroupsLive, listSlackDirectoryPeersLive } from "../../slack/directory-live.js";
+import { monitorSlackProvider } from "../../slack/index.js";
+import { probeSlack } from "../../slack/probe.js";
+import { resolveSlackChannelAllowlist } from "../../slack/resolve-channels.js";
+import { resolveSlackUserAllowlist } from "../../slack/resolve-users.js";
+import { sendMessageSlack } from "../../slack/send.js";
 
-### Tâches
+// Ligne 125-135 : TTS
+import { textToSpeechTelephony } from "../../tts/tts.js";
 
-- [ ] 2.1 — Exécuter `rm -rf apps/ios/`
-- [ ] 2.2 — Exécuter `rm -rf apps/android/`
-- [ ] 2.3 — Exécuter `rm -rf apps/macos/`
-- [ ] 2.4 — Exécuter `rm -rf apps/shared/`
-- [ ] 2.5 — Exécuter `rm -rf Swabble/`
-- [ ] 2.6 — Exécuter `rm -f .swiftformat`
-- [ ] 2.7 — Exécuter `rm -f .swiftlint.yml`
-- [ ] 2.8 — Éditer `package.json` : supprimer tous les scripts commençant par `android:`
-- [ ] 2.9 — Éditer `package.json` : supprimer tous les scripts commençant par `ios:`
-- [ ] 2.10 — Éditer `package.json` : supprimer tous les scripts commençant par `mac:`
-- [ ] 2.11 — Éditer `package.json` : supprimer les scripts `format:swift` et `lint:swift`
-- [ ] 2.12 — Vérifier `pnpm-workspace.yaml` et retirer référence à `apps/*` si présente
-- [ ] 2.13 — Exécuter `pnpm install`
-- [ ] 2.14 — Exécuter `pnpm build` et vérifier qu'il n'y a pas d'erreur
-- [ ] 2.15 — Exécuter `git add -A && git commit -m "refactor: remove native apps (iOS/Android/macOS)"`
+// Ligne 136-145 : Web/WhatsApp
+import { getActiveWebListener } from "../../web/active-listener.js";
+import { getWebAuthAgeMs, logoutWeb, logWebSelfId, readWebSelfId, webAuthExists } from "../../web/auth-store.js";
+import { startWebLoginWithQr, waitForWebLogin } from "../../web/login-qr.js";
+import { loginWeb } from "../../web/login.js";
+import { loadWebMedia } from "../../web/media.js";
+import { sendMessageWhatsApp, sendPollWhatsApp } from "../../web/outbound.js";
+```
 
-**Critères de succès :**
-- Dossier `apps/` vide ou supprimé
-- `Swabble/` supprimé
-- `pnpm build` passe sans erreur
+**GARDER :**
+```typescript
+// Telegram imports
+import { telegramMessageActions } from "../../channels/plugins/actions/telegram.js";
+import { auditTelegramGroupMembership, collectTelegramUnmentionedGroupIds } from "../../telegram/audit.js";
+import { monitorTelegramProvider } from "../../telegram/monitor.js";
+import { probeTelegram } from "../../telegram/probe.js";
+import { sendMessageTelegram } from "../../telegram/send.js";
+import { resolveTelegramToken } from "../../telegram/token.js";
+```
 
----
-
-## 🔄 Phase 3 — Suppression Channels
-
-> Détails : `work/phases/phase_3.md`  
-> **Durée :** 2-3h | **Risque :** Élevé ⚠️
-
-### 3A — Extensions channels isolées (pas de couplage)
-
-- [ ] 3.1 — Exécuter `rm -rf extensions/irc/`
-- [ ] 3.2 — Exécuter `rm -rf extensions/matrix/`
-- [ ] 3.3 — Exécuter `rm -rf extensions/nostr/`
-- [ ] 3.4 — Exécuter `rm -rf extensions/tlon/`
-- [ ] 3.5 — Exécuter `rm -rf extensions/nextcloud-talk/`
-- [ ] 3.6 — Exécuter `rm -rf extensions/mattermost/`
-- [ ] 3.7 — Exécuter `rm -rf extensions/msteams/`
-- [ ] 3.8 — Exécuter `rm -rf extensions/twitch/`
-- [ ] 3.9 — Exécuter `rm -rf extensions/googlechat/`
-- [ ] 3.10 — Exécuter `rm -rf extensions/zalo/`
-- [ ] 3.11 — Exécuter `rm -rf extensions/zalouser/`
-- [ ] 3.12 — Exécuter `pnpm build` et vérifier pas d'erreur
-
-### 3B — Extensions channels avec handlers HTTP
-
-- [ ] 3.13 — Exécuter `rm -rf extensions/discord/`
-- [ ] 3.14 — Exécuter `rm -rf extensions/slack/`
-- [ ] 3.15 — Exécuter `rm -rf extensions/line/`
-- [ ] 3.16 — Exécuter `rm -rf extensions/feishu/`
-- [ ] 3.17 — Exécuter `pnpm build` et noter les erreurs d'import
-
-### 3C — Extensions channels complexes
-
-- [ ] 3.18 — Exécuter `rm -rf extensions/whatsapp/`
-- [ ] 3.19 — Exécuter `rm -rf extensions/signal/`
-- [ ] 3.20 — Exécuter `rm -rf extensions/imessage/`
-- [ ] 3.21 — Exécuter `rm -rf extensions/bluebubbles/`
-
-### 3D — Sources channels dans src/
-
-- [ ] 3.22 — Exécuter `rm -rf src/discord/`
-- [ ] 3.23 — Exécuter `rm -rf src/slack/`
-- [ ] 3.24 — Exécuter `rm -rf src/signal/`
-- [ ] 3.25 — Exécuter `rm -rf src/line/`
-- [ ] 3.26 — Exécuter `rm -rf src/imessage/`
-- [ ] 3.27 — Exécuter `rm -rf src/whatsapp/`
-
-### 3E — Modification Gateway (CRITIQUE)
-
-- [ ] 3.28 — Ouvrir `src/gateway/server-http.ts` et supprimer l'import `handleSlackHttpRequest`
-- [ ] 3.29 — Dans `src/gateway/server-http.ts`, supprimer le handler/route Slack
-- [ ] 3.30 — Ouvrir `src/channels/dock.ts` et retirer les références aux channels supprimés
-- [ ] 3.31 — Ouvrir `src/channels/registry.ts` et simplifier pour Telegram uniquement
-- [ ] 3.32 — Exécuter `pnpm build` et lister toutes les erreurs
-
-### 3F — Plugins et skills channels
-
-- [ ] 3.33 — Exécuter `rm -f src/channels/plugins/bluebubbles-actions.ts`
-- [ ] 3.34 — Exécuter `rm -f src/channels/plugins/slack.actions.ts`
-- [ ] 3.35 — Exécuter `rm -f src/channels/plugins/slack.actions.test.ts`
-- [ ] 3.36 — Exécuter `rm -f src/channels/plugins/whatsapp-heartbeat.ts`
-- [ ] 3.37 — Chercher et supprimer autres fichiers channel-specific dans `src/channels/plugins/`
-- [ ] 3.38 — Exécuter `rm -rf skills/bluebubbles/`
-- [ ] 3.39 — Exécuter `rm -rf skills/imsg/`
-- [ ] 3.40 — Exécuter `rm -rf skills/slack/`
-- [ ] 3.41 — Exécuter `rm -rf skills/discord/`
-
-### 3G — Dépendances npm channels
-
-- [ ] 3.42 — Éditer `package.json` : supprimer `@whiskeysockets/baileys`
-- [ ] 3.43 — Éditer `package.json` : supprimer `discord-api-types`
-- [ ] 3.44 — Éditer `package.json` : supprimer `@buape/carbon`
-- [ ] 3.45 — Éditer `package.json` : supprimer `@slack/bolt`
-- [ ] 3.46 — Éditer `package.json` : supprimer `@slack/web-api`
-- [ ] 3.47 — Éditer `package.json` : supprimer `signal-utils`
-- [ ] 3.48 — Éditer `package.json` : supprimer `@line/bot-sdk`
-- [ ] 3.49 — Éditer `package.json` : supprimer `@larksuiteoapi/node-sdk`
-
-### 3H — Correction et validation
-
-- [ ] 3.50 — Exécuter `grep -r "from.*discord\|from.*slack\|from.*whatsapp\|from.*signal\|from.*line\|from.*imessage" src/ --include="*.ts"` et corriger chaque import trouvé
-- [ ] 3.51 — Exécuter `pnpm install`
-- [ ] 3.52 — Exécuter `pnpm build` et corriger toute erreur restante
-- [ ] 3.53 — Exécuter `git add -A && git commit -m "refactor: remove all channels except Telegram"`
-
-**Critères de succès :**
-- 17 channels supprimés
-- Telegram fonctionne toujours
-- `pnpm build` passe sans erreur
+**Dans le corps du fichier :** Supprimer toutes les références aux fonctions supprimées dans l'objet `PluginRuntime`.
 
 ---
 
-## 🔄 Phase 4 — Suppression Voice/TTS
+### 1.2 `src/channels/dock.ts`
 
-> Détails : `work/phases/phase_4.md`  
-> **Durée :** 30 min | **Risque :** Faible
+**SUPPRIMER ces imports (lignes 15-27) :**
+```typescript
+import { resolveDiscordAccount } from "../discord/accounts.js";
+import { resolveIMessageAccount } from "../imessage/accounts.js";
+import { resolveSignalAccount } from "../signal/accounts.js";
+import { resolveSlackAccount, resolveSlackReplyToMode } from "../slack/accounts.js";
+import { buildSlackThreadingToolContext } from "../slack/threading-tool-context.js";
+import { resolveWhatsAppAccount } from "../web/accounts.js";
+import { normalizeWhatsAppTarget } from "../whatsapp/normalize.js";
+import {
+  resolveDiscordGroupRequireMention,
+  resolveDiscordGroupToolPolicy,
+  resolveGoogleChatGroupRequireMention,
+  resolveGoogleChatGroupToolPolicy,
+  resolveIMessageGroupRequireMention,
+  resolveIMessageGroupToolPolicy,
+  resolveSlackGroupRequireMention,
+  resolveSlackGroupToolPolicy,
+  resolveWhatsAppGroupRequireMention,
+  resolveWhatsAppGroupToolPolicy,
+} from "./plugins/group-mentions.js";
+```
 
-### Tâches
-
-- [ ] 4.1 — Exécuter `rm -rf src/tts/`
-- [ ] 4.2 — Exécuter `rm -rf extensions/voice-call/`
-- [ ] 4.3 — Exécuter `rm -rf extensions/talk-voice/`
-- [ ] 4.4 — Exécuter `rm -rf skills/sag/`
-- [ ] 4.5 — Exécuter `rm -rf skills/openai-whisper/`
-- [ ] 4.6 — Exécuter `rm -rf skills/openai-whisper-api/`
-- [ ] 4.7 — Exécuter `rm -rf skills/sherpa-onnx-tts/`
-- [ ] 4.8 — Éditer `package.json` : supprimer `node-edge-tts`
-- [ ] 4.9 — Exécuter `grep -r "from.*tts\|import.*tts" src/ --include="*.ts"` et corriger si nécessaire
-- [ ] 4.10 — Exécuter `pnpm install`
-- [ ] 4.11 — Exécuter `pnpm build` et vérifier pas d'erreur
-- [ ] 4.12 — Exécuter `git add -A && git commit -m "refactor: remove voice and TTS"`
-
-**Critères de succès :**
-- Voice/TTS complètement supprimé
-- `pnpm build` passe sans erreur
-
----
-
-## 🔄 Phase 5 — Nettoyage Skills & Extensions
-
-> Détails : `work/phases/phase_5.md`  
-> **Durée :** 1h | **Risque :** Faible-Moyen
-
-### 5A — Skills outils externes
-
-- [ ] 5.1 — Exécuter `rm -rf skills/1password/`
-- [ ] 5.2 — Exécuter `rm -rf skills/apple-notes/`
-- [ ] 5.3 — Exécuter `rm -rf skills/apple-reminders/`
-- [ ] 5.4 — Exécuter `rm -rf skills/bear-notes/`
-- [ ] 5.5 — Exécuter `rm -rf skills/notion/`
-- [ ] 5.6 — Exécuter `rm -rf skills/obsidian/`
-- [ ] 5.7 — Exécuter `rm -rf skills/things-mac/`
-- [ ] 5.8 — Exécuter `rm -rf skills/trello/`
-- [ ] 5.9 — Exécuter `rm -rf skills/spotify-player/`
-- [ ] 5.10 — Exécuter `rm -rf skills/songsee/`
-- [ ] 5.11 — Exécuter `rm -rf skills/sonoscli/`
-- [ ] 5.12 — Exécuter `rm -rf skills/openhue/`
-- [ ] 5.13 — Exécuter `rm -rf skills/nano-banana-pro/`
-
-### 5B — Skills divers
-
-- [ ] 5.14 — Exécuter `rm -rf skills/blogwatcher/`
-- [ ] 5.15 — Exécuter `rm -rf skills/blucli/`
-- [ ] 5.16 — Exécuter `rm -rf skills/eightctl/`
-- [ ] 5.17 — Exécuter `rm -rf skills/food-order/`
-- [ ] 5.18 — Exécuter `rm -rf skills/gog/`
-- [ ] 5.19 — Exécuter `rm -rf skills/goplaces/`
-- [ ] 5.20 — Exécuter `rm -rf skills/local-places/`
-- [ ] 5.21 — Exécuter `rm -rf skills/ordercli/`
-- [ ] 5.22 — Exécuter `rm -rf skills/peekaboo/`
-- [ ] 5.23 — Exécuter `rm -rf skills/wacli/`
-- [ ] 5.24 — Exécuter `rm -rf skills/video-frames/`
-- [ ] 5.25 — Exécuter `rm -rf skills/gifgrep/`
-
-### 5C — Skills AI/techniques
-
-- [ ] 5.26 — Exécuter `rm -rf skills/gemini/`
-- [ ] 5.27 — Exécuter `rm -rf skills/oracle/`
-- [ ] 5.28 — Exécuter `rm -rf skills/openai-image-gen/`
-- [ ] 5.29 — Exécuter `rm -rf skills/mcporter/`
-- [ ] 5.30 — Exécuter `rm -rf skills/nano-pdf/`
-- [ ] 5.31 — Exécuter `rm -rf skills/himalaya/`
-- [ ] 5.32 — Exécuter `rm -rf skills/tmux/`
-- [ ] 5.33 — Exécuter `rm -rf skills/skill-creator/`
-- [ ] 5.34 — Exécuter `rm -rf skills/session-logs/`
-- [ ] 5.35 — Exécuter `rm -rf skills/summarize/`
-- [ ] 5.36 — Exécuter `rm -rf skills/healthcheck/`
-- [ ] 5.37 — Exécuter `rm -rf skills/camsnap/`
-- [ ] 5.38 — Exécuter `rm -rf skills/canvas/`
-
-### 5D — Extensions restantes
-
-- [ ] 5.39 — Exécuter `rm -rf extensions/open-prose/`
-- [ ] 5.40 — Exécuter `rm -rf extensions/lobster/`
-- [ ] 5.41 — Exécuter `rm -rf extensions/llm-task/`
-- [ ] 5.42 — Exécuter `rm -rf extensions/qwen-portal-auth/`
-- [ ] 5.43 — Exécuter `rm -rf extensions/minimax-portal-auth/`
-- [ ] 5.44 — Exécuter `rm -rf extensions/google-gemini-cli-auth/`
-- [ ] 5.45 — Exécuter `rm -rf extensions/google-antigravity-auth/`
-- [ ] 5.46 — Exécuter `rm -rf extensions/copilot-proxy/`
-- [ ] 5.47 — Exécuter `rm -rf extensions/diagnostics-otel/`
-- [ ] 5.48 — Exécuter `rm -rf extensions/memory-lancedb/`
-- [ ] 5.49 — Exécuter `rm -rf extensions/device-pair/`
-- [ ] 5.50 — Exécuter `rm -rf extensions/phone-control/`
-
-### 5E — Validation
-
-- [ ] 5.51 — Exécuter `grep -r "skills/" src/ --include="*.ts"` et vérifier aucune référence cassée
-- [ ] 5.52 — Exécuter `pnpm build` et corriger si nécessaire
-- [ ] 5.53 — Exécuter `git add -A && git commit -m "refactor: clean up skills and extensions"`
-
-**Critères de succès :**
-- Skills réduits à 2-5
-- Extensions réduites à 2
-- `pnpm build` passe
+**MODIFIER l'objet `DOCKS` :** Ne garder que l'entrée `telegram`.
 
 ---
 
-## 🔄 Phase 6 — Nettoyage Final & Validation
+### 1.3 `src/channels/registry.ts`
 
-> Détails : `work/phases/phase_6.md`  
-> **Durée :** 1-2h | **Risque :** Moyen
+**MODIFIER `CHAT_CHANNEL_ORDER` (ligne 7-15) :**
+```typescript
+// AVANT
+export const CHAT_CHANNEL_ORDER = [
+  "telegram", "whatsapp", "discord", "irc", "googlechat", 
+  "slack", "signal", "imessage",
+] as const;
 
-### 6A — Dépendances npm restantes
+// APRÈS
+export const CHAT_CHANNEL_ORDER = ["telegram"] as const;
+```
 
-- [ ] 6.1 — Éditer `package.json` : supprimer `jszip` si non utilisé
-- [ ] 6.2 — Éditer `package.json` : supprimer `pdfjs-dist` si non utilisé
-- [ ] 6.3 — Éditer `package.json` : supprimer `@homebridge/ciao` si non utilisé
-- [ ] 6.4 — Éditer `package.json` : supprimer `@napi-rs/canvas` des optionalDependencies
-- [ ] 6.5 — Éditer `package.json` : supprimer `node-llama-cpp` des optionalDependencies
+**MODIFIER `DEFAULT_CHAT_CHANNEL` (ligne 21) :**
+```typescript
+export const DEFAULT_CHAT_CHANNEL: ChatChannelId = "telegram";
+```
 
-### 6B — Nettoyage configs
-
-- [ ] 6.6 — Vérifier `pnpm-workspace.yaml` et retirer workspaces obsolètes
-- [ ] 6.7 — Vérifier `tsconfig.json` et retirer paths obsolètes
-- [ ] 6.8 — Vérifier `tsconfig.test.json` et retirer configs obsolètes
-
-### 6C — Réinstallation propre
-
-- [ ] 6.9 — Exécuter `rm -rf node_modules/`
-- [ ] 6.10 — Exécuter `rm -f pnpm-lock.yaml`
-- [ ] 6.11 — Exécuter `pnpm install`
-- [ ] 6.12 — Exécuter `pnpm build`
-
-### 6D — Tests automatisés
-
-- [ ] 6.13 — Exécuter `pnpm test:unit` (ou équivalent) et noter les résultats
-- [ ] 6.14 — Exécuter tests gateway : `pnpm test -- --grep "gateway"`
-- [ ] 6.15 — Exécuter tests telegram : `pnpm test -- --grep "telegram"`
-- [ ] 6.16 — Exécuter tests agents : `pnpm test -- --grep "agent"`
-
-### 6E — Tests fonctionnels manuels
-
-- [ ] 6.17 — Démarrer le gateway avec `pnpm dev` ou `node dist/entry.js gateway start`
-- [ ] 6.18 — Vérifier que le gateway démarre sans erreur
-- [ ] 6.19 — Configurer un bot Telegram de test si nécessaire
-- [ ] 6.20 — Envoyer un message au bot Telegram et vérifier la réponse
-- [ ] 6.21 — Tester le tool `read` : demander à l'agent de lire un fichier
-- [ ] 6.22 — Tester le tool `write` : demander à l'agent de créer un fichier
-- [ ] 6.23 — Tester le tool `bash` : demander à l'agent d'exécuter une commande
-- [ ] 6.24 — Tester le tool `edit` : demander à l'agent de modifier un fichier
-- [ ] 6.25 — Vérifier que SOUL.md est chargé correctement
-- [ ] 6.26 — Vérifier que IDENTITY.md est chargé correctement
-- [ ] 6.27 — Tester `memory_search` si disponible
-- [ ] 6.28 — Accéder à l'UI web et vérifier qu'elle fonctionne
-- [ ] 6.29 — Lancer le TUI et vérifier qu'il fonctionne
-
-### 6F — Documentation finale
-
-- [ ] 6.30 — Exécuter `find src -name "*.ts" | xargs wc -l | tail -1` et noter
-- [ ] 6.31 — Exécuter `find extensions -name "*.ts" | xargs wc -l | tail -1` et noter
-- [ ] 6.32 — Exécuter `find skills -type d -maxdepth 1 | wc -l` et noter
-- [ ] 6.33 — Exécuter `du -sh src/ extensions/ skills/` et noter
-- [ ] 6.34 — Créer `work/METRICS_AFTER.md` avec toutes les métriques et comparaison avec BEFORE
-- [ ] 6.35 — Mettre à jour `README.md` si nécessaire pour refléter la version minimale
-
-### 6G — Commit final
-
-- [ ] 6.36 — Exécuter `git add -A && git commit -m "refactor: finalize minimal version"`
-- [ ] 6.37 — Exécuter `git push origin feature/minimal`
-
-**Critères de succès :**
-- Toutes dépendances inutiles retirées
-- Build et tests OK
-- Fonctionnalités core validées
-- Métriques documentées
-- Branche pushée
+**SUPPRIMER dans `CHAT_CHANNEL_META` :** Toutes les entrées sauf `telegram`.
 
 ---
 
-## 🏁 Définition de "Done"
+### 1.4 `src/infra/outbound/deliver.ts`
 
-Le projet est terminé quand :
-- [ ] Toutes les phases complétées (115 tâches)
-- [ ] Build sans erreur
-- [ ] Tests core passent
-- [ ] Telegram fonctionne
-- [ ] Agent répond avec tools (read/write/bash/edit)
-- [ ] Memory fonctionne (SOUL/IDENTITY)
-- [ ] UI fonctionne
-- [ ] TUI fonctionne
-- [ ] Réduction ~60% documentée
-- [ ] Branche pushée
+**SUPPRIMER ces imports type (lignes 4-8) :**
+```typescript
+import type { sendMessageDiscord } from "../../discord/send.js";
+import type { sendMessageIMessage } from "../../imessage/send.js";
+import type { sendMessageSlack } from "../../slack/send.js";
+import type { sendMessageWhatsApp } from "../../web/outbound.js";
+```
+
+**SUPPRIMER imports Signal (ligne 24) :**
+```typescript
+import { markdownToSignalTextChunks, type SignalTextStyleRange } from "../../signal/format.js";
+import { sendMessageSignal } from "../../signal/send.js";
+```
+
+**MODIFIER type `OutboundSendDeps` (lignes 43-56) :**
+```typescript
+// AVANT
+export type OutboundSendDeps = {
+  sendWhatsApp?: typeof sendMessageWhatsApp;
+  sendTelegram?: typeof sendMessageTelegram;
+  sendDiscord?: typeof sendMessageDiscord;
+  sendSlack?: typeof sendMessageSlack;
+  sendSignal?: typeof sendMessageSignal;
+  sendIMessage?: typeof sendMessageIMessage;
+  sendMatrix?: SendMatrixMessage;
+  sendMSTeams?: ...;
+};
+
+// APRÈS
+export type OutboundSendDeps = {
+  sendTelegram?: typeof sendMessageTelegram;
+};
+```
+
+---
+
+### 1.5 `src/infra/outbound/outbound-session.ts`
+
+**SUPPRIMER ces imports :**
+```typescript
+import { parseDiscordTarget } from "../../discord/targets.js";
+import { resolveSlackAccount } from "../../slack/accounts.js";
+import { createSlackWebClient } from "../../slack/client.js";
+import { normalizeAllowListLower } from "../../slack/monitor/allow-list.js";
+import { parseSlackTarget } from "../../slack/targets.js";
+import { parseIMessageTarget, normalizeIMessageHandle } from "../../imessage/targets.js";
+import { ... } from "../../signal/identity.js";
+import { isWhatsAppGroupJid, normalizeWhatsAppTarget } from "../../whatsapp/normalize.js";
+```
+
+**GARDER :**
+```typescript
+import { resolveTelegramTargetChatType } from "../../telegram/inline-buttons.js";
+```
+
+---
+
+### 1.6 `src/config/types.channels.ts`
+
+**SUPPRIMER ces imports (lignes 2-10) :**
+```typescript
+import type { DiscordConfig } from "./types.discord.js";
+import type { GoogleChatConfig } from "./types.googlechat.js";
+import type { IMessageConfig } from "./types.imessage.js";
+import type { IrcConfig } from "./types.irc.js";
+import type { MSTeamsConfig } from "./types.msteams.js";
+import type { SignalConfig } from "./types.signal.js";
+import type { SlackConfig } from "./types.slack.js";
+import type { WhatsAppConfig } from "./types.whatsapp.js";
+```
+
+**MODIFIER type `ChannelsConfig` :**
+```typescript
+// AVANT
+export type ChannelsConfig = {
+  defaults?: ChannelDefaultsConfig;
+  whatsapp?: WhatsAppConfig;
+  telegram?: TelegramConfig;
+  discord?: DiscordConfig;
+  // ... tous les autres
+};
+
+// APRÈS
+export type ChannelsConfig = {
+  defaults?: ChannelDefaultsConfig;
+  telegram?: TelegramConfig;
+  [key: string]: any; // Pour extensions futures
+};
+```
+
+---
+
+### 1.7 `src/config/types.ts`
+
+**SUPPRIMER ces exports :**
+```typescript
+export * from "./types.discord.js";
+export * from "./types.googlechat.js";
+export * from "./types.imessage.js";
+export * from "./types.irc.js";
+export * from "./types.msteams.js";
+export * from "./types.signal.js";
+export * from "./types.slack.js";
+export * from "./types.whatsapp.js";
+```
+
+---
+
+### 1.8 `src/gateway/server-http.ts`
+
+**SUPPRIMER import Slack (ligne 21) :**
+```typescript
+import { handleSlackHttpRequest } from "../slack/http/index.js";
+```
+
+**SUPPRIMER handler Slack (ligne 347) :**
+```typescript
+if (await handleSlackHttpRequest(req, res)) {
+  return;
+}
+```
+
+---
+
+### 1.9 `src/cli/deps.ts`
+
+**SUPPRIMER import :**
+```typescript
+import { sendMessageSlack } from "../slack/send.js";
+```
+
+---
+
+### 1.10 `src/plugin-sdk/index.ts`
+
+**SUPPRIMER exports Slack :**
+```typescript
+export { ... } from "../slack/accounts.js";
+export { slackOnboardingAdapter } from "../channels/plugins/onboarding/slack.js";
+export { ... } from "../channels/plugins/normalize/slack.js";
+export { buildSlackThreadingToolContext } from "../slack/threading-tool-context.js";
+```
+
+---
+
+### 1.11 `src/agents/tools/` - Agent Tools
+
+**SUPPRIMER fichiers entiers :**
+- `src/agents/tools/discord-actions.ts`
+- `src/agents/tools/discord-actions-guild.ts`
+- `src/agents/tools/discord-actions-messaging.ts`
+- `src/agents/tools/discord-actions-moderation.ts`
+- `src/agents/tools/discord-actions-presence.ts`
+- `src/agents/tools/slack-actions.ts`
+- `src/agents/tools/whatsapp-actions.ts`
+
+---
+
+### 1.12 `src/channels/plugins/`
+
+**SUPPRIMER dossiers :**
+- `actions/discord.ts` + test
+- `actions/signal.ts` + test
+- `normalize/discord.ts`
+- `normalize/signal.ts`
+- `normalize/slack.ts`
+- `normalize/whatsapp.ts`
+- `normalize/imessage.ts` + test
+- `onboarding/discord.ts`
+- `onboarding/signal.ts`
+- `onboarding/slack.ts`
+- `onboarding/whatsapp.ts`
+- `onboarding/imessage.ts`
+- `outbound/discord.ts`
+- `outbound/signal.ts`
+- `outbound/slack.ts`
+- `outbound/whatsapp.ts`
+- `outbound/imessage.ts`
+- `agent-tools/whatsapp-login.ts`
+- `bluebubbles-actions.ts`
+- `slack.actions.ts` + test
+- `whatsapp-heartbeat.ts`
+- `status-issues/bluebubbles.ts`
+- `status-issues/discord.ts`
+- `status-issues/whatsapp.ts`
+
+**MODIFIER `outbound/load.ts` :** Vérifier qu'il ne référence plus les channels supprimés.
+
+---
+
+### 1.13 `src/auto-reply/reply/commands-allowlist.ts`
+
+**SUPPRIMER ces imports :**
+```typescript
+import { resolveDiscordAccount } from "../../discord/accounts.js";
+import { resolveDiscordUserAllowlist } from "../../discord/resolve-users.js";
+import { resolveIMessageAccount } from "../../imessage/accounts.js";
+import { resolveSignalAccount } from "../../signal/accounts.js";
+import { resolveSlackAccount } from "../../slack/accounts.js";
+import { resolveSlackUserAllowlist } from "../../slack/resolve-users.js";
+```
+
+**MODIFIER le corps :** Supprimer les switch cases pour ces channels.
+
+---
+
+### 1.14 `src/auto-reply/reply/line-directives.ts`
+
+**SUPPRIMER le fichier entier** (spécifique à Line)
+
+---
+
+### 1.15 `src/auto-reply/reply/normalize-reply.ts`
+
+**SUPPRIMER ces imports :**
+```typescript
+import { hasLineDirectives, parseLineDirectives } from "./line-directives.js";
+```
+
+**MODIFIER le code :** Supprimer les références à Line directives.
+
+---
+
+### 1.16 TTS - Fichiers à modifier
+
+#### `src/plugins/runtime/index.ts`
+```typescript
+// SUPPRIMER
+import { textToSpeechTelephony } from "../../tts/tts.js";
+```
+
+#### `src/plugins/runtime/types.ts`
+```typescript
+// SUPPRIMER
+type TextToSpeechTelephony = typeof import("../../tts/tts.js").textToSpeechTelephony;
+// Et la référence dans l'interface
+textToSpeechTelephony: TextToSpeechTelephony;
+```
+
+#### `src/agents/tools/tts-tool.ts`
+**SUPPRIMER le fichier entier** ou le remplacer par un stub.
+
+#### `src/agents/openclaw-tools.ts`
+```typescript
+// SUPPRIMER
+import { createTtsTool } from "./tools/tts-tool.js";
+// Et supprimer l'enregistrement du tool
+```
+
+#### `src/agents/cli-runner/helpers.ts`
+```typescript
+// SUPPRIMER
+import { buildTtsSystemPromptHint } from "../../tts/tts.js";
+// Remplacer par un string vide ou supprimer l'usage
+```
+
+#### `src/agents/pi-embedded-runner/compact.ts`
+```typescript
+// SUPPRIMER
+import { buildTtsSystemPromptHint } from "../../tts/tts.js";
+```
+
+#### `src/agents/pi-embedded-runner/run/attempt.ts`
+```typescript
+// SUPPRIMER
+import { buildTtsSystemPromptHint } from "../../../tts/tts.js";
+```
+
+#### `src/auto-reply/status.ts`
+```typescript
+// SUPPRIMER les imports TTS et adapter le code
+```
+
+#### `src/config/types.ts`
+```typescript
+// SUPPRIMER
+export * from "./types.tts.js";
+```
+
+#### `src/config/types.messages.ts`
+```typescript
+// SUPPRIMER
+import type { TtsConfig } from "./types.tts.js";
+```
+
+---
+
+### 1.17 `src/config/zod-schema.providers.ts`
+
+**SUPPRIMER :**
+```typescript
+import { WhatsAppConfigSchema } from "./zod-schema.providers-whatsapp.js";
+export * from "./zod-schema.providers-whatsapp.js";
+```
+
+---
+
+### 1.14 `src/channels/plugins/group-mentions.ts`
+
+**SUPPRIMER toutes les fonctions** sauf celles pour Telegram :
+- `resolveDiscordGroup*`
+- `resolveSlackGroup*`
+- `resolveWhatsAppGroup*`
+- `resolveIMessageGroup*`
+- `resolveGoogleChatGroup*`
+- `resolveSignalGroup*`
+
+---
+
+---
+
+## ⚠️ CLARIFICATIONS NÉCESSAIRES
+
+Avant de continuer, décisions à prendre :
+
+### 1. UI et TUI ?
+- **Option A** : Supprimer UI (`ui/`) et TUI (`src/tui/`) → Version vraiment minimale
+- **Option B** : Garder UI et TUI → Version avec interfaces
+
+### 2. `src/web/media.ts`
+Ce fichier est utilisé par Telegram ! (`src/telegram/send.ts`, `src/telegram/bot/delivery.ts`)
+- **Solution** : Déplacer `loadWebMedia` dans `src/media/` avant suppression de `src/web/`
+
+### 3. Skills à garder ?
+- `coding-agent` → OUI (pi-coding-agent)
+- `weather` → ?
+- `github` → ?
+- `web_search` → Built-in (Brave)
+
+---
+
+## 🟡 PHASE 2 : Suppression Dossiers Channels
+
+> ⚠️ Exécuter APRÈS Phase 1
+
+### 2.0 Pré-requis : Déplacer `loadWebMedia`
+
+```bash
+# Déplacer web/media.ts vers media/web-fetch.ts
+mv src/web/media.ts src/media/web-fetch.ts
+```
+
+**Puis mettre à jour les imports dans :**
+- `src/telegram/send.ts`
+- `src/telegram/bot/delivery.ts`
+- `src/agents/tools/image-tool.ts`
+- `src/agents/pi-embedded-runner/run/images.ts`
+- `src/infra/outbound/message-action-runner.ts`
+- `src/plugin-sdk/index.ts`
+
+### 2.1 Dossiers `src/`
+```bash
+rm -rf src/discord/
+rm -rf src/slack/
+rm -rf src/signal/
+rm -rf src/line/
+rm -rf src/imessage/
+rm -rf src/whatsapp/
+rm -rf src/web/        # Maintenant safe après déplacement media.ts
+rm -rf src/tts/
+```
+
+### 2.2 Fichiers config types
+```bash
+rm -f src/config/types.discord.ts
+rm -f src/config/types.googlechat.ts
+rm -f src/config/types.imessage.ts
+rm -f src/config/types.irc.ts
+rm -f src/config/types.msteams.ts
+rm -f src/config/types.signal.ts
+rm -f src/config/types.slack.ts
+rm -f src/config/types.whatsapp.ts
+rm -f src/config/zod-schema.providers-whatsapp.ts
+rm -f src/config/schema.irc.ts
+```
+
+---
+
+## 🟢 PHASE 3 : Suppression Extensions
+
+```bash
+rm -rf extensions/whatsapp/
+rm -rf extensions/discord/
+rm -rf extensions/slack/
+rm -rf extensions/signal/
+rm -rf extensions/imessage/
+rm -rf extensions/line/
+rm -rf extensions/irc/
+rm -rf extensions/googlechat/
+rm -rf extensions/mattermost/
+rm -rf extensions/msteams/
+rm -rf extensions/twitch/
+rm -rf extensions/matrix/
+rm -rf extensions/nostr/
+rm -rf extensions/zalo/
+rm -rf extensions/zalouser/
+rm -rf extensions/tlon/
+rm -rf extensions/nextcloud-talk/
+rm -rf extensions/bluebubbles/
+rm -rf extensions/feishu/
+rm -rf extensions/voice-call/
+rm -rf extensions/talk-voice/
+rm -rf extensions/device-pair/
+rm -rf extensions/phone-control/
+rm -rf extensions/open-prose/
+rm -rf extensions/qwen-portal-auth/
+rm -rf extensions/minimax-portal-auth/
+rm -rf extensions/google-gemini-cli-auth/
+rm -rf extensions/google-antigravity-auth/
+rm -rf extensions/copilot-proxy/
+rm -rf extensions/diagnostics-otel/
+rm -rf extensions/memory-lancedb/
+```
+
+---
+
+## 🔵 PHASE 4 : Suppression Apps Natives
+
+```bash
+rm -rf apps/
+rm -rf Swabble/
+```
+
+---
+
+## ⚪ PHASE 5 : Suppression Skills
+
+**Garder uniquement :**
+- `skills/coding-agent/`
+- `skills/weather/`
+- `skills/github/`
+
+**Supprimer tout le reste (~50 skills)**
+
+---
+
+## 🟣 PHASE 6 : Nettoyage package.json
+
+### Dépendances à SUPPRIMER
+
+```json
+{
+  "@whiskeysockets/baileys": "...",
+  "discord-api-types": "...",
+  "@buape/carbon": "...",
+  "@slack/bolt": "...",
+  "@slack/web-api": "...",
+  "signal-utils": "...",
+  "@line/bot-sdk": "...",
+  "@larksuiteoapi/node-sdk": "...",
+  "node-edge-tts": "...",
+  "@napi-rs/canvas": "...",
+  "@homebridge/ciao": "...",
+  "pdfjs-dist": "..."
+}
+```
+
+### Scripts à SUPPRIMER
+```json
+{
+  "scripts": {
+    "android:*": "...",
+    "ios:*": "...",
+    "mac:*": "...",
+    "canvas:a2ui:*": "...",
+    "format:swift": "...",
+    "lint:swift": "..."
+  }
+}
+```
+
+---
+
+## ✅ PHASE 7 : Validation
+
+### 7.1 Build test
+```bash
+pnpm install
+pnpm build
+```
+
+### 7.2 Tests critiques
+```bash
+pnpm test src/gateway/
+pnpm test src/telegram/
+pnpm test src/agents/
+```
+
+### 7.3 Smoke test
+```bash
+pnpm openclaw gateway --verbose
+# Dans un autre terminal:
+pnpm openclaw agent --message "Hello"
+```
+
+---
+
+## 📋 Ordre d'exécution
+
+1. **Phase 1** - Modifications code (2-3h) - MANUEL, fichier par fichier
+2. **Phase 2** - Suppression src/ channels (10 min)
+3. **Phase 3** - Suppression extensions (5 min)
+4. **Phase 4** - Suppression apps (2 min)
+5. **Phase 5** - Suppression skills (10 min)
+6. **Phase 6** - Nettoyage package.json (30 min)
+7. **Phase 7** - Validation (1h)
+
+**Durée totale estimée : 4-6 heures**
+
+---
+
+## ⚠️ Points de vigilance
+
+1. **Ordre critique** : Phase 1 DOIT être terminée avant Phase 2
+2. **Commits atomiques** : Un commit par phase
+3. **Tests après chaque phase** : `pnpm build` minimum
+4. **Backup** : Le repo GitHub est notre backup
+
+---
+
+*Document créé le 2026-02-11*
