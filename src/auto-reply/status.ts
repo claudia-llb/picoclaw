@@ -19,13 +19,6 @@ import {
 import { formatTimeAgo } from "../infra/format-time/format-relative.ts";
 import { resolveCommitHash } from "../infra/git-commit.js";
 import { listPluginCommands } from "../plugins/commands.js";
-// TTS removed in minimal build
-const getTtsMaxLength = () => 0;
-const getTtsProvider = () => undefined;
-const isSummarizationEnabled = () => false;
-const resolveTtsAutoMode = () => "off";
-const resolveTtsConfig = () => ({});
-const resolveTtsPrefsPath = () => undefined;
 import {
   estimateUsageCost,
   formatTokenCount as formatTokenCountShared,

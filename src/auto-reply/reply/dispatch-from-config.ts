@@ -2,8 +2,6 @@ import type { OpenClawConfig } from "../../config/config.js";
 import type { FinalizedMsgContext } from "../templating.js";
 import type { GetReplyOptions, ReplyPayload } from "../types.js";
 import type { ReplyDispatcher, ReplyDispatchKind } from "./reply-dispatcher.js";
-import { resolveSessionAgentId } from "../../agents/agent-scope.js";
-import { loadSessionStore, resolveStorePath } from "../../config/sessions.js";
 import { logVerbose } from "../../globals.js";
 import { isDiagnosticsEnabled } from "../../infra/diagnostic-events.js";
 import {
@@ -12,10 +10,11 @@ import {
   logSessionStateChange,
 } from "../../logging/diagnostic.js";
 import { getGlobalHookRunner } from "../../plugins/hook-runner-global.js";
-// TTS removed in minimal build
-const maybeApplyTtsToPayload = async (p: any) => p;
-const normalizeTtsAutoMode = () => "off";
-const resolveTtsConfig = () => ({});
+// TTS removed in minimal build - passthrough stub that extracts payload
+const maybeApplyTtsToPayload = async (p: {
+  payload: ReplyPayload;
+  [key: string]: unknown;
+}): Promise<ReplyPayload> => p.payload;
 import { getReplyFromConfig } from "../reply.js";
 import { formatAbortReplyText, tryFastAbortFromMessage } from "./abort.js";
 import { shouldSkipDuplicateInbound } from "./inbound-dedupe.js";
