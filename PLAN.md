@@ -34,12 +34,20 @@
 
 ## 📚 Documents de référence
 
-| Document | Description |
-|----------|-------------|
-| [work/CODEBASE.md](work/CODEBASE.md) | Architecture complète, modules, dépendances |
-| [work/STACK.md](work/STACK.md) | Stack technique, 62 deps, binaires natifs |
-| [work/TODO.md](work/TODO.md) | Liste détaillée de tout ce qui doit être supprimé |
-| [work/METRICS_BEFORE.md](work/METRICS_BEFORE.md) | Métriques avant refactoring (569K LOC, 72 deps) |
+> ⚠️ **OBLIGATOIRE** : Avant de commencer toute phase, lire ces fichiers pour comprendre le contexte :
+
+| Document | Description | Quand le lire |
+|----------|-------------|---------------|
+| [work/CODEBASE.md](work/CODEBASE.md) | Architecture complète, modules, dépendances | Avant Phase 3 (channels) |
+| [work/STACK.md](work/STACK.md) | Stack technique, 62 deps, binaires natifs | Avant Phase 3 et 6 |
+| [work/TODO.md](work/TODO.md) | Liste détaillée de tout ce qui doit être supprimé | Toutes les phases |
+| [work/METRICS_BEFORE.md](work/METRICS_BEFORE.md) | Métriques avant refactoring (569K LOC, 72 deps) | Phase 1 et 6 |
+
+**Workflow agent :**
+1. Lire PLAN.md pour comprendre la phase en cours
+2. Lire les documents de référence pertinents (voir tableau)
+3. Exécuter les tâches de la phase
+4. Valider les critères avant de passer à la suite
 
 ---
 
