@@ -96,14 +96,6 @@
       "destination": "/providers/qianfan"
     },
     {
-      "source": "/mattermost",
-      "destination": "/channels/mattermost"
-    },
-    {
-      "source": "/line",
-      "destination": "/channels/line"
-    },
-    {
       "source": "/glm",
       "destination": "/providers/glm"
     },
@@ -116,44 +108,12 @@
       "destination": "/cli/message"
     },
     {
-      "source": "/providers/discord",
-      "destination": "/channels/discord"
-    },
-    {
-      "source": "/providers/googlechat",
-      "destination": "/channels/googlechat"
-    },
-    {
       "source": "/providers/grammy",
       "destination": "/channels/grammy"
     },
     {
-      "source": "/providers/imessage",
-      "destination": "/channels/imessage"
-    },
-    {
       "source": "/providers/location",
       "destination": "/channels/location"
-    },
-    {
-      "source": "/providers/mattermost",
-      "destination": "/channels/mattermost"
-    },
-    {
-      "source": "/providers/msteams",
-      "destination": "/channels/msteams"
-    },
-    {
-      "source": "/providers/line",
-      "destination": "/channels/line"
-    },
-    {
-      "source": "/providers/signal",
-      "destination": "/channels/signal"
-    },
-    {
-      "source": "/providers/slack",
-      "destination": "/channels/slack"
     },
     {
       "source": "/providers/telegram",
@@ -162,14 +122,6 @@
     {
       "source": "/providers/troubleshooting",
       "destination": "/channels/troubleshooting"
-    },
-    {
-      "source": "/providers/zalo",
-      "destination": "/channels/zalo"
-    },
-    {
-      "source": "/providers/whatsapp",
-      "destination": "/channels/whatsapp"
     },
     {
       "source": "/sandbox",
@@ -300,10 +252,6 @@
       "destination": "/reference/device-models"
     },
     {
-      "source": "/discord",
-      "destination": "/channels/discord"
-    },
-    {
       "source": "/discovery",
       "destination": "/gateway/discovery"
     },
@@ -370,10 +318,6 @@
     {
       "source": "/images",
       "destination": "/nodes/images"
-    },
-    {
-      "source": "/imessage",
-      "destination": "/channels/imessage"
     },
     {
       "source": "/ios",
@@ -584,20 +528,12 @@
       "destination": "/start/showcase"
     },
     {
-      "source": "/signal",
-      "destination": "/channels/signal"
-    },
-    {
       "source": "/skills",
       "destination": "/tools/skills"
     },
     {
       "source": "/skills-config",
       "destination": "/tools/skills-config"
-    },
-    {
-      "source": "/slack",
-      "destination": "/channels/slack"
     },
     {
       "source": "/slash-commands",
@@ -690,10 +626,6 @@
     {
       "source": "/webhook",
       "destination": "/automation/webhook"
-    },
-    {
-      "source": "/whatsapp",
-      "destination": "/channels/whatsapp"
     },
     {
       "source": "/windows",
