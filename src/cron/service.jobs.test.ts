@@ -50,7 +50,7 @@ describe("applyJobPatch", () => {
       payload: {
         kind: "agentTurn",
         deliver: false,
-        channel: "Signal",
+        channel: "Telegram",
         to: "555",
         bestEffortDeliver: true,
       },
@@ -60,13 +60,13 @@ describe("applyJobPatch", () => {
     expect(job.payload.kind).toBe("agentTurn");
     if (job.payload.kind === "agentTurn") {
       expect(job.payload.deliver).toBe(false);
-      expect(job.payload.channel).toBe("Signal");
+      expect(job.payload.channel).toBe("Telegram");
       expect(job.payload.to).toBe("555");
       expect(job.payload.bestEffortDeliver).toBe(true);
     }
     expect(job.delivery).toEqual({
       mode: "none",
-      channel: "signal",
+      channel: "telegram",
       to: "555",
       bestEffort: true,
     });

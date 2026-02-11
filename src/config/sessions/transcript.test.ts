@@ -82,7 +82,7 @@ describe("appendAssistantMessageToSessionTranscript", () => {
       [sessionKey]: {
         sessionId,
         chatType: "direct",
-        channel: "discord",
+        channel: "telegram",
       },
     };
     fs.writeFileSync(storePath, JSON.stringify(store), "utf-8");

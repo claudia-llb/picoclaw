@@ -11,7 +11,7 @@ const MAIN_SESSION_KEY = "agent:main:main";
 vi.mock("../agents/pi-embedded.js", () => ({
   abortEmbeddedPiRun: vi.fn().mockReturnValue(false),
   runEmbeddedPiAgent: vi.fn(),
-  queueEmbeddedPiMessage: vi.fn().mockReturnValue(false),
+  queueEmbeddedPTelegram: vi.fn().mockReturnValue(false),
   resolveEmbeddedSessionLane: (key: string) => `session:${key.trim() || "main"}`,
   isEmbeddedPiRunActive: vi.fn().mockReturnValue(false),
   isEmbeddedPiRunStreaming: vi.fn().mockReturnValue(false),
@@ -89,7 +89,7 @@ describe("directive behavior", () => {
               },
             },
           },
-          channels: { whatsapp: { allowFrom: ["*"] } },
+          channels: { telegram: { allowFrom: ["*"] } },
           session: { store: storePath },
         },
       );
@@ -135,7 +135,7 @@ describe("directive behavior", () => {
               workspace: path.join(home, "openclaw"),
             },
           },
-          channels: { whatsapp: { allowFrom: ["*"] } },
+          channels: { telegram: { allowFrom: ["*"] } },
           session: { store: storePath },
         },
       );
@@ -161,7 +161,7 @@ describe("directive behavior", () => {
           Body: "hello",
           From: "+1004",
           To: "+2000",
-          Provider: "whatsapp",
+          Provider: "telegram",
           SenderE164: "+1004",
         },
         {},
@@ -174,10 +174,10 @@ describe("directive behavior", () => {
           },
           tools: {
             elevated: {
-              allowFrom: { whatsapp: ["+1004"] },
+              allowFrom: { telegram: ["+1004"] },
             },
           },
-          channels: { whatsapp: { allowFrom: ["*"] } },
+          channels: { telegram: { allowFrom: ["*"] } },
           session: { store: storePath },
         },
       );

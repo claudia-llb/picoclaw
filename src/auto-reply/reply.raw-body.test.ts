@@ -8,7 +8,7 @@ import { getReplyFromConfig } from "./reply.js";
 vi.mock("../agents/pi-embedded.js", () => ({
   abortEmbeddedPiRun: vi.fn().mockReturnValue(false),
   runEmbeddedPiAgent: vi.fn(),
-  queueEmbeddedPiMessage: vi.fn().mockReturnValue(false),
+  queueEmbeddedPTelegram: vi.fn().mockReturnValue(false),
   resolveEmbeddedSessionLane: (key: string) => `session:${key.trim() || "main"}`,
   isEmbeddedPiRunActive: vi.fn().mockReturnValue(false),
   isEmbeddedPiRunStreaming: vi.fn().mockReturnValue(false),
@@ -49,7 +49,7 @@ describe("RawBody directive parsing", () => {
       vi.mocked(runEmbeddedPiAgent).mockReset();
 
       const groupMessageCtx = {
-        Body: `[Chat messages since your last reply - for context]\\n[WhatsApp ...] Someone: hello\\n\\n[Current message - respond to this]\\n[WhatsApp ...] Jake: /think:high\\n[from: Jake McInteer (+6421807830)]`,
+        Body: `[Chat messages since your last reply - for context]\\n[Telegram ...] Someone: hello\\n\\n[Current message - respond to this]\\n[Telegram ...] Jake: /think:high\\n[from: Jake McInteer (+6421807830)]`,
         RawBody: "/think:high",
         From: "+1222",
         To: "+1222",
@@ -67,7 +67,7 @@ describe("RawBody directive parsing", () => {
               workspace: path.join(home, "openclaw"),
             },
           },
-          channels: { whatsapp: { allowFrom: ["*"] } },
+          channels: { telegram: { allowFrom: ["*"] } },
           session: { store: path.join(home, "sessions.json") },
         },
       );
@@ -104,7 +104,7 @@ describe("RawBody directive parsing", () => {
               },
             },
           },
-          channels: { whatsapp: { allowFrom: ["*"] } },
+          channels: { telegram: { allowFrom: ["*"] } },
           session: { store: path.join(home, "sessions.json") },
         },
       );
@@ -138,7 +138,7 @@ describe("RawBody directive parsing", () => {
               workspace: path.join(home, "openclaw"),
             },
           },
-          channels: { whatsapp: { allowFrom: ["*"] } },
+          channels: { telegram: { allowFrom: ["*"] } },
           session: { store: path.join(home, "sessions.json") },
         },
       );
@@ -149,19 +149,19 @@ describe("RawBody directive parsing", () => {
     });
   });
 
-  it("Integration: WhatsApp group message with structural wrapper and RawBody command", async () => {
+  it("Integration: Telegram group message with structural wrapper and RawBody command", async () => {
     await withTempHome(async (home) => {
       vi.mocked(runEmbeddedPiAgent).mockReset();
 
       const groupMessageCtx = {
-        Body: `[Chat messages since your last reply - for context]\\n[WhatsApp ...] Someone: hello\\n\\n[Current message - respond to this]\\n[WhatsApp ...] Jake: /status\\n[from: Jake McInteer (+6421807830)]`,
+        Body: `[Chat messages since your last reply - for context]\\n[Telegram ...] Someone: hello\\n\\n[Current message - respond to this]\\n[Telegram ...] Jake: /status\\n[from: Jake McInteer (+6421807830)]`,
         RawBody: "/status",
         ChatType: "group",
         From: "+1222",
         To: "+1222",
-        SessionKey: "agent:main:whatsapp:group:g1",
-        Provider: "whatsapp",
-        Surface: "whatsapp",
+        SessionKey: "agent:main:telegram:group:g1",
+        Provider: "telegram",
+        Surface: "telegram",
         SenderE164: "+1222",
         CommandAuthorized: true,
       };
@@ -176,13 +176,13 @@ describe("RawBody directive parsing", () => {
               workspace: path.join(home, "openclaw"),
             },
           },
-          channels: { whatsapp: { allowFrom: ["+1222"] } },
+          channels: { telegram: { allowFrom: ["+1222"] } },
           session: { store: path.join(home, "sessions.json") },
         },
       );
 
       const text = Array.isArray(res) ? res[0]?.text : res?.text;
-      expect(text).toContain("Session: agent:main:whatsapp:group:g1");
+      expect(text).toContain("Session: agent:main:telegram:group:g1");
       expect(text).toContain("anthropic/claude-opus-4-5");
       expect(runEmbeddedPiAgent).not.toHaveBeenCalled();
     });
@@ -222,7 +222,7 @@ describe("RawBody directive parsing", () => {
               workspace: path.join(home, "openclaw"),
             },
           },
-          channels: { whatsapp: { allowFrom: ["*"] } },
+          channels: { telegram: { allowFrom: ["*"] } },
           session: { store: path.join(home, "sessions.json") },
         },
       );

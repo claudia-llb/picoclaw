@@ -52,7 +52,7 @@ describe("gateway config.apply", () => {
           method: "config.apply",
           params: {
             raw: '{ "agents": { "list": [{ "id": "main", "workspace": "~/openclaw" }] } }',
-            sessionKey: "agent:main:whatsapp:dm:+15555550123",
+            sessionKey: "agent:main:telegram:dm:+15555550123",
             restartDelayMs: 0,
           },
         }),
@@ -74,7 +74,7 @@ describe("gateway config.apply", () => {
         const parsed = JSON.parse(raw) as { payload?: { kind?: string } };
         expect(parsed.payload?.kind).toBe("config-apply");
       } catch {
-        // File may not exist if signal delivery is mocked, verify response was ok instead
+        // File may not exist if telegram delivery is mocked, verify response was ok instead
         expect(res.ok).toBe(true);
       }
     } finally {

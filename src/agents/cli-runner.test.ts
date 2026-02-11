@@ -32,7 +32,7 @@ describe("runCliAgent resume cleanup", () => {
       stdout: "ok",
       stderr: "",
       code: 0,
-      signal: null,
+      telegram: null,
       killed: false,
     });
 
@@ -80,7 +80,7 @@ describe("runCliAgent resume cleanup", () => {
       stdout: "ok",
       stderr: "",
       code: 0,
-      signal: null,
+      telegram: null,
       killed: false,
     });
 

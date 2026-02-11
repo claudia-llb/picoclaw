@@ -15,8 +15,8 @@ function buildParams(commandBody: string, cfg: OpenClawConfig, ctxOverrides?: Pa
     CommandBody: commandBody,
     CommandSource: "text",
     CommandAuthorized: true,
-    Provider: "whatsapp",
-    Surface: "whatsapp",
+    Provider: "telegram",
+    Surface: "telegram",
     ...ctxOverrides,
   } as MsgContext;
 
@@ -40,7 +40,7 @@ function buildParams(commandBody: string, cfg: OpenClawConfig, ctxOverrides?: Pa
     resolvedVerboseLevel: "off" as const,
     resolvedReasoningLevel: "off" as const,
     resolveDefaultThinkingLevel: async () => undefined,
-    provider: "whatsapp",
+    provider: "telegram",
     model: "test-model",
     contextTokens: 0,
     isGroup: false,
@@ -55,7 +55,7 @@ describe("/approve command", () => {
   it("rejects invalid usage", async () => {
     const cfg = {
       commands: { text: true },
-      channels: { whatsapp: { allowFrom: ["*"] } },
+      channels: { telegram: { allowFrom: ["*"] } },
     } as OpenClawConfig;
     const params = buildParams("/approve", cfg);
     const result = await handleCommands(params);
@@ -66,7 +66,7 @@ describe("/approve command", () => {
   it("submits approval", async () => {
     const cfg = {
       commands: { text: true },
-      channels: { whatsapp: { allowFrom: ["*"] } },
+      channels: { telegram: { allowFrom: ["*"] } },
     } as OpenClawConfig;
     const params = buildParams("/approve abc allow-once", cfg, { SenderId: "123" });
 

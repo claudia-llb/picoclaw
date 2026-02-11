@@ -19,7 +19,7 @@ async function fetchSampleBuffer(url: string, timeoutMs: number): Promise<Buffer
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), Math.max(1, timeoutMs));
   try {
-    const res = await fetch(url, { signal: controller.signal });
+    const res = await fetch(url, { telegram: controller.telegram });
     if (!res.ok) {
       throw new Error(`Sample download failed (HTTP ${res.status})`);
     }

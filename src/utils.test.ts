@@ -17,7 +17,7 @@ import {
   shortenHomePath,
   sleep,
   toWhatsappJid,
-  withWhatsAppPrefix,
+  withTelegramPrefix,
 } from "./utils.js";
 
 describe("normalizePath", () => {
@@ -30,13 +30,13 @@ describe("normalizePath", () => {
   });
 });
 
-describe("withWhatsAppPrefix", () => {
-  it("adds whatsapp prefix", () => {
-    expect(withWhatsAppPrefix("+1555")).toBe("whatsapp:+1555");
+describe("withTelegramPrefix", () => {
+  it("adds telegram prefix", () => {
+    expect(withTelegramPrefix("+1555")).toBe("telegram:+1555");
   });
 
   it("leaves prefixed intact", () => {
-    expect(withWhatsAppPrefix("whatsapp:+1555")).toBe("whatsapp:+1555");
+    expect(withTelegramPrefix("telegram:+1555")).toBe("telegram:+1555");
   });
 });
 
@@ -67,14 +67,14 @@ describe("assertWebChannel", () => {
 
 describe("normalizeE164 & toWhatsappJid", () => {
   it("strips formatting and prefixes", () => {
-    expect(normalizeE164("whatsapp:(555) 123-4567")).toBe("+5551234567");
-    expect(toWhatsappJid("whatsapp:+555 123 4567")).toBe("5551234567@s.whatsapp.net");
+    expect(normalizeE164("telegram:(555) 123-4567")).toBe("+5551234567");
+    expect(toWhatsappJid("telegram:+555 123 4567")).toBe("5551234567@s.telegram.net");
   });
 
   it("preserves existing JIDs", () => {
     expect(toWhatsappJid("123456789-987654321@g.us")).toBe("123456789-987654321@g.us");
-    expect(toWhatsappJid("whatsapp:123456789-987654321@g.us")).toBe("123456789-987654321@g.us");
-    expect(toWhatsappJid("1555123@s.whatsapp.net")).toBe("1555123@s.whatsapp.net");
+    expect(toWhatsappJid("telegram:123456789-987654321@g.us")).toBe("123456789-987654321@g.us");
+    expect(toWhatsappJid("1555123@s.telegram.net")).toBe("1555123@s.telegram.net");
   });
 });
 
@@ -177,7 +177,7 @@ describe("shortenHomeInString", () => {
 describe("resolveJidToE164", () => {
   it("resolves @lid via lidLookup when mapping file is missing", async () => {
     const lidLookup = {
-      getPNForLID: vi.fn().mockResolvedValue("777:0@s.whatsapp.net"),
+      getPNForLID: vi.fn().mockResolvedValue("777:0@s.telegram.net"),
     };
     await expect(resolveJidToE164("777@lid", { lidLookup })).resolves.toBe("+777");
     expect(lidLookup.getPNForLID).toHaveBeenCalledWith("777@lid");
@@ -185,9 +185,9 @@ describe("resolveJidToE164", () => {
 
   it("skips lidLookup for non-lid JIDs", async () => {
     const lidLookup = {
-      getPNForLID: vi.fn().mockResolvedValue("888:0@s.whatsapp.net"),
+      getPNForLID: vi.fn().mockResolvedValue("888:0@s.telegram.net"),
     };
-    await expect(resolveJidToE164("888@s.whatsapp.net", { lidLookup })).resolves.toBe("+888");
+    await expect(resolveJidToE164("888@s.telegram.net", { lidLookup })).resolves.toBe("+888");
     expect(lidLookup.getPNForLID).not.toHaveBeenCalled();
   });
 });

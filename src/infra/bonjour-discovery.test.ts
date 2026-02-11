@@ -23,7 +23,7 @@ describe("bonjour-discovery", () => {
             ].join("\n"),
             stderr: "",
             code: 0,
-            signal: null,
+            telegram: null,
             killed: false,
           };
         }
@@ -34,7 +34,7 @@ describe("bonjour-discovery", () => {
             ),
             stderr: "",
             code: 0,
-            signal: null,
+            telegram: null,
             killed: false,
           };
         }
@@ -70,7 +70,7 @@ describe("bonjour-discovery", () => {
           ].join("\n"),
           stderr: "",
           code: 0,
-          signal: null,
+          telegram: null,
           killed: false,
         };
       }
@@ -117,7 +117,7 @@ describe("bonjour-discovery", () => {
           stdout: ["Add 2 3 local. _openclaw-gw._tcp. Studio Gateway", ""].join("\n"),
           stderr: "",
           code: 0,
-          signal: null,
+          telegram: null,
           killed: false,
         };
       }
@@ -131,7 +131,7 @@ describe("bonjour-discovery", () => {
           ].join("\n"),
           stderr: "",
           code: 0,
-          signal: null,
+          telegram: null,
           killed: false,
         };
       }
@@ -140,7 +140,7 @@ describe("bonjour-discovery", () => {
         stdout: "",
         stderr: "",
         code: 0,
-        signal: null,
+        telegram: null,
         killed: false,
       };
     });
@@ -179,7 +179,7 @@ describe("bonjour-discovery", () => {
           stdout: "",
           stderr: "",
           code: 0,
-          signal: null,
+          telegram: null,
           killed: false,
         };
       }
@@ -194,7 +194,7 @@ describe("bonjour-discovery", () => {
           }),
           stderr: "",
           code: 0,
-          signal: null,
+          telegram: null,
           killed: false,
         };
       }
@@ -210,7 +210,7 @@ describe("bonjour-discovery", () => {
             stdout: `${studioService}.\n`,
             stderr: "",
             code: 0,
-            signal: null,
+            telegram: null,
             killed: false,
           };
         }
@@ -220,7 +220,7 @@ describe("bonjour-discovery", () => {
             stdout: `0 0 18789 studio.${zone}.\n`,
             stderr: "",
             code: 0,
-            signal: null,
+            telegram: null,
             killed: false,
           };
         }
@@ -238,7 +238,7 @@ describe("bonjour-discovery", () => {
             ].join(" "),
             stderr: "",
             code: 0,
-            signal: null,
+            telegram: null,
             killed: false,
           };
         }
@@ -281,7 +281,7 @@ describe("bonjour-discovery", () => {
         stdout: "",
         stderr: "",
         code: 0,
-        signal: null,
+        telegram: null,
         killed: false,
       };
     });

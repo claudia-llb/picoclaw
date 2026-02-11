@@ -13,13 +13,13 @@ describe("system events (session routing)", () => {
   });
 
   it("does not leak session-scoped events into main", async () => {
-    enqueueSystemEvent("Discord reaction added: ✅", {
-      sessionKey: "discord:group:123",
-      contextKey: "discord:reaction:added:msg:user:✅",
+    enqueueSystemEvent("Telegram reaction added: ✅", {
+      sessionKey: "telegram:group:123",
+      contextKey: "telegram:reaction:added:msg:user:✅",
     });
 
     expect(peekSystemEvents(mainKey)).toEqual([]);
-    expect(peekSystemEvents("discord:group:123")).toEqual(["Discord reaction added: ✅"]);
+    expect(peekSystemEvents("telegram:group:123")).toEqual(["Telegram reaction added: ✅"]);
 
     const main = await prependSystemEvents({
       cfg,
@@ -29,17 +29,17 @@ describe("system events (session routing)", () => {
       prefixedBodyBase: "hello",
     });
     expect(main).toBe("hello");
-    expect(peekSystemEvents("discord:group:123")).toEqual(["Discord reaction added: ✅"]);
+    expect(peekSystemEvents("telegram:group:123")).toEqual(["Telegram reaction added: ✅"]);
 
-    const discord = await prependSystemEvents({
+    const telegram = await prependSystemEvents({
       cfg,
-      sessionKey: "discord:group:123",
+      sessionKey: "telegram:group:123",
       isMainSession: false,
       isNewSession: false,
       prefixedBodyBase: "hi",
     });
-    expect(discord).toMatch(/^System: \[[^\]]+\] Discord reaction added: ✅\n\nhi$/);
-    expect(peekSystemEvents("discord:group:123")).toEqual([]);
+    expect(telegram).toMatch(/^System: \[[^\]]+\] Telegram reaction added: ✅\n\nhi$/);
+    expect(peekSystemEvents("telegram:group:123")).toEqual([]);
   });
 
   it("requires an explicit session key", () => {

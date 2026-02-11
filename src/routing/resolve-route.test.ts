@@ -7,7 +7,7 @@ describe("resolveAgentRoute", () => {
     const cfg: OpenClawConfig = {};
     const route = resolveAgentRoute({
       cfg,
-      channel: "whatsapp",
+      channel: "telegram",
       accountId: null,
       peer: { kind: "direct", id: "+15551234567" },
     });
@@ -23,7 +23,7 @@ describe("resolveAgentRoute", () => {
     };
     const route = resolveAgentRoute({
       cfg,
-      channel: "whatsapp",
+      channel: "telegram",
       accountId: null,
       peer: { kind: "direct", id: "+15551234567" },
     });
@@ -36,11 +36,11 @@ describe("resolveAgentRoute", () => {
     };
     const route = resolveAgentRoute({
       cfg,
-      channel: "whatsapp",
+      channel: "telegram",
       accountId: null,
       peer: { kind: "direct", id: "+15551234567" },
     });
-    expect(route.sessionKey).toBe("agent:main:whatsapp:direct:+15551234567");
+    expect(route.sessionKey).toBe("agent:main:telegram:direct:+15551234567");
   });
 
   test("identityLinks collapses per-peer DM sessions across providers", () => {
@@ -48,7 +48,7 @@ describe("resolveAgentRoute", () => {
       session: {
         dmScope: "per-peer",
         identityLinks: {
-          alice: ["telegram:111111111", "discord:222222222222222222"],
+          alice: ["telegram:111111111", "telegram:222222222222222222"],
         },
       },
     };
@@ -66,17 +66,17 @@ describe("resolveAgentRoute", () => {
       session: {
         dmScope: "per-channel-peer",
         identityLinks: {
-          alice: ["telegram:111111111", "discord:222222222222222222"],
+          alice: ["telegram:111111111", "telegram:222222222222222222"],
         },
       },
     };
     const route = resolveAgentRoute({
       cfg,
-      channel: "discord",
+      channel: "telegram",
       accountId: null,
       peer: { kind: "direct", id: "222222222222222222" },
     });
-    expect(route.sessionKey).toBe("agent:main:discord:direct:alice");
+    expect(route.sessionKey).toBe("agent:main:telegram:direct:alice");
   });
 
   test("peer binding wins over account binding", () => {
@@ -85,20 +85,20 @@ describe("resolveAgentRoute", () => {
         {
           agentId: "a",
           match: {
-            channel: "whatsapp",
+            channel: "telegram",
             accountId: "biz",
             peer: { kind: "direct", id: "+1000" },
           },
         },
         {
           agentId: "b",
-          match: { channel: "whatsapp", accountId: "biz" },
+          match: { channel: "telegram", accountId: "biz" },
         },
       ],
     };
     const route = resolveAgentRoute({
       cfg,
-      channel: "whatsapp",
+      channel: "telegram",
       accountId: "biz",
       peer: { kind: "direct", id: "+1000" },
     });
@@ -107,13 +107,13 @@ describe("resolveAgentRoute", () => {
     expect(route.matchedBy).toBe("binding.peer");
   });
 
-  test("discord channel peer binding wins over guild binding", () => {
+  test("telegram channel peer binding wins over guild binding", () => {
     const cfg: OpenClawConfig = {
       bindings: [
         {
           agentId: "chan",
           match: {
-            channel: "discord",
+            channel: "telegram",
             accountId: "default",
             peer: { kind: "channel", id: "c1" },
           },
@@ -121,7 +121,7 @@ describe("resolveAgentRoute", () => {
         {
           agentId: "guild",
           match: {
-            channel: "discord",
+            channel: "telegram",
             accountId: "default",
             guildId: "g1",
           },
@@ -130,13 +130,13 @@ describe("resolveAgentRoute", () => {
     };
     const route = resolveAgentRoute({
       cfg,
-      channel: "discord",
+      channel: "telegram",
       accountId: "default",
       peer: { kind: "channel", id: "c1" },
       guildId: "g1",
     });
     expect(route.agentId).toBe("chan");
-    expect(route.sessionKey).toBe("agent:chan:discord:channel:c1");
+    expect(route.sessionKey).toBe("agent:chan:telegram:channel:c1");
     expect(route.matchedBy).toBe("binding.peer");
   });
 
@@ -146,20 +146,20 @@ describe("resolveAgentRoute", () => {
         {
           agentId: "guild",
           match: {
-            channel: "discord",
+            channel: "telegram",
             accountId: "default",
             guildId: "g1",
           },
         },
         {
           agentId: "acct",
-          match: { channel: "discord", accountId: "default" },
+          match: { channel: "telegram", accountId: "default" },
         },
       ],
     };
     const route = resolveAgentRoute({
       cfg,
-      channel: "discord",
+      channel: "telegram",
       accountId: "default",
       peer: { kind: "channel", id: "c1" },
       guildId: "g1",
@@ -170,12 +170,12 @@ describe("resolveAgentRoute", () => {
 
   test("missing accountId in binding matches default account only", () => {
     const cfg: OpenClawConfig = {
-      bindings: [{ agentId: "defaultAcct", match: { channel: "whatsapp" } }],
+      bindings: [{ agentId: "defaultAcct", match: { channel: "telegram" } }],
     };
 
     const defaultRoute = resolveAgentRoute({
       cfg,
-      channel: "whatsapp",
+      channel: "telegram",
       accountId: undefined,
       peer: { kind: "direct", id: "+1000" },
     });
@@ -184,7 +184,7 @@ describe("resolveAgentRoute", () => {
 
     const otherRoute = resolveAgentRoute({
       cfg,
-      channel: "whatsapp",
+      channel: "telegram",
       accountId: "biz",
       peer: { kind: "direct", id: "+1000" },
     });
@@ -196,13 +196,13 @@ describe("resolveAgentRoute", () => {
       bindings: [
         {
           agentId: "any",
-          match: { channel: "whatsapp", accountId: "*" },
+          match: { channel: "telegram", accountId: "*" },
         },
       ],
     };
     const route = resolveAgentRoute({
       cfg,
-      channel: "whatsapp",
+      channel: "telegram",
       accountId: "biz",
       peer: { kind: "direct", id: "+1000" },
     });
@@ -218,7 +218,7 @@ describe("resolveAgentRoute", () => {
     };
     const route = resolveAgentRoute({
       cfg,
-      channel: "whatsapp",
+      channel: "telegram",
       accountId: "biz",
       peer: { kind: "direct", id: "+1000" },
     });
@@ -260,7 +260,7 @@ describe("parentPeer binding inheritance (thread support)", () => {
         {
           agentId: "adecco",
           match: {
-            channel: "discord",
+            channel: "telegram",
             peer: { kind: "channel", id: "parent-channel-123" },
           },
         },
@@ -268,7 +268,7 @@ describe("parentPeer binding inheritance (thread support)", () => {
     };
     const route = resolveAgentRoute({
       cfg,
-      channel: "discord",
+      channel: "telegram",
       peer: { kind: "channel", id: "thread-456" },
       parentPeer: { kind: "channel", id: "parent-channel-123" },
     });
@@ -282,14 +282,14 @@ describe("parentPeer binding inheritance (thread support)", () => {
         {
           agentId: "thread-agent",
           match: {
-            channel: "discord",
+            channel: "telegram",
             peer: { kind: "channel", id: "thread-456" },
           },
         },
         {
           agentId: "parent-agent",
           match: {
-            channel: "discord",
+            channel: "telegram",
             peer: { kind: "channel", id: "parent-channel-123" },
           },
         },
@@ -297,7 +297,7 @@ describe("parentPeer binding inheritance (thread support)", () => {
     };
     const route = resolveAgentRoute({
       cfg,
-      channel: "discord",
+      channel: "telegram",
       peer: { kind: "channel", id: "thread-456" },
       parentPeer: { kind: "channel", id: "parent-channel-123" },
     });
@@ -311,14 +311,14 @@ describe("parentPeer binding inheritance (thread support)", () => {
         {
           agentId: "parent-agent",
           match: {
-            channel: "discord",
+            channel: "telegram",
             peer: { kind: "channel", id: "parent-channel-123" },
           },
         },
         {
           agentId: "guild-agent",
           match: {
-            channel: "discord",
+            channel: "telegram",
             guildId: "guild-789",
           },
         },
@@ -326,7 +326,7 @@ describe("parentPeer binding inheritance (thread support)", () => {
     };
     const route = resolveAgentRoute({
       cfg,
-      channel: "discord",
+      channel: "telegram",
       peer: { kind: "channel", id: "thread-456" },
       parentPeer: { kind: "channel", id: "parent-channel-123" },
       guildId: "guild-789",
@@ -341,14 +341,14 @@ describe("parentPeer binding inheritance (thread support)", () => {
         {
           agentId: "other-parent-agent",
           match: {
-            channel: "discord",
+            channel: "telegram",
             peer: { kind: "channel", id: "other-parent-999" },
           },
         },
         {
           agentId: "guild-agent",
           match: {
-            channel: "discord",
+            channel: "telegram",
             guildId: "guild-789",
           },
         },
@@ -356,7 +356,7 @@ describe("parentPeer binding inheritance (thread support)", () => {
     };
     const route = resolveAgentRoute({
       cfg,
-      channel: "discord",
+      channel: "telegram",
       peer: { kind: "channel", id: "thread-456" },
       parentPeer: { kind: "channel", id: "parent-channel-123" },
       guildId: "guild-789",
@@ -371,7 +371,7 @@ describe("parentPeer binding inheritance (thread support)", () => {
         {
           agentId: "parent-agent",
           match: {
-            channel: "discord",
+            channel: "telegram",
             peer: { kind: "channel", id: "parent-channel-123" },
           },
         },
@@ -379,7 +379,7 @@ describe("parentPeer binding inheritance (thread support)", () => {
     };
     const route = resolveAgentRoute({
       cfg,
-      channel: "discord",
+      channel: "telegram",
       peer: { kind: "channel", id: "thread-456" },
       parentPeer: { kind: "channel", id: "" },
     });
@@ -393,7 +393,7 @@ describe("parentPeer binding inheritance (thread support)", () => {
         {
           agentId: "parent-agent",
           match: {
-            channel: "discord",
+            channel: "telegram",
             peer: { kind: "channel", id: "parent-channel-123" },
           },
         },
@@ -401,7 +401,7 @@ describe("parentPeer binding inheritance (thread support)", () => {
     };
     const route = resolveAgentRoute({
       cfg,
-      channel: "discord",
+      channel: "telegram",
       peer: { kind: "channel", id: "thread-456" },
       parentPeer: null,
     });
@@ -417,7 +417,7 @@ describe("backward compatibility: peer.kind dm → direct", () => {
         {
           agentId: "alex",
           match: {
-            channel: "whatsapp",
+            channel: "telegram",
             // Legacy config uses "dm" instead of "direct"
             peer: { kind: "dm", id: "+15551234567" },
           },
@@ -426,7 +426,7 @@ describe("backward compatibility: peer.kind dm → direct", () => {
     };
     const route = resolveAgentRoute({
       cfg,
-      channel: "whatsapp",
+      channel: "telegram",
       accountId: null,
       // Runtime uses canonical "direct"
       peer: { kind: "direct", id: "+15551234567" },

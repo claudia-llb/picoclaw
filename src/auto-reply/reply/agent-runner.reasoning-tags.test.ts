@@ -17,7 +17,7 @@ vi.mock("../../agents/model-fallback.js", () => ({
 }));
 
 vi.mock("../../agents/pi-embedded.js", () => ({
-  queueEmbeddedPiMessage: vi.fn().mockReturnValue(false),
+  queueEmbeddedPTelegram: vi.fn().mockReturnValue(false),
   runEmbeddedPiAgent: (params: unknown) => runEmbeddedPiAgentMock(params),
 }));
 
@@ -44,7 +44,7 @@ function createRun(params?: {
 }) {
   const typing = createMockTypingController();
   const sessionCtx = {
-    Provider: "whatsapp",
+    Provider: "telegram",
     OriginatingTo: "+15550001111",
     AccountId: "primary",
     MessageSid: "msg",
@@ -60,7 +60,7 @@ function createRun(params?: {
       agentDir: "/tmp/agent",
       sessionId: "session",
       sessionKey,
-      messageProvider: "whatsapp",
+      messageProvider: "telegram",
       sessionFile: "/tmp/session.jsonl",
       workspaceDir: "/tmp",
       config: {},

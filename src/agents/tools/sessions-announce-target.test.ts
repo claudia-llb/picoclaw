@@ -13,16 +13,16 @@ const installRegistry = async () => {
   setActivePluginRegistry(
     createTestRegistry([
       {
-        pluginId: "discord",
+        pluginId: "telegram",
         source: "test",
         plugin: {
-          id: "discord",
+          id: "telegram",
           meta: {
-            id: "discord",
-            label: "Discord",
-            selectionLabel: "Discord",
-            docsPath: "/channels/discord",
-            blurb: "Discord test stub.",
+            id: "telegram",
+            label: "Telegram",
+            selectionLabel: "Telegram",
+            docsPath: "/channels/telegram",
+            blurb: "Telegram test stub.",
           },
           capabilities: { chatTypes: ["direct", "channel", "thread"] },
           config: {
@@ -32,16 +32,16 @@ const installRegistry = async () => {
         },
       },
       {
-        pluginId: "whatsapp",
+        pluginId: "telegram",
         source: "test",
         plugin: {
-          id: "whatsapp",
+          id: "telegram",
           meta: {
-            id: "whatsapp",
-            label: "WhatsApp",
-            selectionLabel: "WhatsApp",
-            docsPath: "/channels/whatsapp",
-            blurb: "WhatsApp test stub.",
+            id: "telegram",
+            label: "Telegram",
+            selectionLabel: "Telegram",
+            docsPath: "/channels/telegram",
+            blurb: "Telegram test stub.",
             preferSessionLookupForAnnounceTarget: true,
           },
           capabilities: { chatTypes: ["direct", "group"] },
@@ -62,24 +62,24 @@ describe("resolveAnnounceTarget", () => {
     await installRegistry();
   });
 
-  it("derives non-WhatsApp announce targets from the session key", async () => {
+  it("derives non-Telegram announce targets from the session key", async () => {
     const { resolveAnnounceTarget } = await loadResolveAnnounceTarget();
     const target = await resolveAnnounceTarget({
-      sessionKey: "agent:main:discord:group:dev",
-      displayKey: "agent:main:discord:group:dev",
+      sessionKey: "agent:main:telegram:group:dev",
+      displayKey: "agent:main:telegram:group:dev",
     });
-    expect(target).toEqual({ channel: "discord", to: "channel:dev" });
+    expect(target).toEqual({ channel: "telegram", to: "channel:dev" });
     expect(callGatewayMock).not.toHaveBeenCalled();
   });
 
-  it("hydrates WhatsApp accountId from sessions.list when available", async () => {
+  it("hydrates Telegram accountId from sessions.list when available", async () => {
     const { resolveAnnounceTarget } = await loadResolveAnnounceTarget();
     callGatewayMock.mockResolvedValueOnce({
       sessions: [
         {
-          key: "agent:main:whatsapp:group:123@g.us",
+          key: "agent:main:telegram:group:123@g.us",
           deliveryContext: {
-            channel: "whatsapp",
+            channel: "telegram",
             to: "123@g.us",
             accountId: "work",
           },
@@ -88,11 +88,11 @@ describe("resolveAnnounceTarget", () => {
     });
 
     const target = await resolveAnnounceTarget({
-      sessionKey: "agent:main:whatsapp:group:123@g.us",
-      displayKey: "agent:main:whatsapp:group:123@g.us",
+      sessionKey: "agent:main:telegram:group:123@g.us",
+      displayKey: "agent:main:telegram:group:123@g.us",
     });
     expect(target).toEqual({
-      channel: "whatsapp",
+      channel: "telegram",
       to: "123@g.us",
       accountId: "work",
     });

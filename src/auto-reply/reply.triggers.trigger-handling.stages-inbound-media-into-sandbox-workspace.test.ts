@@ -37,10 +37,10 @@ describe("stageSandboxMedia", () => {
 
       const ctx: MsgContext = {
         Body: "hi",
-        From: "whatsapp:group:demo",
+        From: "telegram:group:demo",
         To: "+2000",
         ChatType: "group",
-        Provider: "whatsapp",
+        Provider: "telegram",
         MediaPath: mediaPath,
         MediaType: "image/jpeg",
         MediaUrl: mediaPath,
@@ -61,7 +61,7 @@ describe("stageSandboxMedia", () => {
               },
             },
           },
-          channels: { whatsapp: { allowFrom: ["*"] } },
+          channels: { telegram: { allowFrom: ["*"] } },
           session: { store: join(home, "sessions.json") },
         },
         sessionKey: "agent:main:main",

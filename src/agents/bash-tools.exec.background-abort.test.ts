@@ -12,14 +12,14 @@ afterEach(() => {
   resetProcessRegistryForTests();
 });
 
-test("background exec is not killed when tool signal aborts", async () => {
+test("background exec is not killed when tool telegram aborts", async () => {
   const tool = createExecTool({ allowBackground: true, backgroundMs: 0 });
   const abortController = new AbortController();
 
   const result = await tool.execute(
     "toolcall",
     { command: 'node -e "setTimeout(() => {}, 5000)"', background: true },
-    abortController.signal,
+    abortController.telegram,
   );
 
   expect(result.details.status).toBe("running");
@@ -43,7 +43,7 @@ test("background exec is not killed when tool signal aborts", async () => {
   }
 });
 
-test("background exec still times out after tool signal abort", async () => {
+test("background exec still times out after tool telegram abort", async () => {
   const tool = createExecTool({ allowBackground: true, backgroundMs: 0 });
   const abortController = new AbortController();
 
@@ -54,7 +54,7 @@ test("background exec still times out after tool signal abort", async () => {
       background: true,
       timeout: 0.2,
     },
-    abortController.signal,
+    abortController.telegram,
   );
 
   expect(result.details.status).toBe("running");
@@ -82,14 +82,14 @@ test("background exec still times out after tool signal abort", async () => {
   }
 });
 
-test("yielded background exec is not killed when tool signal aborts", async () => {
+test("yielded background exec is not killed when tool telegram aborts", async () => {
   const tool = createExecTool({ allowBackground: true, backgroundMs: 10 });
   const abortController = new AbortController();
 
   const result = await tool.execute(
     "toolcall",
     { command: 'node -e "setTimeout(() => {}, 5000)"', yieldMs: 5 },
-    abortController.signal,
+    abortController.telegram,
   );
 
   expect(result.details.status).toBe("running");

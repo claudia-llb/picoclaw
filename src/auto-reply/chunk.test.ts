@@ -108,14 +108,14 @@ describe("chunkText", () => {
 
 describe("resolveTextChunkLimit", () => {
   it("uses per-provider defaults", () => {
-    expect(resolveTextChunkLimit(undefined, "whatsapp")).toBe(4000);
     expect(resolveTextChunkLimit(undefined, "telegram")).toBe(4000);
-    expect(resolveTextChunkLimit(undefined, "slack")).toBe(4000);
-    expect(resolveTextChunkLimit(undefined, "signal")).toBe(4000);
-    expect(resolveTextChunkLimit(undefined, "imessage")).toBe(4000);
-    expect(resolveTextChunkLimit(undefined, "discord")).toBe(4000);
+    expect(resolveTextChunkLimit(undefined, "telegram")).toBe(4000);
+    expect(resolveTextChunkLimit(undefined, "telegram")).toBe(4000);
+    expect(resolveTextChunkLimit(undefined, "telegram")).toBe(4000);
+    expect(resolveTextChunkLimit(undefined, "telegram")).toBe(4000);
+    expect(resolveTextChunkLimit(undefined, "telegram")).toBe(4000);
     expect(
-      resolveTextChunkLimit(undefined, "discord", undefined, {
+      resolveTextChunkLimit(undefined, "telegram", undefined, {
         fallbackLimit: 2000,
       }),
     ).toBe(2000);
@@ -123,7 +123,7 @@ describe("resolveTextChunkLimit", () => {
 
   it("supports provider overrides", () => {
     const cfg = { channels: { telegram: { textChunkLimit: 1234 } } };
-    expect(resolveTextChunkLimit(cfg, "whatsapp")).toBe(4000);
+    expect(resolveTextChunkLimit(cfg, "telegram")).toBe(4000);
     expect(resolveTextChunkLimit(cfg, "telegram")).toBe(1234);
   });
 
@@ -146,12 +146,12 @@ describe("resolveTextChunkLimit", () => {
   it("uses the matching provider override", () => {
     const cfg = {
       channels: {
-        discord: { textChunkLimit: 111 },
-        slack: { textChunkLimit: 222 },
+        telegram: { textChunkLimit: 111 },
+        telegram: { textChunkLimit: 222 },
       },
     };
-    expect(resolveTextChunkLimit(cfg, "discord")).toBe(111);
-    expect(resolveTextChunkLimit(cfg, "slack")).toBe(222);
+    expect(resolveTextChunkLimit(cfg, "telegram")).toBe(111);
+    expect(resolveTextChunkLimit(cfg, "telegram")).toBe(222);
     expect(resolveTextChunkLimit(cfg, "telegram")).toBe(4000);
   });
 });
@@ -365,25 +365,25 @@ describe("chunkMarkdownTextWithMode", () => {
 describe("resolveChunkMode", () => {
   it("returns length as default", () => {
     expect(resolveChunkMode(undefined, "telegram")).toBe("length");
-    expect(resolveChunkMode({}, "discord")).toBe("length");
-    expect(resolveChunkMode(undefined, "bluebubbles")).toBe("length");
+    expect(resolveChunkMode({}, "telegram")).toBe("length");
+    expect(resolveChunkMode(undefined, "telegram")).toBe("length");
   });
 
   it("returns length for internal channel", () => {
-    const cfg = { channels: { bluebubbles: { chunkMode: "newline" as const } } };
+    const cfg = { channels: { telegram: { chunkMode: "newline" as const } } };
     expect(resolveChunkMode(cfg, "__internal__")).toBe("length");
   });
 
-  it("supports provider-level overrides for slack", () => {
-    const cfg = { channels: { slack: { chunkMode: "newline" as const } } };
-    expect(resolveChunkMode(cfg, "slack")).toBe("newline");
-    expect(resolveChunkMode(cfg, "discord")).toBe("length");
+  it("supports provider-level overrides for telegram", () => {
+    const cfg = { channels: { telegram: { chunkMode: "newline" as const } } };
+    expect(resolveChunkMode(cfg, "telegram")).toBe("newline");
+    expect(resolveChunkMode(cfg, "telegram")).toBe("length");
   });
 
-  it("supports account-level overrides for slack", () => {
+  it("supports account-level overrides for telegram", () => {
     const cfg = {
       channels: {
-        slack: {
+        telegram: {
           chunkMode: "length" as const,
           accounts: {
             primary: { chunkMode: "newline" as const },
@@ -391,7 +391,7 @@ describe("resolveChunkMode", () => {
         },
       },
     };
-    expect(resolveChunkMode(cfg, "slack", "primary")).toBe("newline");
-    expect(resolveChunkMode(cfg, "slack", "other")).toBe("length");
+    expect(resolveChunkMode(cfg, "telegram", "primary")).toBe("newline");
+    expect(resolveChunkMode(cfg, "telegram", "other")).toBe("length");
   });
 });

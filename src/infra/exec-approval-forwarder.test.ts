@@ -36,7 +36,7 @@ describe("exec approval forwarder", () => {
       getConfig: () => cfg,
       deliver,
       nowMs: () => 1000,
-      resolveSessionTarget: () => ({ channel: "slack", to: "U1" }),
+      resolveSessionTarget: () => ({ channel: "telegram", to: "U1" }),
     });
 
     await forwarder.handleRequested(baseRequest);
@@ -45,7 +45,7 @@ describe("exec approval forwarder", () => {
     await forwarder.handleResolved({
       id: baseRequest.id,
       decision: "allow-once",
-      resolvedBy: "slack:U1",
+      resolvedBy: "telegram:U1",
       ts: 2000,
     });
     expect(deliver).toHaveBeenCalledTimes(2);

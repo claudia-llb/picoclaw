@@ -6,7 +6,7 @@ describe("formatPluginSourceForTable", () => {
     const out = formatPluginSourceForTable(
       {
         origin: "bundled",
-        source: "/opt/homebrew/lib/node_modules/openclaw/extensions/bluebubbles/index.ts",
+        source: "/opt/homebrew/lib/node_modules/openclaw/extensions/telegram/index.ts",
       },
       {
         stock: "/opt/homebrew/lib/node_modules/openclaw/extensions",
@@ -14,7 +14,7 @@ describe("formatPluginSourceForTable", () => {
         workspace: "/Users/x/ws/.openclaw/extensions",
       },
     );
-    expect(out.value).toBe("stock:bluebubbles/index.ts");
+    expect(out.value).toBe("stock:telegram/index.ts");
     expect(out.rootKey).toBe("stock");
   });
 

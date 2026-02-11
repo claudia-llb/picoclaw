@@ -7,7 +7,7 @@ vi.mock("../agents/pi-embedded.js", () => ({
   abortEmbeddedPiRun: vi.fn().mockReturnValue(false),
   compactEmbeddedPiSession: vi.fn(),
   runEmbeddedPiAgent: vi.fn(),
-  queueEmbeddedPiMessage: vi.fn().mockReturnValue(false),
+  queueEmbeddedPTelegram: vi.fn().mockReturnValue(false),
   resolveEmbeddedSessionLane: (key: string) => `session:${key.trim() || "main"}`,
   isEmbeddedPiRunActive: vi.fn().mockReturnValue(false),
   isEmbeddedPiRunStreaming: vi.fn().mockReturnValue(false),
@@ -82,7 +82,7 @@ function makeCfg(home: string) {
       },
     },
     channels: {
-      whatsapp: {
+      telegram: {
         allowFrom: ["*"],
       },
     },
@@ -207,7 +207,7 @@ describe("trigger handling", () => {
           From: "123@g.us",
           To: "+2000",
           ChatType: "group",
-          Provider: "whatsapp",
+          Provider: "telegram",
           SenderE164: "+2000",
           CommandAuthorized: true,
         },
@@ -220,7 +220,7 @@ describe("trigger handling", () => {
         string,
         { groupActivation?: string }
       >;
-      expect(store["agent:main:whatsapp:group:123@g.us"]?.groupActivation).toBe("always");
+      expect(store["agent:main:telegram:group:123@g.us"]?.groupActivation).toBe("always");
       expect(runEmbeddedPiAgent).not.toHaveBeenCalled();
     });
   });

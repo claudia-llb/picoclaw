@@ -45,26 +45,26 @@ afterAll(async () => {
   await server.close();
 });
 
-const whatsappOutbound: ChannelOutboundAdapter = {
+const telegramOutbound: ChannelOutboundAdapter = {
   deliveryMode: "direct",
   sendText: async ({ deps, to, text }) => {
-    if (!deps?.sendWhatsApp) {
-      throw new Error("Missing sendWhatsApp dep");
+    if (!deps?.sendTelegram) {
+      throw new Error("Missing sendTelegram dep");
     }
-    return { channel: "whatsapp", ...(await deps.sendWhatsApp(to, text, {})) };
+    return { channel: "telegram", ...(await deps.sendTelegram(to, text, {})) };
   },
   sendMedia: async ({ deps, to, text, mediaUrl }) => {
-    if (!deps?.sendWhatsApp) {
-      throw new Error("Missing sendWhatsApp dep");
+    if (!deps?.sendTelegram) {
+      throw new Error("Missing sendTelegram dep");
     }
-    return { channel: "whatsapp", ...(await deps.sendWhatsApp(to, text, { mediaUrl })) };
+    return { channel: "telegram", ...(await deps.sendTelegram(to, text, { mediaUrl })) };
   },
 };
 
-const whatsappPlugin = createOutboundTestPlugin({
-  id: "whatsapp",
-  outbound: whatsappOutbound,
-  label: "WhatsApp",
+const telegramPlugin = createOutboundTestPlugin({
+  id: "telegram",
+  outbound: telegramOutbound,
+  label: "Telegram",
 });
 
 const createRegistry = (channels: PluginRegistry["channels"]): PluginRegistry => ({
@@ -80,11 +80,11 @@ const createRegistry = (channels: PluginRegistry["channels"]): PluginRegistry =>
   diagnostics: [],
 });
 
-const whatsappRegistry = createRegistry([
+const telegramRegistry = createRegistry([
   {
-    pluginId: "whatsapp",
+    pluginId: "telegram",
     source: "test",
-    plugin: whatsappPlugin,
+    plugin: telegramPlugin,
   },
 ]);
 const emptyRegistry = createRegistry([]);
@@ -345,8 +345,8 @@ describe("gateway server misc", () => {
   test("send dedupes by idempotencyKey", { timeout: 60_000 }, async () => {
     const prevRegistry = getActivePluginRegistry() ?? emptyRegistry;
     try {
-      setActivePluginRegistry(whatsappRegistry);
-      expect(getChannelPlugin("whatsapp")).toBeDefined();
+      setActivePluginRegistry(telegramRegistry);
+      expect(getChannelPlugin("telegram")).toBeDefined();
 
       const idem = "same-key";
       const res1P = onceMessage(ws, (o) => o.type === "res" && o.id === "a1");
@@ -384,7 +384,7 @@ describe("gateway server misc", () => {
       JSON.stringify(
         {
           channels: {
-            discord: {
+            telegram: {
               token: "token-123",
             },
           },
@@ -402,9 +402,9 @@ describe("gateway server misc", () => {
     const updated = JSON.parse(await fs.readFile(configPath, "utf-8")) as Record<string, unknown>;
     const plugins = updated.plugins as Record<string, unknown> | undefined;
     const entries = plugins?.entries as Record<string, unknown> | undefined;
-    const discord = entries?.discord as Record<string, unknown> | undefined;
-    expect(discord?.enabled).toBe(true);
-    expect((updated.channels as Record<string, unknown> | undefined)?.discord).toMatchObject({
+    const telegram = entries?.telegram as Record<string, unknown> | undefined;
+    expect(telegram?.enabled).toBe(true);
+    expect((updated.channels as Record<string, unknown> | undefined)?.telegram).toMatchObject({
       token: "token-123",
     });
   });

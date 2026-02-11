@@ -52,7 +52,7 @@ vi.mock("node:child_process", async () => {
       stdout: "",
       stderr: "",
       status: 0,
-      signal: null,
+      telegram: null,
     })),
   };
 });
@@ -146,7 +146,7 @@ describe("update-cli", () => {
       stdout: "",
       stderr: "",
       code: 0,
-      signal: null,
+      telegram: null,
       killed: false,
     });
     setTty(false);

@@ -7,7 +7,7 @@ vi.mock("../agents/pi-embedded.js", () => ({
   abortEmbeddedPiRun: vi.fn().mockReturnValue(false),
   compactEmbeddedPiSession: vi.fn(),
   runEmbeddedPiAgent: vi.fn(),
-  queueEmbeddedPiMessage: vi.fn().mockReturnValue(false),
+  queueEmbeddedPTelegram: vi.fn().mockReturnValue(false),
   resolveEmbeddedSessionLane: (key: string) => `session:${key.trim() || "main"}`,
   isEmbeddedPiRunActive: vi.fn().mockReturnValue(false),
   isEmbeddedPiRunStreaming: vi.fn().mockReturnValue(false),
@@ -82,7 +82,7 @@ function makeCfg(home: string) {
       },
     },
     channels: {
-      whatsapp: {
+      telegram: {
         allowFrom: ["*"],
       },
     },
@@ -98,7 +98,7 @@ describe("group intro prompts", () => {
   const groupParticipationNote =
     "Be a good group participant: mostly lurk and follow the conversation; reply only when directly addressed or you can add clear value. Emoji reactions are welcome when available. Write like a human. Avoid Markdown tables. Don't type literal \\n sequences; use real line breaks sparingly.";
 
-  it("labels Discord groups using the surface metadata", async () => {
+  it("labels Telegram groups using the surface metadata", async () => {
     await withTempHome(async (home) => {
       vi.mocked(runEmbeddedPiAgent).mockResolvedValue({
         payloads: [{ text: "ok" }],
@@ -111,12 +111,12 @@ describe("group intro prompts", () => {
       await getReplyFromConfig(
         {
           Body: "status update",
-          From: "discord:group:dev",
+          From: "telegram:group:dev",
           To: "+1888",
           ChatType: "group",
           GroupSubject: "Release Squad",
           GroupMembers: "Alice, Bob",
-          Provider: "discord",
+          Provider: "telegram",
         },
         {},
         makeCfg(home),
@@ -126,11 +126,11 @@ describe("group intro prompts", () => {
       const extraSystemPrompt =
         vi.mocked(runEmbeddedPiAgent).mock.calls.at(-1)?.[0]?.extraSystemPrompt ?? "";
       expect(extraSystemPrompt).toBe(
-        `You are replying inside a Discord group chat. Activation: trigger-only (you are invoked only when explicitly mentioned; recent context may be included). ${groupParticipationNote} Address the specific sender noted in the message context.`,
+        `You are replying inside a Telegram group chat. Activation: trigger-only (you are invoked only when explicitly mentioned; recent context may be included). ${groupParticipationNote} Address the specific sender noted in the message context.`,
       );
     });
   });
-  it("keeps WhatsApp labeling for WhatsApp group chats", async () => {
+  it("keeps Telegram labeling for Telegram group chats", async () => {
     await withTempHome(async (home) => {
       vi.mocked(runEmbeddedPiAgent).mockResolvedValue({
         payloads: [{ text: "ok" }],
@@ -147,7 +147,7 @@ describe("group intro prompts", () => {
           To: "+1999",
           ChatType: "group",
           GroupSubject: "Ops",
-          Provider: "whatsapp",
+          Provider: "telegram",
         },
         {},
         makeCfg(home),
@@ -157,7 +157,7 @@ describe("group intro prompts", () => {
       const extraSystemPrompt =
         vi.mocked(runEmbeddedPiAgent).mock.calls.at(-1)?.[0]?.extraSystemPrompt ?? "";
       expect(extraSystemPrompt).toBe(
-        `You are replying inside a WhatsApp group chat. Activation: trigger-only (you are invoked only when explicitly mentioned; recent context may be included). WhatsApp IDs: SenderId is the participant JID (group participant id). ${groupParticipationNote} Address the specific sender noted in the message context.`,
+        `You are replying inside a Telegram group chat. Activation: trigger-only (you are invoked only when explicitly mentioned; recent context may be included). Telegram IDs: SenderId is the participant JID (group participant id). ${groupParticipationNote} Address the specific sender noted in the message context.`,
       );
     });
   });

@@ -44,8 +44,8 @@ async function resolveState(params: {
 describe("createModelSelectionState parent inheritance", () => {
   it("inherits parent override from explicit parentSessionKey", async () => {
     const cfg = {} as OpenClawConfig;
-    const parentKey = "agent:main:discord:channel:c1";
-    const sessionKey = "agent:main:discord:channel:c1:thread:123";
+    const parentKey = "agent:main:telegram:channel:c1";
+    const sessionKey = "agent:main:telegram:channel:c1:thread:123";
     const parentEntry = makeEntry({
       providerOverride: "openai",
       modelOverride: "gpt-4o",
@@ -131,8 +131,8 @@ describe("createModelSelectionState parent inheritance", () => {
         },
       },
     } as OpenClawConfig;
-    const parentKey = "agent:main:slack:channel:c1";
-    const sessionKey = "agent:main:slack:channel:c1:thread:123";
+    const parentKey = "agent:main:telegram:channel:c1";
+    const sessionKey = "agent:main:telegram:channel:c1:thread:123";
     const parentEntry = makeEntry({
       providerOverride: "anthropic",
       modelOverride: "claude-opus-4-5",

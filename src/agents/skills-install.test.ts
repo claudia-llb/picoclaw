@@ -46,7 +46,7 @@ describe("installSkill code safety scanning", () => {
       code: 0,
       stdout: "ok",
       stderr: "",
-      signal: null,
+      telegram: null,
       killed: false,
     });
   });

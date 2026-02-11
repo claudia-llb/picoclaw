@@ -5,7 +5,7 @@ describe("stripEnvelopeFromMessage", () => {
   test("removes message_id hint lines from user messages", () => {
     const input = {
       role: "user",
-      content: "[WhatsApp 2026-01-24 13:36] yolo\n[message_id: 7b8b]",
+      content: "[Telegram 2026-01-24 13:36] yolo\n[message_id: 7b8b]",
     };
     const result = stripEnvelopeFromMessage(input) as { content?: string };
     expect(result.content).toBe("yolo");

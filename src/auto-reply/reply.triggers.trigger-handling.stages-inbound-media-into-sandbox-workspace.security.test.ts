@@ -36,10 +36,10 @@ describe("stageSandboxMedia security", () => {
 
       const ctx: MsgContext = {
         Body: "hi",
-        From: "whatsapp:group:demo",
+        From: "telegram:group:demo",
         To: "+2000",
         ChatType: "group",
-        Provider: "whatsapp",
+        Provider: "telegram",
         MediaPath: sensitiveFile,
         MediaType: "image/jpeg",
         MediaUrl: sensitiveFile,
@@ -61,7 +61,7 @@ describe("stageSandboxMedia security", () => {
               },
             },
           },
-          channels: { whatsapp: { allowFrom: ["*"] } },
+          channels: { telegram: { allowFrom: ["*"] } },
           session: { store: join(home, "sessions.json") },
         },
         sessionKey: "agent:main:main",

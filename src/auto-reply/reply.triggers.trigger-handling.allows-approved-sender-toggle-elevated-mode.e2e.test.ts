@@ -7,7 +7,7 @@ vi.mock("../agents/pi-embedded.js", () => ({
   abortEmbeddedPiRun: vi.fn().mockReturnValue(false),
   compactEmbeddedPiSession: vi.fn(),
   runEmbeddedPiAgent: vi.fn(),
-  queueEmbeddedPiMessage: vi.fn().mockReturnValue(false),
+  queueEmbeddedPTelegram: vi.fn().mockReturnValue(false),
   resolveEmbeddedSessionLane: (key: string) => `session:${key.trim() || "main"}`,
   isEmbeddedPiRunActive: vi.fn().mockReturnValue(false),
   isEmbeddedPiRunStreaming: vi.fn().mockReturnValue(false),
@@ -81,7 +81,7 @@ function _makeCfg(home: string) {
       },
     },
     channels: {
-      whatsapp: {
+      telegram: {
         allowFrom: ["*"],
       },
     },
@@ -105,11 +105,11 @@ describe("trigger handling", () => {
         },
         tools: {
           elevated: {
-            allowFrom: { whatsapp: ["+1000"] },
+            allowFrom: { telegram: ["+1000"] },
           },
         },
         channels: {
-          whatsapp: {
+          telegram: {
             allowFrom: ["+1000"],
           },
         },
@@ -121,7 +121,7 @@ describe("trigger handling", () => {
           Body: "/elevated on",
           From: "+1000",
           To: "+2000",
-          Provider: "whatsapp",
+          Provider: "telegram",
           SenderE164: "+1000",
           CommandAuthorized: true,
         },
@@ -148,11 +148,11 @@ describe("trigger handling", () => {
         tools: {
           elevated: {
             enabled: false,
-            allowFrom: { whatsapp: ["+1000"] },
+            allowFrom: { telegram: ["+1000"] },
           },
         },
         channels: {
-          whatsapp: {
+          telegram: {
             allowFrom: ["+1000"],
           },
         },
@@ -164,7 +164,7 @@ describe("trigger handling", () => {
           Body: "/elevated on",
           From: "+1000",
           To: "+2000",
-          Provider: "whatsapp",
+          Provider: "telegram",
           SenderE164: "+1000",
         },
         {},
@@ -196,11 +196,11 @@ describe("trigger handling", () => {
         },
         tools: {
           elevated: {
-            allowFrom: { whatsapp: ["+1000"] },
+            allowFrom: { telegram: ["+1000"] },
           },
         },
         channels: {
-          whatsapp: {
+          telegram: {
             allowFrom: ["+1000"],
             groups: { "*": { requireMention: false } },
           },
@@ -211,9 +211,9 @@ describe("trigger handling", () => {
       const res = await getReplyFromConfig(
         {
           Body: "/elevated on",
-          From: "whatsapp:group:123@g.us",
-          To: "whatsapp:+2000",
-          Provider: "whatsapp",
+          From: "telegram:group:123@g.us",
+          To: "telegram:+2000",
+          Provider: "telegram",
           SenderE164: "+1000",
           ChatType: "group",
           WasMentioned: false,

@@ -7,7 +7,7 @@ vi.mock("../agents/pi-embedded.js", () => ({
   abortEmbeddedPiRun: vi.fn().mockReturnValue(false),
   compactEmbeddedPiSession: vi.fn(),
   runEmbeddedPiAgent: vi.fn(),
-  queueEmbeddedPiMessage: vi.fn().mockReturnValue(false),
+  queueEmbeddedPTelegram: vi.fn().mockReturnValue(false),
   resolveEmbeddedSessionLane: (key: string) => `session:${key.trim() || "main"}`,
   isEmbeddedPiRunActive: vi.fn().mockReturnValue(false),
   isEmbeddedPiRunStreaming: vi.fn().mockReturnValue(false),
@@ -82,7 +82,7 @@ function makeCfg(home: string) {
       },
     },
     channels: {
-      whatsapp: {
+      telegram: {
         allowFrom: ["*"],
       },
     },
@@ -122,7 +122,7 @@ describe("trigger handling", () => {
       const sessionKey = resolveSessionKey("per-sender", {
         From: "+1002",
         To: "+2000",
-        Provider: "whatsapp",
+        Provider: "telegram",
       } as Parameters<typeof resolveSessionKey>[1]);
       await fs.writeFile(
         cfg.session.store,
@@ -144,7 +144,7 @@ describe("trigger handling", () => {
           Body: "/status",
           From: "+1002",
           To: "+2000",
-          Provider: "whatsapp",
+          Provider: "telegram",
           SenderE164: "+1002",
           CommandAuthorized: true,
         },
@@ -174,8 +174,8 @@ describe("trigger handling", () => {
           Body: "please /status now",
           From: "+1002",
           To: "+2000",
-          Provider: "whatsapp",
-          Surface: "whatsapp",
+          Provider: "telegram",
+          Surface: "telegram",
           SenderE164: "+1002",
           CommandAuthorized: true,
         },

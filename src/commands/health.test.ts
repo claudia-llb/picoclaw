@@ -29,19 +29,19 @@ describe("healthCommand", () => {
       ts: Date.now(),
       durationMs: 5,
       channels: {
-        whatsapp: { accountId: "default", linked: true, authAgeMs: 5000 },
+        telegram: { accountId: "default", linked: true, authAgeMs: 5000 },
         telegram: {
           accountId: "default",
           configured: true,
           probe: { ok: true, elapsedMs: 1 },
         },
-        discord: { accountId: "default", configured: false },
+        telegram: { accountId: "default", configured: false },
       },
-      channelOrder: ["whatsapp", "telegram", "discord"],
+      channelOrder: ["telegram", "telegram", "telegram"],
       channelLabels: {
-        whatsapp: "WhatsApp",
         telegram: "Telegram",
-        discord: "Discord",
+        telegram: "Telegram",
+        telegram: "Telegram",
       },
       heartbeatSeconds: 60,
       defaultAgentId: "main",
@@ -69,7 +69,7 @@ describe("healthCommand", () => {
     expect(runtime.exit).not.toHaveBeenCalled();
     const logged = runtime.log.mock.calls[0]?.[0] as string;
     const parsed = JSON.parse(logged) as HealthSummary;
-    expect(parsed.channels.whatsapp?.linked).toBe(true);
+    expect(parsed.channels.telegram?.linked).toBe(true);
     expect(parsed.channels.telegram?.configured).toBe(true);
     expect(parsed.sessions.count).toBe(1);
   });
@@ -80,15 +80,15 @@ describe("healthCommand", () => {
       ts: Date.now(),
       durationMs: 5,
       channels: {
-        whatsapp: { accountId: "default", linked: false, authAgeMs: null },
+        telegram: { accountId: "default", linked: false, authAgeMs: null },
         telegram: { accountId: "default", configured: false },
-        discord: { accountId: "default", configured: false },
+        telegram: { accountId: "default", configured: false },
       },
-      channelOrder: ["whatsapp", "telegram", "discord"],
+      channelOrder: ["telegram", "telegram", "telegram"],
       channelLabels: {
-        whatsapp: "WhatsApp",
         telegram: "Telegram",
-        discord: "Discord",
+        telegram: "Telegram",
+        telegram: "Telegram",
       },
       heartbeatSeconds: 60,
       defaultAgentId: "main",

@@ -6,16 +6,16 @@ const approveChannelPairingCode = vi.fn();
 const notifyPairingApproved = vi.fn();
 const pairingIdLabels: Record<string, string> = {
   telegram: "telegramUserId",
-  discord: "discordUserId",
+  telegram: "telegramUserId",
 };
 const normalizeChannelId = vi.fn((raw: string) => {
   if (!raw) {
     return null;
   }
   if (raw === "imsg") {
-    return "imessage";
+    return "telegram";
   }
-  if (["telegram", "discord", "imessage"].includes(raw)) {
+  if (["telegram", "telegram", "telegram"].includes(raw)) {
     return raw;
   }
   return null;
@@ -23,7 +23,7 @@ const normalizeChannelId = vi.fn((raw: string) => {
 const getPairingAdapter = vi.fn((channel: string) => ({
   idLabel: pairingIdLabels[channel] ?? "userId",
 }));
-const listPairingChannels = vi.fn(() => ["telegram", "discord", "imessage"]);
+const listPairingChannels = vi.fn(() => ["telegram", "telegram", "telegram"]);
 
 vi.mock("../pairing/pairing-store.js", () => ({
   listChannelPairingRequests,
@@ -104,7 +104,7 @@ describe("pairing cli", () => {
     await program.parseAsync(["pairing", "list", "imsg"], { from: "user" });
 
     expect(normalizeChannelId).toHaveBeenCalledWith("imsg");
-    expect(listChannelPairingRequests).toHaveBeenCalledWith("imessage");
+    expect(listChannelPairingRequests).toHaveBeenCalledWith("telegram");
   });
 
   it("accepts extension channels outside the registry", async () => {
@@ -120,7 +120,7 @@ describe("pairing cli", () => {
     expect(listChannelPairingRequests).toHaveBeenCalledWith("zalo");
   });
 
-  it("labels Discord ids as discordUserId", async () => {
+  it("labels Telegram ids as telegramUserId", async () => {
     const { registerPairingCli } = await import("./pairing-cli.js");
     listChannelPairingRequests.mockResolvedValueOnce([
       {
@@ -136,11 +136,11 @@ describe("pairing cli", () => {
     const program = new Command();
     program.name("test");
     registerPairingCli(program);
-    await program.parseAsync(["pairing", "list", "--channel", "discord"], {
+    await program.parseAsync(["pairing", "list", "--channel", "telegram"], {
       from: "user",
     });
     const output = log.mock.calls.map((call) => call.join(" ")).join("\n");
-    expect(output).toContain("discordUserId");
+    expect(output).toContain("telegramUserId");
     expect(output).toContain("999");
   });
 

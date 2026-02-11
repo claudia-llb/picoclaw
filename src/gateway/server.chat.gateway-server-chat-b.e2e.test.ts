@@ -103,7 +103,7 @@ describe("gateway server chat", () => {
           main: {
             sessionId: "sess-main",
             updatedAt: Date.now(),
-            lastChannel: "whatsapp",
+            lastChannel: "telegram",
             lastTo: "+1555",
           },
         });
@@ -117,7 +117,7 @@ describe("gateway server chat", () => {
           string,
           { lastChannel?: string; lastTo?: string } | undefined
         >;
-        expect(stored["agent:main:main"]?.lastChannel).toBe("whatsapp");
+        expect(stored["agent:main:main"]?.lastChannel).toBe("telegram");
         expect(stored["agent:main:main"]?.lastTo).toBe("+1555");
 
         await writeStore({ main: { sessionId: "sess-main", updatedAt: Date.now() } });
@@ -127,15 +127,15 @@ describe("gateway server chat", () => {
           const callsBefore = spy.mock.calls.length;
           spy.mockImplementationOnce(async (_ctx, opts) => {
             opts?.onAgentRunStart?.(opts.runId ?? "idem-abort-1");
-            const signal = opts?.abortSignal;
+            const telegram = opts?.abortTelegram;
             await new Promise<void>((resolve) => {
-              if (!signal) {
+              if (!telegram) {
                 return resolve();
               }
-              if (signal.aborted) {
+              if (telegram.aborted) {
                 return resolve();
               }
-              signal.addEventListener("abort", () => resolve(), { once: true });
+              telegram.addEventListener("abort", () => resolve(), { once: true });
             });
           });
           const sendResP = onceMessage(
@@ -190,15 +190,15 @@ describe("gateway server chat", () => {
         try {
           spy.mockImplementationOnce(async (_ctx, opts) => {
             opts?.onAgentRunStart?.(opts.runId ?? "idem-abort-save-1");
-            const signal = opts?.abortSignal;
+            const telegram = opts?.abortTelegram;
             await new Promise<void>((resolve) => {
-              if (!signal) {
+              if (!telegram) {
                 return resolve();
               }
-              if (signal.aborted) {
+              if (telegram.aborted) {
                 return resolve();
               }
-              signal.addEventListener("abort", () => resolve(), { once: true });
+              telegram.addEventListener("abort", () => resolve(), { once: true });
             });
           });
           const abortedEventP = onceMessage(
@@ -233,15 +233,15 @@ describe("gateway server chat", () => {
         const callsBeforeStop = spy.mock.calls.length;
         spy.mockImplementationOnce(async (_ctx, opts) => {
           opts?.onAgentRunStart?.(opts.runId ?? "idem-stop-1");
-          const signal = opts?.abortSignal;
+          const telegram = opts?.abortTelegram;
           await new Promise<void>((resolve) => {
-            if (!signal) {
+            if (!telegram) {
               return resolve();
             }
-            if (signal.aborted) {
+            if (telegram.aborted) {
               return resolve();
             }
-            signal.addEventListener("abort", () => resolve(), { once: true });
+            telegram.addEventListener("abort", () => resolve(), { once: true });
           });
         });
         const stopSendResP = onceMessage(
@@ -318,15 +318,15 @@ describe("gateway server chat", () => {
         resetSpy();
         spy.mockImplementationOnce(async (_ctx, opts) => {
           opts?.onAgentRunStart?.(opts.runId ?? "idem-abort-all-1");
-          const signal = opts?.abortSignal;
+          const telegram = opts?.abortTelegram;
           await new Promise<void>((resolve) => {
-            if (!signal) {
+            if (!telegram) {
               return resolve();
             }
-            if (signal.aborted) {
+            if (telegram.aborted) {
               return resolve();
             }
-            signal.addEventListener("abort", () => resolve(), { once: true });
+            telegram.addEventListener("abort", () => resolve(), { once: true });
           });
         });
         const abortedEventP = onceMessage(
@@ -388,15 +388,15 @@ describe("gateway server chat", () => {
         });
         spy.mockImplementationOnce(async (_ctx, opts) => {
           agentStartedResolve?.();
-          const signal = opts?.abortSignal;
+          const telegram = opts?.abortTelegram;
           await new Promise<void>((resolve) => {
-            if (!signal) {
+            if (!telegram) {
               return resolve();
             }
-            if (signal.aborted) {
+            if (telegram.aborted) {
               return resolve();
             }
-            signal.addEventListener("abort", () => resolve(), { once: true });
+            telegram.addEventListener("abort", () => resolve(), { once: true });
           });
         });
         const sendResP = onceMessage(

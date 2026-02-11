@@ -24,14 +24,14 @@ describe("tool display details", () => {
         name: "message",
         args: {
           action: "react",
-          provider: "discord",
+          provider: "telegram",
           to: "chan-1",
           remove: false,
         },
       }),
     );
 
-    expect(detail).toContain("provider discord");
+    expect(detail).toContain("provider telegram");
     expect(detail).toContain("to chan-1");
     expect(detail).not.toContain("remove");
   });

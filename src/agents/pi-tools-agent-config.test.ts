@@ -48,7 +48,7 @@ describe("Agent-specific tool filtering", () => {
             tools: {
               elevated: {
                 enabled: true,
-                allowFrom: { whatsapp: ["+15555550123"] },
+                allowFrom: { telegram: ["+15555550123"] },
               },
             },
           },
@@ -220,7 +220,7 @@ describe("Agent-specific tool filtering", () => {
     // family agent: restricted
     const familyTools = createOpenClawCodingTools({
       config: cfg,
-      sessionKey: "agent:family:whatsapp:group:123",
+      sessionKey: "agent:family:telegram:group:123",
       workspaceDir: "/tmp/test-family",
       agentDir: "/tmp/agent-family",
     });
@@ -235,7 +235,7 @@ describe("Agent-specific tool filtering", () => {
   it("should apply group tool policy overrides (group-specific beats wildcard)", () => {
     const cfg: OpenClawConfig = {
       channels: {
-        whatsapp: {
+        telegram: {
           groups: {
             "*": {
               tools: { allow: ["read"] },
@@ -250,8 +250,8 @@ describe("Agent-specific tool filtering", () => {
 
     const trustedTools = createOpenClawCodingTools({
       config: cfg,
-      sessionKey: "agent:main:whatsapp:group:trusted",
-      messageProvider: "whatsapp",
+      sessionKey: "agent:main:telegram:group:trusted",
+      messageProvider: "telegram",
       workspaceDir: "/tmp/test-group-trusted",
       agentDir: "/tmp/agent-group",
     });
@@ -261,8 +261,8 @@ describe("Agent-specific tool filtering", () => {
 
     const defaultTools = createOpenClawCodingTools({
       config: cfg,
-      sessionKey: "agent:main:whatsapp:group:unknown",
-      messageProvider: "whatsapp",
+      sessionKey: "agent:main:telegram:group:unknown",
+      messageProvider: "telegram",
       workspaceDir: "/tmp/test-group-default",
       agentDir: "/tmp/agent-group",
     });
@@ -274,7 +274,7 @@ describe("Agent-specific tool filtering", () => {
   it("should apply per-sender tool policies for group tools", () => {
     const cfg: OpenClawConfig = {
       channels: {
-        whatsapp: {
+        telegram: {
           groups: {
             "*": {
               tools: { allow: ["read"] },
@@ -289,7 +289,7 @@ describe("Agent-specific tool filtering", () => {
 
     const aliceTools = createOpenClawCodingTools({
       config: cfg,
-      sessionKey: "agent:main:whatsapp:group:family",
+      sessionKey: "agent:main:telegram:group:family",
       senderId: "alice",
       workspaceDir: "/tmp/test-group-sender",
       agentDir: "/tmp/agent-group-sender",
@@ -300,7 +300,7 @@ describe("Agent-specific tool filtering", () => {
 
     const bobTools = createOpenClawCodingTools({
       config: cfg,
-      sessionKey: "agent:main:whatsapp:group:family",
+      sessionKey: "agent:main:telegram:group:family",
       senderId: "bob",
       workspaceDir: "/tmp/test-group-sender-bob",
       agentDir: "/tmp/agent-group-sender",
@@ -313,7 +313,7 @@ describe("Agent-specific tool filtering", () => {
   it("should not let default sender policy override group tools", () => {
     const cfg: OpenClawConfig = {
       channels: {
-        whatsapp: {
+        telegram: {
           groups: {
             "*": {
               toolsBySender: {
@@ -330,7 +330,7 @@ describe("Agent-specific tool filtering", () => {
 
     const adminTools = createOpenClawCodingTools({
       config: cfg,
-      sessionKey: "agent:main:whatsapp:group:locked",
+      sessionKey: "agent:main:telegram:group:locked",
       senderId: "admin",
       workspaceDir: "/tmp/test-group-default-override",
       agentDir: "/tmp/agent-group-default-override",
@@ -368,7 +368,7 @@ describe("Agent-specific tool filtering", () => {
   it("should inherit group tool policy for subagents from spawnedBy session keys", () => {
     const cfg: OpenClawConfig = {
       channels: {
-        whatsapp: {
+        telegram: {
           groups: {
             trusted: {
               tools: { allow: ["read"] },
@@ -381,7 +381,7 @@ describe("Agent-specific tool filtering", () => {
     const tools = createOpenClawCodingTools({
       config: cfg,
       sessionKey: "agent:main:subagent:test",
-      spawnedBy: "agent:main:whatsapp:group:trusted",
+      spawnedBy: "agent:main:telegram:group:trusted",
       workspaceDir: "/tmp/test-subagent-group",
       agentDir: "/tmp/agent-subagent",
     });
@@ -410,7 +410,7 @@ describe("Agent-specific tool filtering", () => {
 
     const tools = createOpenClawCodingTools({
       config: cfg,
-      sessionKey: "agent:work:slack:dm:user123",
+      sessionKey: "agent:work:telegram:dm:user123",
       workspaceDir: "/tmp/test-work",
       agentDir: "/tmp/agent-work",
     });

@@ -23,7 +23,7 @@ vi.mock("../agents/model-fallback.js", () => ({
 vi.mock("../agents/pi-embedded.js", () => ({
   abortEmbeddedPiRun: vi.fn().mockReturnValue(false),
   runEmbeddedPiAgent: (params: unknown) => runEmbeddedPiAgentMock(params),
-  queueEmbeddedPiMessage: vi.fn().mockReturnValue(false),
+  queueEmbeddedPTelegram: vi.fn().mockReturnValue(false),
   resolveEmbeddedSessionLane: (key: string) => `session:${key.trim() || "main"}`,
   isEmbeddedPiRunActive: vi.fn().mockReturnValue(false),
   isEmbeddedPiRunStreaming: vi.fn().mockReturnValue(false),
@@ -58,7 +58,7 @@ function makeCfg(home: string) {
       },
     },
     channels: {
-      whatsapp: {
+      telegram: {
         allowFrom: ["*"],
       },
     },
@@ -80,7 +80,7 @@ describe("getReplyFromConfig typing (heartbeat)", () => {
       const onReplyStart = vi.fn();
 
       await getReplyFromConfig(
-        { Body: "hi", From: "+1000", To: "+2000", Provider: "whatsapp" },
+        { Body: "hi", From: "+1000", To: "+2000", Provider: "telegram" },
         { onReplyStart, isHeartbeat: false },
         makeCfg(home),
       );
@@ -98,7 +98,7 @@ describe("getReplyFromConfig typing (heartbeat)", () => {
       const onReplyStart = vi.fn();
 
       await getReplyFromConfig(
-        { Body: "hi", From: "+1000", To: "+2000", Provider: "whatsapp" },
+        { Body: "hi", From: "+1000", To: "+2000", Provider: "telegram" },
         { onReplyStart, isHeartbeat: true },
         makeCfg(home),
       );

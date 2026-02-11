@@ -46,7 +46,7 @@ describe("createOpenClawCodingTools", () => {
       const min =
         name === "gateway"
           ? 1
-          : // Most tools expose multiple actions; keep this signal so schemas stay useful to models.
+          : // Most tools expose multiple actions; keep this telegram so schemas stay useful to models.
             2;
       expect(values.size).toBeGreaterThanOrEqual(min);
     }

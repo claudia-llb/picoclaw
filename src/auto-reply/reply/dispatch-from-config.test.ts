@@ -28,7 +28,7 @@ vi.mock("./route-reply.js", () => ({
   isRoutableChannel: (channel: string | undefined) =>
     Boolean(
       channel &&
-      ["telegram", "slack", "discord", "signal", "imessage", "whatsapp"].includes(channel),
+      ["telegram", "telegram", "telegram", "telegram", "telegram", "telegram"].includes(channel),
     ),
   routeReply: mocks.routeReply,
 }));
@@ -86,9 +86,9 @@ describe("dispatchReplyFromConfig", () => {
     const cfg = {} as OpenClawConfig;
     const dispatcher = createDispatcher();
     const ctx = buildTestCtx({
-      Provider: "slack",
+      Provider: "telegram",
       Surface: undefined,
-      OriginatingChannel: "slack",
+      OriginatingChannel: "telegram",
       OriginatingTo: "channel:C123",
     });
 
@@ -112,7 +112,7 @@ describe("dispatchReplyFromConfig", () => {
     const cfg = {} as OpenClawConfig;
     const dispatcher = createDispatcher();
     const ctx = buildTestCtx({
-      Provider: "slack",
+      Provider: "telegram",
       AccountId: "acc-1",
       MessageThreadId: 123,
       OriginatingChannel: "telegram",
@@ -297,9 +297,9 @@ describe("dispatchReplyFromConfig", () => {
     });
     const cfg = {} as OpenClawConfig;
     const ctx = buildTestCtx({
-      Provider: "whatsapp",
-      OriginatingChannel: "whatsapp",
-      OriginatingTo: "whatsapp:+15555550123",
+      Provider: "telegram",
+      OriginatingChannel: "telegram",
+      OriginatingTo: "telegram:+15555550123",
       MessageSid: "msg-1",
     });
     const replyResolver = vi.fn(async () => ({ text: "hi" }) as ReplyPayload);
@@ -329,8 +329,8 @@ describe("dispatchReplyFromConfig", () => {
     const cfg = {} as OpenClawConfig;
     const dispatcher = createDispatcher();
     const ctx = buildTestCtx({
-      Provider: "slack",
-      Surface: "slack",
+      Provider: "telegram",
+      Surface: "telegram",
       OriginatingChannel: "Telegram",
       OriginatingTo: "telegram:999",
       CommandBody: "/search hello",
@@ -379,11 +379,11 @@ describe("dispatchReplyFromConfig", () => {
     const cfg = { diagnostics: { enabled: true } } as OpenClawConfig;
     const dispatcher = createDispatcher();
     const ctx = buildTestCtx({
-      Provider: "slack",
-      Surface: "slack",
+      Provider: "telegram",
+      Surface: "telegram",
       SessionKey: "agent:main:main",
       MessageSid: "msg-1",
-      To: "slack:C123",
+      To: "telegram:C123",
     });
 
     const replyResolver = async () => ({ text: "hi" }) satisfies ReplyPayload;
@@ -397,7 +397,7 @@ describe("dispatchReplyFromConfig", () => {
     });
     expect(diagnosticMocks.logMessageProcessed).toHaveBeenCalledWith(
       expect.objectContaining({
-        channel: "slack",
+        channel: "telegram",
         outcome: "completed",
         sessionKey: "agent:main:main",
       }),
@@ -411,9 +411,9 @@ describe("dispatchReplyFromConfig", () => {
     });
     const cfg = { diagnostics: { enabled: true } } as OpenClawConfig;
     const ctx = buildTestCtx({
-      Provider: "whatsapp",
-      OriginatingChannel: "whatsapp",
-      OriginatingTo: "whatsapp:+15555550123",
+      Provider: "telegram",
+      OriginatingChannel: "telegram",
+      OriginatingTo: "telegram:+15555550123",
       MessageSid: "msg-dup",
     });
     const replyResolver = vi.fn(async () => ({ text: "hi" }) as ReplyPayload);
@@ -434,7 +434,7 @@ describe("dispatchReplyFromConfig", () => {
     expect(replyResolver).toHaveBeenCalledTimes(1);
     expect(diagnosticMocks.logMessageProcessed).toHaveBeenCalledWith(
       expect.objectContaining({
-        channel: "whatsapp",
+        channel: "telegram",
         outcome: "skipped",
         reason: "duplicate",
       }),

@@ -24,7 +24,7 @@ describe("normalizeConfigPaths", () => {
               },
             },
           },
-          imessage: {
+          telegram: {
             accounts: { personal: { dbPath: "~/Library/Messages/chat.db" } },
           },
         },
@@ -52,7 +52,7 @@ describe("normalizeConfigPaths", () => {
       expect(cfg.channels?.telegram?.accounts?.personal?.tokenFile).toBe(
         path.join(home, ".openclaw", "telegram.token"),
       );
-      expect(cfg.channels?.imessage?.accounts?.personal?.dbPath).toBe(
+      expect(cfg.channels?.telegram?.accounts?.personal?.dbPath).toBe(
         path.join(home, "Library", "Messages", "chat.db"),
       );
       expect(cfg.agents?.defaults?.workspace).toBe(path.join(home, "ws-default"));

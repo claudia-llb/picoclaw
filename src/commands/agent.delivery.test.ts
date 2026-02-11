@@ -58,7 +58,7 @@ describe("deliverAgentCommandResult", () => {
       opts: {
         message: "hello",
         deliver: true,
-        channel: "whatsapp",
+        channel: "telegram",
         accountId: "kev",
         to: "+15551234567",
       },
@@ -81,7 +81,7 @@ describe("deliverAgentCommandResult", () => {
     } as unknown as RuntimeEnv;
     const sessionEntry = {
       lastAccountId: "legacy",
-      lastChannel: "whatsapp",
+      lastChannel: "telegram",
     } as SessionEntry;
     const result = {
       payloads: [{ text: "hi" }],
@@ -96,7 +96,7 @@ describe("deliverAgentCommandResult", () => {
       opts: {
         message: "hello",
         deliver: true,
-        channel: "whatsapp",
+        channel: "telegram",
       },
       sessionEntry,
       result,
@@ -131,7 +131,7 @@ describe("deliverAgentCommandResult", () => {
       opts: {
         message: "hello",
         deliver: true,
-        channel: "whatsapp",
+        channel: "telegram",
         to: "+15551234567",
         deliveryTargetMode: "explicit",
       },
@@ -172,7 +172,7 @@ describe("deliverAgentCommandResult", () => {
       opts: {
         message: "hello",
         deliver: true,
-        channel: "whatsapp",
+        channel: "telegram",
       },
       sessionEntry,
       result,
@@ -180,7 +180,7 @@ describe("deliverAgentCommandResult", () => {
     });
 
     expect(mocks.resolveOutboundTarget).toHaveBeenCalledWith(
-      expect.objectContaining({ accountId: undefined, channel: "whatsapp" }),
+      expect.objectContaining({ accountId: undefined, channel: "telegram" }),
     );
   });
 
@@ -246,7 +246,7 @@ describe("deliverAgentCommandResult", () => {
         deliver: true,
         to: "+15551234567",
         replyTo: "#reports",
-        replyChannel: "slack",
+        replyChannel: "telegram",
         replyAccountId: "ops",
       },
       sessionEntry,
@@ -255,7 +255,7 @@ describe("deliverAgentCommandResult", () => {
     });
 
     expect(mocks.resolveOutboundTarget).toHaveBeenCalledWith(
-      expect.objectContaining({ channel: "slack", to: "#reports", accountId: "ops" }),
+      expect.objectContaining({ channel: "telegram", to: "#reports", accountId: "ops" }),
     );
   });
 

@@ -90,13 +90,13 @@ describe("enableConsoleCapture", () => {
     vi.useRealTimers();
   });
 
-  it("suppresses discord EventQueue slow listener duplicates", () => {
+  it("suppresses telegram EventQueue slow listener duplicates", () => {
     setLoggerOverride({ level: "info", file: tempLogPath() });
     const warn = vi.fn();
     console.warn = warn;
     enableConsoleCapture();
     console.warn(
-      "[EventQueue] Slow listener detected: DiscordMessageListener took 12.3 seconds for event MESSAGE_CREATE",
+      "[EventQueue] Slow listener detected: TelegramMessageListener took 12.3 seconds for event MESSAGE_CREATE",
     );
     expect(warn).not.toHaveBeenCalled();
   });

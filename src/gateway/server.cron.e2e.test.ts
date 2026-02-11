@@ -187,7 +187,7 @@ describe("gateway server cron", () => {
           payload: {
             kind: "agentTurn",
             deliver: true,
-            channel: "signal",
+            channel: "telegram",
             to: "+15550001111",
             bestEffortDeliver: true,
           },
@@ -203,7 +203,7 @@ describe("gateway server cron", () => {
       expect(legacyDeliveryPatched?.payload?.kind).toBe("agentTurn");
       expect(legacyDeliveryPatched?.payload?.message).toBe("hello");
       expect(legacyDeliveryPatched?.delivery?.mode).toBe("announce");
-      expect(legacyDeliveryPatched?.delivery?.channel).toBe("signal");
+      expect(legacyDeliveryPatched?.delivery?.channel).toBe("telegram");
       expect(legacyDeliveryPatched?.delivery?.to).toBe("+15550001111");
       expect(legacyDeliveryPatched?.delivery?.bestEffort).toBe(true);
 

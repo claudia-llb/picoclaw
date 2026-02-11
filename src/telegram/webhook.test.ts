@@ -34,7 +34,7 @@ describe("startTelegramWebhook", () => {
       accountId: "opie",
       config: cfg,
       port: 0, // random free port
-      abortSignal: abort.signal,
+      abortTelegram: abort.telegram,
     });
     expect(createTelegramBotSpy).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -65,7 +65,7 @@ describe("startTelegramWebhook", () => {
       accountId: "opie",
       config: cfg,
       port: 0,
-      abortSignal: abort.signal,
+      abortTelegram: abort.telegram,
       path: "/hook",
     });
     expect(createTelegramBotSpy).toHaveBeenCalledWith(

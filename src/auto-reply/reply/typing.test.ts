@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createMockTypingController } from "./test-helpers.js";
-import { createTypingSignaler, resolveTypingMode } from "./typing-mode.js";
+import { createTypingTelegramer, resolveTypingMode } from "./typing-mode.js";
 import { createTypingController } from "./typing.js";
 
 describe("typing controller", () => {
@@ -158,72 +158,72 @@ describe("resolveTypingMode", () => {
   });
 });
 
-describe("createTypingSignaler", () => {
-  it("signals immediately for instant mode", async () => {
+describe("createTypingTelegramer", () => {
+  it("telegrams immediately for instant mode", async () => {
     const typing = createMockTypingController();
-    const signaler = createTypingSignaler({
+    const telegramer = createTypingTelegramer({
       typing,
       mode: "instant",
       isHeartbeat: false,
     });
 
-    await signaler.signalRunStart();
+    await telegramer.telegramRunStart();
 
     expect(typing.startTypingLoop).toHaveBeenCalled();
   });
 
-  it("signals on text for message mode", async () => {
+  it("telegrams on text for message mode", async () => {
     const typing = createMockTypingController();
-    const signaler = createTypingSignaler({
+    const telegramer = createTypingTelegramer({
       typing,
       mode: "message",
       isHeartbeat: false,
     });
 
-    await signaler.signalTextDelta("hello");
+    await telegramer.telegramTextDelta("hello");
 
     expect(typing.startTypingOnText).toHaveBeenCalledWith("hello");
     expect(typing.startTypingLoop).not.toHaveBeenCalled();
   });
 
-  it("signals on message start for message mode", async () => {
+  it("telegrams on message start for message mode", async () => {
     const typing = createMockTypingController();
-    const signaler = createTypingSignaler({
+    const telegramer = createTypingTelegramer({
       typing,
       mode: "message",
       isHeartbeat: false,
     });
 
-    await signaler.signalMessageStart();
+    await telegramer.telegramMessageStart();
 
     expect(typing.startTypingLoop).not.toHaveBeenCalled();
-    await signaler.signalTextDelta("hello");
+    await telegramer.telegramTextDelta("hello");
     expect(typing.startTypingOnText).toHaveBeenCalledWith("hello");
   });
 
-  it("signals on reasoning for thinking mode", async () => {
+  it("telegrams on reasoning for thinking mode", async () => {
     const typing = createMockTypingController();
-    const signaler = createTypingSignaler({
+    const telegramer = createTypingTelegramer({
       typing,
       mode: "thinking",
       isHeartbeat: false,
     });
 
-    await signaler.signalReasoningDelta();
+    await telegramer.telegramReasoningDelta();
     expect(typing.startTypingLoop).not.toHaveBeenCalled();
-    await signaler.signalTextDelta("hi");
+    await telegramer.telegramTextDelta("hi");
     expect(typing.startTypingLoop).toHaveBeenCalled();
   });
 
   it("refreshes ttl on text for thinking mode", async () => {
     const typing = createMockTypingController();
-    const signaler = createTypingSignaler({
+    const telegramer = createTypingTelegramer({
       typing,
       mode: "thinking",
       isHeartbeat: false,
     });
 
-    await signaler.signalTextDelta("hi");
+    await telegramer.telegramTextDelta("hi");
 
     expect(typing.startTypingLoop).toHaveBeenCalled();
     expect(typing.refreshTypingTtl).toHaveBeenCalled();
@@ -232,13 +232,13 @@ describe("createTypingSignaler", () => {
 
   it("starts typing on tool start before text", async () => {
     const typing = createMockTypingController();
-    const signaler = createTypingSignaler({
+    const telegramer = createTypingTelegramer({
       typing,
       mode: "message",
       isHeartbeat: false,
     });
 
-    await signaler.signalToolStart();
+    await telegramer.telegramToolStart();
 
     expect(typing.startTypingLoop).toHaveBeenCalled();
     expect(typing.refreshTypingTtl).toHaveBeenCalled();
@@ -249,17 +249,17 @@ describe("createTypingSignaler", () => {
     const typing = createMockTypingController({
       isActive: vi.fn(() => true),
     });
-    const signaler = createTypingSignaler({
+    const telegramer = createTypingTelegramer({
       typing,
       mode: "message",
       isHeartbeat: false,
     });
 
-    await signaler.signalTextDelta("hello");
+    await telegramer.telegramTextDelta("hello");
     typing.startTypingLoop.mockClear();
     typing.startTypingOnText.mockClear();
     typing.refreshTypingTtl.mockClear();
-    await signaler.signalToolStart();
+    await telegramer.telegramToolStart();
 
     expect(typing.refreshTypingTtl).toHaveBeenCalled();
     expect(typing.startTypingLoop).not.toHaveBeenCalled();
@@ -267,15 +267,15 @@ describe("createTypingSignaler", () => {
 
   it("suppresses typing when disabled", async () => {
     const typing = createMockTypingController();
-    const signaler = createTypingSignaler({
+    const telegramer = createTypingTelegramer({
       typing,
       mode: "instant",
       isHeartbeat: true,
     });
 
-    await signaler.signalRunStart();
-    await signaler.signalTextDelta("hi");
-    await signaler.signalReasoningDelta();
+    await telegramer.telegramRunStart();
+    await telegramer.telegramTextDelta("hi");
+    await telegramer.telegramReasoningDelta();
 
     expect(typing.startTypingLoop).not.toHaveBeenCalled();
     expect(typing.startTypingOnText).not.toHaveBeenCalled();

@@ -5,7 +5,7 @@ import { buildOutboundResultEnvelope } from "./envelope.js";
 describe("buildOutboundResultEnvelope", () => {
   it("flattens delivery-only payloads by default", () => {
     const delivery: OutboundDeliveryJson = {
-      provider: "whatsapp",
+      provider: "telegram",
       via: "gateway",
       to: "+1",
       messageId: "m1",
@@ -48,7 +48,7 @@ describe("buildOutboundResultEnvelope", () => {
 
   it("can keep delivery wrapped when requested", () => {
     const delivery: OutboundDeliveryJson = {
-      provider: "discord",
+      provider: "telegram",
       via: "gateway",
       to: "channel:C1",
       messageId: "m3",

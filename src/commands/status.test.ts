@@ -127,12 +127,12 @@ vi.mock("../channels/plugins/index.js", () => ({
   listChannelPlugins: () =>
     [
       {
-        id: "whatsapp",
+        id: "telegram",
         meta: {
-          id: "whatsapp",
-          label: "WhatsApp",
-          selectionLabel: "WhatsApp",
-          docsPath: "/platforms/whatsapp",
+          id: "telegram",
+          label: "Telegram",
+          selectionLabel: "Telegram",
+          docsPath: "/platforms/telegram",
           blurb: "mock",
         },
         config: {
@@ -144,12 +144,12 @@ vi.mock("../channels/plugins/index.js", () => ({
         },
       },
       {
-        id: "signal",
+        id: "telegram",
         meta: {
-          id: "signal",
-          label: "Signal",
-          selectionLabel: "Signal",
-          docsPath: "/platforms/signal",
+          id: "telegram",
+          label: "Telegram",
+          selectionLabel: "Telegram",
+          docsPath: "/platforms/telegram",
           blurb: "mock",
         },
         config: {
@@ -161,18 +161,18 @@ vi.mock("../channels/plugins/index.js", () => ({
             accounts
               .filter((account) => typeof account.lastError === "string" && account.lastError)
               .map((account) => ({
-                channel: "signal",
+                channel: "telegram",
                 accountId: typeof account.accountId === "string" ? account.accountId : "default",
                 message: `Channel error: ${String(account.lastError)}`,
               })),
         },
       },
       {
-        id: "imessage",
+        id: "telegram",
         meta: {
-          id: "imessage",
-          label: "iMessage",
-          selectionLabel: "iMessage",
+          id: "telegram",
+          label: "Telegram",
+          selectionLabel: "Telegram",
           docsPath: "/platforms/mac",
           blurb: "mock",
         },
@@ -185,7 +185,7 @@ vi.mock("../channels/plugins/index.js", () => ({
             accounts
               .filter((account) => typeof account.lastError === "string" && account.lastError)
               .map((account) => ({
-                channel: "imessage",
+                channel: "telegram",
                 accountId: typeof account.accountId === "string" ? account.accountId : "default",
                 message: `Channel error: ${String(account.lastError)}`,
               })),
@@ -324,7 +324,7 @@ describe("statusCommand", () => {
     expect(logs.some((l) => l.includes("macos 14.0 (arm64)"))).toBe(true);
     expect(logs.some((l) => l.includes("Memory"))).toBe(true);
     expect(logs.some((l) => l.includes("Channels"))).toBe(true);
-    expect(logs.some((l) => l.includes("WhatsApp"))).toBe(true);
+    expect(logs.some((l) => l.includes("Telegram"))).toBe(true);
     expect(logs.some((l) => l.includes("Sessions"))).toBe(true);
     expect(logs.some((l) => l.includes("+1000"))).toBe(true);
     expect(logs.some((l) => l.includes("50%"))).toBe(true);
@@ -385,22 +385,22 @@ describe("statusCommand", () => {
     });
     mocks.callGateway.mockResolvedValueOnce({
       channelAccounts: {
-        signal: [
+        telegram: [
           {
             accountId: "default",
             enabled: true,
             configured: true,
             running: false,
-            lastError: "signal-cli unreachable",
+            lastError: "telegram-cli unreachable",
           },
         ],
-        imessage: [
+        telegram: [
           {
             accountId: "default",
             enabled: true,
             configured: true,
             running: false,
-            lastError: "imessage permission denied",
+            lastError: "telegram permission denied",
           },
         ],
       },
@@ -409,8 +409,8 @@ describe("statusCommand", () => {
     (runtime.log as vi.Mock).mockClear();
     await statusCommand({}, runtime as never);
     const logs = (runtime.log as vi.Mock).mock.calls.map((c) => String(c[0]));
-    expect(logs.join("\n")).toMatch(/Signal/i);
-    expect(logs.join("\n")).toMatch(/iMessage/i);
+    expect(logs.join("\n")).toMatch(/Telegram/i);
+    expect(logs.join("\n")).toMatch(/Telegram/i);
     expect(logs.join("\n")).toMatch(/gateway:/i);
     expect(logs.join("\n")).toMatch(/WARN/);
   });

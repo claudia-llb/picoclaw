@@ -306,12 +306,12 @@ describe("createOpenClawCodingTools", () => {
     expect(offenders).toEqual([]);
   });
   it("does not expose provider-specific message tools", () => {
-    const tools = createOpenClawCodingTools({ messageProvider: "discord" });
+    const tools = createOpenClawCodingTools({ messageProvider: "telegram" });
     const names = new Set(tools.map((tool) => tool.name));
-    expect(names.has("discord")).toBe(false);
-    expect(names.has("slack")).toBe(false);
     expect(names.has("telegram")).toBe(false);
-    expect(names.has("whatsapp")).toBe(false);
+    expect(names.has("telegram")).toBe(false);
+    expect(names.has("telegram")).toBe(false);
+    expect(names.has("telegram")).toBe(false);
   });
   it("filters session tools for sub-agent sessions by default", () => {
     const tools = createOpenClawCodingTools({

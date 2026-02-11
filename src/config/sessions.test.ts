@@ -18,7 +18,7 @@ import {
 
 describe("sessions", () => {
   it("returns normalized per-sender key", () => {
-    expect(deriveSessionKey("per-sender", { From: "whatsapp:+1555" })).toBe("+1555");
+    expect(deriveSessionKey("per-sender", { From: "telegram:+1555" })).toBe("+1555");
   });
 
   it("falls back to unknown when sender missing", () => {
@@ -31,7 +31,7 @@ describe("sessions", () => {
 
   it("keeps group chats distinct", () => {
     expect(deriveSessionKey("per-sender", { From: "12345-678@g.us" })).toBe(
-      "whatsapp:group:12345-678@g.us",
+      "telegram:group:12345-678@g.us",
     );
   });
 
@@ -40,27 +40,27 @@ describe("sessions", () => {
       deriveSessionKey("per-sender", {
         From: "12345-678@g.us",
         ChatType: "group",
-        Provider: "whatsapp",
+        Provider: "telegram",
       }),
-    ).toBe("whatsapp:group:12345-678@g.us");
+    ).toBe("telegram:group:12345-678@g.us");
   });
 
   it("keeps explicit provider when provided in group key", () => {
     expect(
-      resolveSessionKey("per-sender", { From: "discord:group:12345", ChatType: "group" }, "main"),
-    ).toBe("agent:main:discord:group:12345");
+      resolveSessionKey("per-sender", { From: "telegram:group:12345", ChatType: "group" }, "main"),
+    ).toBe("agent:main:telegram:group:12345");
   });
 
-  it("builds discord display name with guild+channel slugs", () => {
+  it("builds telegram display name with guild+channel slugs", () => {
     expect(
       buildGroupDisplayName({
-        provider: "discord",
+        provider: "telegram",
         groupChannel: "#general",
         space: "friends-of-openclaw",
         id: "123",
-        key: "discord:group:123",
+        key: "telegram:group:123",
       }),
-    ).toBe("discord:friends-of-openclaw#general");
+    ).toBe("telegram:friends-of-openclaw#general");
   });
 
   it("collapses direct chats to main by default", () => {
@@ -72,7 +72,7 @@ describe("sessions", () => {
   });
 
   it("maps direct chats to main key when provided", () => {
-    expect(resolveSessionKey("per-sender", { From: "whatsapp:+1555" }, "main")).toBe(
+    expect(resolveSessionKey("per-sender", { From: "telegram:+1555" }, "main")).toBe(
       "agent:main:main",
     );
   });
@@ -89,7 +89,7 @@ describe("sessions", () => {
 
   it("leaves groups untouched even with main key", () => {
     expect(resolveSessionKey("per-sender", { From: "12345-678@g.us" }, "main")).toBe(
-      "agent:main:whatsapp:group:12345-678@g.us",
+      "agent:main:telegram:group:12345-678@g.us",
     );
   });
 
@@ -155,7 +155,7 @@ describe("sessions", () => {
     await updateLastRoute({
       storePath,
       sessionKey: mainSessionKey,
-      channel: "whatsapp",
+      channel: "telegram",
       to: "111",
       accountId: "legacy",
       deliveryContext: {
@@ -221,7 +221,7 @@ describe("sessions", () => {
   });
 
   it("updateLastRoute records origin + group metadata when ctx is provided", async () => {
-    const sessionKey = "agent:main:whatsapp:group:123@g.us";
+    const sessionKey = "agent:main:telegram:group:123@g.us";
     const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-sessions-"));
     const storePath = path.join(dir, "sessions.json");
     await fs.writeFile(storePath, "{}", "utf-8");
@@ -230,11 +230,11 @@ describe("sessions", () => {
       storePath,
       sessionKey,
       deliveryContext: {
-        channel: "whatsapp",
+        channel: "telegram",
         to: "123@g.us",
       },
       ctx: {
-        Provider: "whatsapp",
+        Provider: "telegram",
         ChatType: "group",
         GroupSubject: "Family",
         From: "123@g.us",
@@ -243,10 +243,10 @@ describe("sessions", () => {
 
     const store = loadSessionStore(storePath);
     expect(store[sessionKey]?.subject).toBe("Family");
-    expect(store[sessionKey]?.channel).toBe("whatsapp");
+    expect(store[sessionKey]?.channel).toBe("telegram");
     expect(store[sessionKey]?.groupId).toBe("123@g.us");
     expect(store[sessionKey]?.origin?.label).toBe("Family id:123@g.us");
-    expect(store[sessionKey]?.origin?.provider).toBe("whatsapp");
+    expect(store[sessionKey]?.origin?.provider).toBe("telegram");
     expect(store[sessionKey]?.origin?.chatType).toBe("group");
   });
 
@@ -325,18 +325,18 @@ describe("sessions", () => {
       store["agent:main:main"] = {
         sessionId: "sess-normalized",
         updatedAt: Date.now(),
-        lastChannel: " WhatsApp ",
+        lastChannel: " Telegram ",
         lastTo: " +1555 ",
         lastAccountId: " acct-1 ",
       };
     });
 
     const store = loadSessionStore(storePath);
-    expect(store["agent:main:main"]?.lastChannel).toBe("whatsapp");
+    expect(store["agent:main:main"]?.lastChannel).toBe("telegram");
     expect(store["agent:main:main"]?.lastTo).toBe("+1555");
     expect(store["agent:main:main"]?.lastAccountId).toBe("acct-1");
     expect(store["agent:main:main"]?.deliveryContext).toEqual({
-      channel: "whatsapp",
+      channel: "telegram",
       to: "+1555",
       accountId: "acct-1",
     });
@@ -384,7 +384,7 @@ describe("sessions", () => {
           [mainSessionKey]: {
             sessionId: "sess-legacy",
             updatedAt: 123,
-            provider: "slack",
+            provider: "telegram",
             lastProvider: "telegram",
             lastTo: "user:U123",
           },
@@ -397,7 +397,7 @@ describe("sessions", () => {
 
     const store = loadSessionStore(storePath) as unknown as Record<string, Record<string, unknown>>;
     const entry = store[mainSessionKey] ?? {};
-    expect(entry.channel).toBe("slack");
+    expect(entry.channel).toBe("telegram");
     expect(entry.provider).toBeUndefined();
     expect(entry.lastChannel).toBe("telegram");
     expect(entry.lastProvider).toBeUndefined();

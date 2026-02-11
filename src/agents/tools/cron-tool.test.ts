@@ -252,7 +252,7 @@ describe("cron tool", () => {
     callGatewayMock.mockResolvedValueOnce({ ok: true });
 
     const tool = createCronTool({
-      agentSessionKey: "agent:main:slack:channel:general:thread:1699999999.0001",
+      agentSessionKey: "agent:main:telegram:channel:general:thread:1699999999.0001",
     });
     await tool.execute("call-thread", {
       action: "add",
@@ -268,7 +268,7 @@ describe("cron tool", () => {
     };
     expect(call?.params?.delivery).toEqual({
       mode: "announce",
-      channel: "slack",
+      channel: "telegram",
       to: "general",
     });
   });
@@ -395,7 +395,7 @@ describe("cron tool", () => {
   it("does not recover flat params when no meaningful job field is present", async () => {
     const tool = createCronTool();
     await expect(
-      tool.execute("call-no-signal", {
+      tool.execute("call-no-telegram", {
         action: "add",
         name: "orphan-name",
         enabled: true,
@@ -427,7 +427,7 @@ describe("cron tool", () => {
   it("does not infer delivery when mode is none", async () => {
     callGatewayMock.mockResolvedValueOnce({ ok: true });
 
-    const tool = createCronTool({ agentSessionKey: "agent:main:discord:dm:buddy" });
+    const tool = createCronTool({ agentSessionKey: "agent:main:telegram:dm:buddy" });
     await tool.execute("call-none", {
       action: "add",
       job: {

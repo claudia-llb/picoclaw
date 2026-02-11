@@ -13,8 +13,8 @@ function buildParams(commandBody: string, cfg: OpenClawConfig, ctxOverrides?: Pa
     CommandBody: commandBody,
     CommandSource: "text",
     CommandAuthorized: true,
-    Provider: "whatsapp",
-    Surface: "whatsapp",
+    Provider: "telegram",
+    Surface: "telegram",
     ...ctxOverrides,
   } as MsgContext;
 
@@ -38,7 +38,7 @@ function buildParams(commandBody: string, cfg: OpenClawConfig, ctxOverrides?: Pa
     resolvedVerboseLevel: "off" as const,
     resolvedReasoningLevel: "off" as const,
     resolveDefaultThinkingLevel: async () => undefined,
-    provider: "whatsapp",
+    provider: "telegram",
     model: "test-model",
     contextTokens: 0,
     isGroup: false,
@@ -114,7 +114,7 @@ describe("handleCommands /config configWrites gating", () => {
   it("blocks /config set when channel config writes are disabled", async () => {
     const cfg = {
       commands: { config: true, text: true },
-      channels: { whatsapp: { allowFrom: ["*"], configWrites: false } },
+      channels: { telegram: { allowFrom: ["*"], configWrites: false } },
     } as OpenClawConfig;
     const params = buildParams('/config set messages.ackReaction=":)"', cfg);
     const result = await handleCommands(params);

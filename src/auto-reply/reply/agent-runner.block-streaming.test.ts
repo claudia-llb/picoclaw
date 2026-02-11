@@ -22,7 +22,7 @@ vi.mock("../../agents/model-fallback.js", () => ({
 }));
 
 vi.mock("../../agents/pi-embedded.js", () => ({
-  queueEmbeddedPiMessage: vi.fn().mockReturnValue(false),
+  queueEmbeddedPTelegram: vi.fn().mockReturnValue(false),
   runEmbeddedPiAgent: (params: unknown) => runEmbeddedPiAgentMock(params),
 }));
 
@@ -52,7 +52,7 @@ describe("runReplyAgent block streaming", () => {
 
     const typing = createMockTypingController();
     const sessionCtx = {
-      Provider: "discord",
+      Provider: "telegram",
       OriginatingTo: "channel:C1",
       AccountId: "primary",
       MessageSid: "msg",
@@ -65,7 +65,7 @@ describe("runReplyAgent block streaming", () => {
       run: {
         sessionId: "session",
         sessionKey: "main",
-        messageProvider: "discord",
+        messageProvider: "telegram",
         sessionFile: "/tmp/session.jsonl",
         workspaceDir: "/tmp",
         config: {

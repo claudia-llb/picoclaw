@@ -129,7 +129,7 @@ async function completeSimpleWithTimeout<TApi extends Api>(
   try {
     return await completeSimple(model, context, {
       ...options,
-      signal: controller.signal,
+      telegram: controller.telegram,
     });
   } finally {
     clearTimeout(timer);

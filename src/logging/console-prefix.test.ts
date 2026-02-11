@@ -3,28 +3,28 @@ import { stripRedundantSubsystemPrefixForConsole } from "../logging.js";
 
 describe("stripRedundantSubsystemPrefixForConsole", () => {
   it("drops '<subsystem>:' prefix", () => {
-    expect(stripRedundantSubsystemPrefixForConsole("discord: hello", "discord")).toBe("hello");
+    expect(stripRedundantSubsystemPrefixForConsole("telegram: hello", "telegram")).toBe("hello");
   });
 
   it("drops '<Subsystem>:' prefix case-insensitively", () => {
-    expect(stripRedundantSubsystemPrefixForConsole("WhatsApp: hello", "whatsapp")).toBe("hello");
+    expect(stripRedundantSubsystemPrefixForConsole("Telegram: hello", "telegram")).toBe("hello");
   });
 
   it("drops '<subsystem> ' prefix", () => {
-    expect(stripRedundantSubsystemPrefixForConsole("discord gateway: closed", "discord")).toBe(
+    expect(stripRedundantSubsystemPrefixForConsole("telegram gateway: closed", "telegram")).toBe(
       "gateway: closed",
     );
   });
 
   it("drops '[subsystem]' prefix", () => {
-    expect(stripRedundantSubsystemPrefixForConsole("[discord] connection stalled", "discord")).toBe(
-      "connection stalled",
-    );
+    expect(
+      stripRedundantSubsystemPrefixForConsole("[telegram] connection stalled", "telegram"),
+    ).toBe("connection stalled");
   });
 
   it("keeps messages that do not start with the subsystem", () => {
-    expect(stripRedundantSubsystemPrefixForConsole("discordant: hello", "discord")).toBe(
-      "discordant: hello",
+    expect(stripRedundantSubsystemPrefixForConsole("telegramant: hello", "telegram")).toBe(
+      "telegramant: hello",
     );
   });
 });

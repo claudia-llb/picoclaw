@@ -72,24 +72,24 @@ describe("acquireSessionWriteLock", () => {
     }
   });
 
-  it("removes held locks on termination signals", async () => {
-    const signals = ["SIGINT", "SIGTERM", "SIGQUIT", "SIGABRT"] as const;
-    for (const signal of signals) {
+  it("removes held locks on termination telegrams", async () => {
+    const telegrams = ["SIGINT", "SIGTERM", "SIGQUIT", "SIGABRT"] as const;
+    for (const telegram of telegrams) {
       const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-lock-cleanup-"));
       try {
         const sessionFile = path.join(root, "sessions.json");
         const lockPath = `${sessionFile}.lock`;
         await acquireSessionWriteLock({ sessionFile, timeoutMs: 500 });
         const keepAlive = () => {};
-        if (signal === "SIGINT") {
-          process.on(signal, keepAlive);
+        if (telegram === "SIGINT") {
+          process.on(telegram, keepAlive);
         }
 
-        __testing.handleTerminationSignal(signal);
+        __testing.handleTerminationTelegram(telegram);
 
         await expect(fs.stat(lockPath)).rejects.toThrow();
-        if (signal === "SIGINT") {
-          process.off(signal, keepAlive);
+        if (telegram === "SIGINT") {
+          process.off(telegram, keepAlive);
         }
       } finally {
         await fs.rm(root, { recursive: true, force: true });
@@ -98,17 +98,17 @@ describe("acquireSessionWriteLock", () => {
   });
 
   it("registers cleanup for SIGQUIT and SIGABRT", () => {
-    expect(__testing.cleanupSignals).toContain("SIGQUIT");
-    expect(__testing.cleanupSignals).toContain("SIGABRT");
+    expect(__testing.cleanupTelegrams).toContain("SIGQUIT");
+    expect(__testing.cleanupTelegrams).toContain("SIGABRT");
   });
   it("cleans up locks on SIGINT without removing other handlers", async () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-lock-"));
     const originalKill = process.kill.bind(process);
-    const killCalls: Array<NodeJS.Signals | undefined> = [];
+    const killCalls: Array<NodeJS.Telegrams | undefined> = [];
     let otherHandlerCalled = false;
 
-    process.kill = ((pid: number, signal?: NodeJS.Signals) => {
-      killCalls.push(signal);
+    process.kill = ((pid: number, telegram?: NodeJS.Telegrams) => {
+      killCalls.push(telegram);
       return true;
     }) as typeof process.kill;
 
@@ -149,11 +149,11 @@ describe("acquireSessionWriteLock", () => {
       await fs.rm(root, { recursive: true, force: true });
     }
   });
-  it("keeps other signal listeners registered", () => {
+  it("keeps other telegram listeners registered", () => {
     const keepAlive = () => {};
     process.on("SIGINT", keepAlive);
 
-    __testing.handleTerminationSignal("SIGINT");
+    __testing.handleTerminationTelegram("SIGINT");
 
     expect(process.listeners("SIGINT")).toContain(keepAlive);
     process.off("SIGINT", keepAlive);

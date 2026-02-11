@@ -93,7 +93,7 @@ describe("memory search citations", () => {
     };
     const tool = createMemorySearchTool({
       config: cfg,
-      agentSessionKey: "agent:main:discord:dm:u123",
+      agentSessionKey: "agent:main:telegram:dm:u123",
     });
     if (!tool) {
       throw new Error("tool missing");
@@ -111,7 +111,7 @@ describe("memory search citations", () => {
     };
     const tool = createMemorySearchTool({
       config: cfg,
-      agentSessionKey: "agent:main:discord:group:c123",
+      agentSessionKey: "agent:main:telegram:group:c123",
     });
     if (!tool) {
       throw new Error("tool missing");

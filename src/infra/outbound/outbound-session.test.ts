@@ -5,17 +5,17 @@ import { resolveOutboundSessionRoute } from "./outbound-session.js";
 const baseConfig = {} as OpenClawConfig;
 
 describe("resolveOutboundSessionRoute", () => {
-  it("builds Slack thread session keys", async () => {
+  it("builds Telegram thread session keys", async () => {
     const route = await resolveOutboundSessionRoute({
       cfg: baseConfig,
-      channel: "slack",
+      channel: "telegram",
       agentId: "main",
       target: "channel:C123",
       replyToId: "456",
     });
 
-    expect(route?.sessionKey).toBe("agent:main:slack:channel:c123:thread:456");
-    expect(route?.from).toBe("slack:channel:C123");
+    expect(route?.sessionKey).toBe("agent:main:telegram:channel:c123:thread:456");
+    expect(route?.from).toBe("telegram:channel:C123");
     expect(route?.to).toBe("channel:C123");
     expect(route?.threadId).toBe("456");
   });
@@ -52,14 +52,14 @@ describe("resolveOutboundSessionRoute", () => {
       session: {
         dmScope: "per-peer",
         identityLinks: {
-          alice: ["discord:123"],
+          alice: ["telegram:123"],
         },
       },
     } as OpenClawConfig;
 
     const route = await resolveOutboundSessionRoute({
       cfg,
-      channel: "discord",
+      channel: "telegram",
       agentId: "main",
       target: "user:123",
     });
@@ -67,15 +67,15 @@ describe("resolveOutboundSessionRoute", () => {
     expect(route?.sessionKey).toBe("agent:main:direct:alice");
   });
 
-  it("strips chat_* prefixes for BlueBubbles group session keys", async () => {
+  it("strips chat_* prefixes for Telegram group session keys", async () => {
     const route = await resolveOutboundSessionRoute({
       cfg: baseConfig,
-      channel: "bluebubbles",
+      channel: "telegram",
       agentId: "main",
       target: "chat_guid:ABC123",
     });
 
-    expect(route?.sessionKey).toBe("agent:main:bluebubbles:group:abc123");
+    expect(route?.sessionKey).toBe("agent:main:telegram:group:abc123");
     expect(route?.from).toBe("group:ABC123");
   });
 
@@ -92,10 +92,10 @@ describe("resolveOutboundSessionRoute", () => {
     expect(route?.chatType).toBe("direct");
   });
 
-  it("uses group session keys for Slack mpim allowlist entries", async () => {
+  it("uses group session keys for Telegram mpim allowlist entries", async () => {
     const cfg = {
       channels: {
-        slack: {
+        telegram: {
           dm: {
             groupChannels: ["G123"],
           },
@@ -105,12 +105,12 @@ describe("resolveOutboundSessionRoute", () => {
 
     const route = await resolveOutboundSessionRoute({
       cfg,
-      channel: "slack",
+      channel: "telegram",
       agentId: "main",
       target: "channel:G123",
     });
 
-    expect(route?.sessionKey).toBe("agent:main:slack:group:g123");
-    expect(route?.from).toBe("slack:group:G123");
+    expect(route?.sessionKey).toBe("agent:main:telegram:group:g123");
+    expect(route?.from).toBe("telegram:group:G123");
   });
 });

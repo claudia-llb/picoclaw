@@ -132,14 +132,14 @@ const createStubChannelPlugin = (params: {
 
 const defaultRegistry = createRegistry([
   {
-    pluginId: "whatsapp",
+    pluginId: "telegram",
     source: "test",
     plugin: createStubChannelPlugin({
-      id: "whatsapp",
-      label: "WhatsApp",
+      id: "telegram",
+      label: "Telegram",
       resolveAllowFrom: (cfg) => {
         const channels = cfg.channels as Record<string, unknown> | undefined;
-        const entry = channels?.whatsapp as Record<string, unknown> | undefined;
+        const entry = channels?.telegram as Record<string, unknown> | undefined;
         const allow = entry?.allowFrom;
         return Array.isArray(allow) ? allow.map((value) => String(value)) : [];
       },
@@ -151,19 +151,19 @@ const defaultRegistry = createRegistry([
     plugin: createStubChannelPlugin({ id: "telegram", label: "Telegram" }),
   },
   {
-    pluginId: "discord",
+    pluginId: "telegram",
     source: "test",
-    plugin: createStubChannelPlugin({ id: "discord", label: "Discord" }),
+    plugin: createStubChannelPlugin({ id: "telegram", label: "Telegram" }),
   },
   {
-    pluginId: "slack",
+    pluginId: "telegram",
     source: "test",
-    plugin: createStubChannelPlugin({ id: "slack", label: "Slack" }),
+    plugin: createStubChannelPlugin({ id: "telegram", label: "Telegram" }),
   },
   {
-    pluginId: "signal",
+    pluginId: "telegram",
     source: "test",
-    plugin: createStubChannelPlugin({ id: "signal", label: "Signal" }),
+    plugin: createStubChannelPlugin({ id: "telegram", label: "Telegram" }),
   },
 ]);
 
@@ -178,7 +178,7 @@ describe("gateway server agent", () => {
         main: {
           sessionId: "sess-main-stale",
           updatedAt: Date.now(),
-          lastChannel: "whatsapp",
+          lastChannel: "telegram",
           lastTo: "+1555",
         },
       },
@@ -194,7 +194,7 @@ describe("gateway server agent", () => {
 
     const spy = vi.mocked(agentCommand);
     const call = spy.mock.calls.at(-1)?.[0] as Record<string, unknown>;
-    expectChannels(call, "whatsapp");
+    expectChannels(call, "telegram");
     expect(call.to).toBe("+1555");
     expect(call.deliveryTargetMode).toBe("implicit");
     expect(call.sessionId).toBe("sess-main-stale");
@@ -296,7 +296,7 @@ describe("gateway server agent", () => {
         main: {
           sessionId: "sess-main-account",
           updatedAt: Date.now(),
-          lastChannel: "whatsapp",
+          lastChannel: "telegram",
           lastTo: "+1555",
           lastAccountId: "default",
         },
@@ -313,7 +313,7 @@ describe("gateway server agent", () => {
 
     const spy = vi.mocked(agentCommand);
     const call = spy.mock.calls.at(-1)?.[0] as Record<string, unknown>;
-    expectChannels(call, "whatsapp");
+    expectChannels(call, "telegram");
     expect(call.to).toBe("+1555");
     expect(call.accountId).toBe("kev");
     const runContext = call.runContext as { accountId?: string } | undefined;
@@ -331,7 +331,7 @@ describe("gateway server agent", () => {
         main: {
           sessionId: "sess-main-explicit",
           updatedAt: Date.now(),
-          lastChannel: "whatsapp",
+          lastChannel: "telegram",
           lastTo: "+1555",
           lastAccountId: "legacy",
         },
@@ -348,7 +348,7 @@ describe("gateway server agent", () => {
 
     const spy = vi.mocked(agentCommand);
     const call = spy.mock.calls.at(-1)?.[0] as Record<string, unknown>;
-    expectChannels(call, "whatsapp");
+    expectChannels(call, "telegram");
     expect(call.to).toBe("+1666");
     expect(call.accountId).toBeUndefined();
     testState.allowFrom = undefined;
@@ -364,7 +364,7 @@ describe("gateway server agent", () => {
         main: {
           sessionId: "sess-main-explicit-account",
           updatedAt: Date.now(),
-          lastChannel: "whatsapp",
+          lastChannel: "telegram",
           lastTo: "+1555",
           lastAccountId: "legacy",
         },
@@ -382,7 +382,7 @@ describe("gateway server agent", () => {
 
     const spy = vi.mocked(agentCommand);
     const call = spy.mock.calls.at(-1)?.[0] as Record<string, unknown>;
-    expectChannels(call, "whatsapp");
+    expectChannels(call, "telegram");
     expect(call.to).toBe("+1666");
     expect(call.accountId).toBe("primary");
     testState.allowFrom = undefined;
@@ -398,7 +398,7 @@ describe("gateway server agent", () => {
         main: {
           sessionId: "sess-main-implicit",
           updatedAt: Date.now(),
-          lastChannel: "whatsapp",
+          lastChannel: "telegram",
           lastTo: "+1555",
           lastAccountId: "kev",
         },
@@ -414,7 +414,7 @@ describe("gateway server agent", () => {
 
     const spy = vi.mocked(agentCommand);
     const call = spy.mock.calls.at(-1)?.[0] as Record<string, unknown>;
-    expectChannels(call, "whatsapp");
+    expectChannels(call, "telegram");
     expect(call.to).toBe("+1555");
     expect(call.accountId).toBe("kev");
     testState.allowFrom = undefined;
@@ -460,7 +460,7 @@ describe("gateway server agent", () => {
     expect(images[0]?.data).toBe(BASE_IMAGE_PNG);
   });
 
-  test("agent falls back to whatsapp when delivery requested and no last channel exists", async () => {
+  test("agent falls back to telegram when delivery requested and no last channel exists", async () => {
     setRegistry(defaultRegistry);
     testState.allowFrom = ["+1555"];
     const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gw-"));
@@ -483,23 +483,23 @@ describe("gateway server agent", () => {
 
     const spy = vi.mocked(agentCommand);
     const call = spy.mock.calls.at(-1)?.[0] as Record<string, unknown>;
-    expectChannels(call, "whatsapp");
+    expectChannels(call, "telegram");
     expect(call.to).toBe("+1555");
     expect(call.deliver).toBe(true);
     expect(call.sessionId).toBe("sess-main-missing-provider");
     testState.allowFrom = undefined;
   });
 
-  test("agent routes main last-channel whatsapp", async () => {
+  test("agent routes main last-channel telegram", async () => {
     setRegistry(defaultRegistry);
     const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gw-"));
     testState.sessionStorePath = path.join(dir, "sessions.json");
     await writeSessionStore({
       entries: {
         main: {
-          sessionId: "sess-main-whatsapp",
+          sessionId: "sess-main-telegram",
           updatedAt: Date.now(),
-          lastChannel: "whatsapp",
+          lastChannel: "telegram",
           lastTo: "+1555",
         },
       },
@@ -509,18 +509,18 @@ describe("gateway server agent", () => {
       sessionKey: "main",
       channel: "last",
       deliver: true,
-      idempotencyKey: "idem-agent-last-whatsapp",
+      idempotencyKey: "idem-agent-last-telegram",
     });
     expect(res.ok).toBe(true);
 
     const spy = vi.mocked(agentCommand);
     const call = spy.mock.calls.at(-1)?.[0] as Record<string, unknown>;
-    expectChannels(call, "whatsapp");
-    expect(call.messageChannel).toBe("whatsapp");
+    expectChannels(call, "telegram");
+    expect(call.messageChannel).toBe("telegram");
     expect(call.to).toBe("+1555");
     expect(call.deliver).toBe(true);
     expect(call.bestEffortDeliver).toBe(true);
-    expect(call.sessionId).toBe("sess-main-whatsapp");
+    expect(call.sessionId).toBe("sess-main-telegram");
   });
 
   test("agent routes main last-channel telegram", async () => {
@@ -555,17 +555,17 @@ describe("gateway server agent", () => {
     expect(call.sessionId).toBe("sess-main");
   });
 
-  test("agent routes main last-channel discord", async () => {
+  test("agent routes main last-channel telegram", async () => {
     setRegistry(defaultRegistry);
     const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gw-"));
     testState.sessionStorePath = path.join(dir, "sessions.json");
     await writeSessionStore({
       entries: {
         main: {
-          sessionId: "sess-discord",
+          sessionId: "sess-telegram",
           updatedAt: Date.now(),
-          lastChannel: "discord",
-          lastTo: "channel:discord-123",
+          lastChannel: "telegram",
+          lastTo: "channel:telegram-123",
         },
       },
     });
@@ -574,30 +574,30 @@ describe("gateway server agent", () => {
       sessionKey: "main",
       channel: "last",
       deliver: true,
-      idempotencyKey: "idem-agent-last-discord",
+      idempotencyKey: "idem-agent-last-telegram",
     });
     expect(res.ok).toBe(true);
 
     const spy = vi.mocked(agentCommand);
     const call = spy.mock.calls.at(-1)?.[0] as Record<string, unknown>;
-    expectChannels(call, "discord");
-    expect(call.to).toBe("channel:discord-123");
+    expectChannels(call, "telegram");
+    expect(call.to).toBe("channel:telegram-123");
     expect(call.deliver).toBe(true);
     expect(call.bestEffortDeliver).toBe(true);
-    expect(call.sessionId).toBe("sess-discord");
+    expect(call.sessionId).toBe("sess-telegram");
   });
 
-  test("agent routes main last-channel slack", async () => {
+  test("agent routes main last-channel telegram", async () => {
     setRegistry(defaultRegistry);
     const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gw-"));
     testState.sessionStorePath = path.join(dir, "sessions.json");
     await writeSessionStore({
       entries: {
         main: {
-          sessionId: "sess-slack",
+          sessionId: "sess-telegram",
           updatedAt: Date.now(),
-          lastChannel: "slack",
-          lastTo: "channel:slack-123",
+          lastChannel: "telegram",
+          lastTo: "channel:telegram-123",
         },
       },
     });
@@ -606,29 +606,29 @@ describe("gateway server agent", () => {
       sessionKey: "main",
       channel: "last",
       deliver: true,
-      idempotencyKey: "idem-agent-last-slack",
+      idempotencyKey: "idem-agent-last-telegram",
     });
     expect(res.ok).toBe(true);
 
     const spy = vi.mocked(agentCommand);
     const call = spy.mock.calls.at(-1)?.[0] as Record<string, unknown>;
-    expectChannels(call, "slack");
-    expect(call.to).toBe("channel:slack-123");
+    expectChannels(call, "telegram");
+    expect(call.to).toBe("channel:telegram-123");
     expect(call.deliver).toBe(true);
     expect(call.bestEffortDeliver).toBe(true);
-    expect(call.sessionId).toBe("sess-slack");
+    expect(call.sessionId).toBe("sess-telegram");
   });
 
-  test("agent routes main last-channel signal", async () => {
+  test("agent routes main last-channel telegram", async () => {
     setRegistry(defaultRegistry);
     const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gw-"));
     testState.sessionStorePath = path.join(dir, "sessions.json");
     await writeSessionStore({
       entries: {
         main: {
-          sessionId: "sess-signal",
+          sessionId: "sess-telegram",
           updatedAt: Date.now(),
-          lastChannel: "signal",
+          lastChannel: "telegram",
           lastTo: "+15551234567",
         },
       },
@@ -638,16 +638,16 @@ describe("gateway server agent", () => {
       sessionKey: "main",
       channel: "last",
       deliver: true,
-      idempotencyKey: "idem-agent-last-signal",
+      idempotencyKey: "idem-agent-last-telegram",
     });
     expect(res.ok).toBe(true);
 
     const spy = vi.mocked(agentCommand);
     const call = spy.mock.calls.at(-1)?.[0] as Record<string, unknown>;
-    expectChannels(call, "signal");
+    expectChannels(call, "telegram");
     expect(call.to).toBe("+15551234567");
     expect(call.deliver).toBe(true);
     expect(call.bestEffortDeliver).toBe(true);
-    expect(call.sessionId).toBe("sess-signal");
+    expect(call.sessionId).toBe("sess-telegram");
   });
 });

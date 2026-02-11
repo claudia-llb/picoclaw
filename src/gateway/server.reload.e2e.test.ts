@@ -40,7 +40,7 @@ const hoisted = vi.hoisted(() => {
   const providerManager = {
     getRuntimeSnapshot: vi.fn(() => ({
       providers: {
-        whatsapp: {
+        telegram: {
           running: false,
           connected: false,
           reconnectAttempts: 0,
@@ -57,26 +57,26 @@ const hoisted = vi.hoisted(() => {
           lastError: null,
           mode: null,
         },
-        discord: {
+        telegram: {
           running: false,
           lastStartAt: null,
           lastStopAt: null,
           lastError: null,
         },
-        slack: {
+        telegram: {
           running: false,
           lastStartAt: null,
           lastStopAt: null,
           lastError: null,
         },
-        signal: {
+        telegram: {
           running: false,
           lastStartAt: null,
           lastStopAt: null,
           lastError: null,
           baseUrl: null,
         },
-        imessage: {
+        telegram: {
           running: false,
           lastStartAt: null,
           lastStopAt: null,
@@ -92,12 +92,12 @@ const hoisted = vi.hoisted(() => {
         },
       },
       providerAccounts: {
-        whatsapp: {},
         telegram: {},
-        discord: {},
-        slack: {},
-        signal: {},
-        imessage: {},
+        telegram: {},
+        telegram: {},
+        telegram: {},
+        telegram: {},
+        telegram: {},
         msteams: {},
       },
     })),
@@ -191,7 +191,7 @@ describe("gateway hot reload", () => {
     }
   });
 
-  it("applies hot reload actions and emits restart signal", async () => {
+  it("applies hot reload actions and emits restart telegram", async () => {
     const port = await getFreePort();
     const server = await startGatewayServer(port);
 
@@ -210,9 +210,9 @@ describe("gateway hot reload", () => {
       web: { enabled: true },
       channels: {
         telegram: { botToken: "token" },
-        discord: { token: "token" },
-        signal: { account: "+15550000000" },
-        imessage: { enabled: true },
+        telegram: { token: "token" },
+        telegram: { account: "+15550000000" },
+        telegram: { enabled: true },
       },
     };
 
@@ -225,9 +225,9 @@ describe("gateway hot reload", () => {
           "browser.enabled",
           "web.enabled",
           "channels.telegram.botToken",
-          "channels.discord.token",
-          "channels.signal.account",
-          "channels.imessage.enabled",
+          "channels.telegram.token",
+          "channels.telegram.account",
+          "channels.telegram.enabled",
         ],
         restartGateway: false,
         restartReasons: [],
@@ -237,7 +237,7 @@ describe("gateway hot reload", () => {
         restartBrowserControl: true,
         restartCron: true,
         restartHeartbeat: true,
-        restartChannels: new Set(["whatsapp", "telegram", "discord", "signal", "imessage"]),
+        restartChannels: new Set(["telegram", "telegram", "telegram", "telegram", "telegram"]),
         noopPaths: [],
       },
       nextConfig,
@@ -259,22 +259,22 @@ describe("gateway hot reload", () => {
 
     expect(hoisted.providerManager.stopChannel).toHaveBeenCalledTimes(5);
     expect(hoisted.providerManager.startChannel).toHaveBeenCalledTimes(5);
-    expect(hoisted.providerManager.stopChannel).toHaveBeenCalledWith("whatsapp");
-    expect(hoisted.providerManager.startChannel).toHaveBeenCalledWith("whatsapp");
     expect(hoisted.providerManager.stopChannel).toHaveBeenCalledWith("telegram");
     expect(hoisted.providerManager.startChannel).toHaveBeenCalledWith("telegram");
-    expect(hoisted.providerManager.stopChannel).toHaveBeenCalledWith("discord");
-    expect(hoisted.providerManager.startChannel).toHaveBeenCalledWith("discord");
-    expect(hoisted.providerManager.stopChannel).toHaveBeenCalledWith("signal");
-    expect(hoisted.providerManager.startChannel).toHaveBeenCalledWith("signal");
-    expect(hoisted.providerManager.stopChannel).toHaveBeenCalledWith("imessage");
-    expect(hoisted.providerManager.startChannel).toHaveBeenCalledWith("imessage");
+    expect(hoisted.providerManager.stopChannel).toHaveBeenCalledWith("telegram");
+    expect(hoisted.providerManager.startChannel).toHaveBeenCalledWith("telegram");
+    expect(hoisted.providerManager.stopChannel).toHaveBeenCalledWith("telegram");
+    expect(hoisted.providerManager.startChannel).toHaveBeenCalledWith("telegram");
+    expect(hoisted.providerManager.stopChannel).toHaveBeenCalledWith("telegram");
+    expect(hoisted.providerManager.startChannel).toHaveBeenCalledWith("telegram");
+    expect(hoisted.providerManager.stopChannel).toHaveBeenCalledWith("telegram");
+    expect(hoisted.providerManager.startChannel).toHaveBeenCalledWith("telegram");
 
     const onRestart = hoisted.getOnRestart();
     expect(onRestart).toBeTypeOf("function");
 
-    const signalSpy = vi.fn();
-    process.once("SIGUSR1", signalSpy);
+    const telegramSpy = vi.fn();
+    process.once("SIGUSR1", telegramSpy);
 
     onRestart?.(
       {
@@ -293,7 +293,7 @@ describe("gateway hot reload", () => {
       {},
     );
 
-    expect(signalSpy).toHaveBeenCalledTimes(1);
+    expect(telegramSpy).toHaveBeenCalledTimes(1);
 
     await server.close();
   });

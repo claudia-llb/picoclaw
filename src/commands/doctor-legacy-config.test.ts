@@ -31,44 +31,44 @@ describe("normalizeLegacyConfigValues", () => {
     }
   });
 
-  it("does not add whatsapp config when missing and no auth exists", () => {
+  it("does not add telegram config when missing and no auth exists", () => {
     const res = normalizeLegacyConfigValues({
       messages: { ackReaction: "👀" },
     });
 
-    expect(res.config.channels?.whatsapp).toBeUndefined();
+    expect(res.config.channels?.telegram).toBeUndefined();
     expect(res.changes).toEqual([]);
   });
 
-  it("copies legacy ack reaction when whatsapp config exists", () => {
+  it("copies legacy ack reaction when telegram config exists", () => {
     const res = normalizeLegacyConfigValues({
       messages: { ackReaction: "👀", ackReactionScope: "group-mentions" },
-      channels: { whatsapp: {} },
+      channels: { telegram: {} },
     });
 
-    expect(res.config.channels?.whatsapp?.ackReaction).toEqual({
+    expect(res.config.channels?.telegram?.ackReaction).toEqual({
       emoji: "👀",
       direct: false,
       group: "mentions",
     });
     expect(res.changes).toEqual([
-      "Copied messages.ackReaction → channels.whatsapp.ackReaction (scope: group-mentions).",
+      "Copied messages.ackReaction → channels.telegram.ackReaction (scope: group-mentions).",
     ]);
   });
 
-  it("does not add whatsapp config when only auth exists (issue #900)", () => {
-    const credsDir = path.join(tempOauthDir ?? "", "whatsapp", "default");
+  it("does not add telegram config when only auth exists (issue #900)", () => {
+    const credsDir = path.join(tempOauthDir ?? "", "telegram", "default");
     writeCreds(credsDir);
 
     const res = normalizeLegacyConfigValues({
       messages: { ackReaction: "👀", ackReactionScope: "group-mentions" },
     });
 
-    expect(res.config.channels?.whatsapp).toBeUndefined();
+    expect(res.config.channels?.telegram).toBeUndefined();
     expect(res.changes).toEqual([]);
   });
 
-  it("does not add whatsapp config when only legacy auth exists (issue #900)", () => {
+  it("does not add telegram config when only legacy auth exists (issue #900)", () => {
     const credsPath = path.join(tempOauthDir ?? "", "creds.json");
     fs.writeFileSync(credsPath, JSON.stringify({ me: {} }));
 
@@ -76,19 +76,19 @@ describe("normalizeLegacyConfigValues", () => {
       messages: { ackReaction: "👀", ackReactionScope: "group-mentions" },
     });
 
-    expect(res.config.channels?.whatsapp).toBeUndefined();
+    expect(res.config.channels?.telegram).toBeUndefined();
     expect(res.changes).toEqual([]);
   });
 
-  it("does not add whatsapp config when only non-default auth exists (issue #900)", () => {
-    const credsDir = path.join(tempOauthDir ?? "", "whatsapp", "work");
+  it("does not add telegram config when only non-default auth exists (issue #900)", () => {
+    const credsDir = path.join(tempOauthDir ?? "", "telegram", "work");
     writeCreds(credsDir);
 
     const res = normalizeLegacyConfigValues({
       messages: { ackReaction: "👀", ackReactionScope: "group-mentions" },
     });
 
-    expect(res.config.channels?.whatsapp).toBeUndefined();
+    expect(res.config.channels?.telegram).toBeUndefined();
     expect(res.changes).toEqual([]);
   });
 
@@ -99,10 +99,10 @@ describe("normalizeLegacyConfigValues", () => {
 
       const res = normalizeLegacyConfigValues({
         messages: { ackReaction: "👀", ackReactionScope: "group-mentions" },
-        channels: { whatsapp: { accounts: { work: { authDir: customDir } } } },
+        channels: { telegram: { accounts: { work: { authDir: customDir } } } },
       });
 
-      expect(res.config.channels?.whatsapp?.ackReaction).toEqual({
+      expect(res.config.channels?.telegram?.ackReaction).toEqual({
         emoji: "👀",
         direct: false,
         group: "mentions",

@@ -55,13 +55,13 @@ describe("sendMessage channel normalization", () => {
     expect(result.channel).toBe("msteams");
   });
 
-  it("normalizes iMessage alias", async () => {
+  it("normalizes Telegram alias", async () => {
     const { sendMessage } = await loadMessage();
     const sendIMessage = vi.fn(async () => ({ messageId: "i1" }));
     await setRegistry(
       createTestRegistry([
         {
-          pluginId: "imessage",
+          pluginId: "telegram",
           source: "test",
           plugin: createIMessageTestPlugin(),
         },
@@ -76,7 +76,7 @@ describe("sendMessage channel normalization", () => {
     });
 
     expect(sendIMessage).toHaveBeenCalledWith("someone@example.com", "hi", expect.any(Object));
-    expect(result.channel).toBe("imessage");
+    expect(result.channel).toBe("telegram");
   });
 });
 

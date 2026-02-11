@@ -3,7 +3,7 @@ import { sleep } from "../utils.ts";
 import {
   removeAckReactionAfterReply,
   shouldAckReaction,
-  shouldAckReactionForWhatsApp,
+  shouldAckReactionForTelegram,
 } from "./ack-reactions.js";
 
 describe("shouldAckReaction", () => {
@@ -137,10 +137,10 @@ describe("shouldAckReaction", () => {
   });
 });
 
-describe("shouldAckReactionForWhatsApp", () => {
+describe("shouldAckReactionForTelegram", () => {
   it("respects direct and group modes", () => {
     expect(
-      shouldAckReactionForWhatsApp({
+      shouldAckReactionForTelegram({
         emoji: "👀",
         isDirect: true,
         isGroup: false,
@@ -152,7 +152,7 @@ describe("shouldAckReactionForWhatsApp", () => {
     ).toBe(true);
 
     expect(
-      shouldAckReactionForWhatsApp({
+      shouldAckReactionForTelegram({
         emoji: "👀",
         isDirect: true,
         isGroup: false,
@@ -164,7 +164,7 @@ describe("shouldAckReactionForWhatsApp", () => {
     ).toBe(false);
 
     expect(
-      shouldAckReactionForWhatsApp({
+      shouldAckReactionForTelegram({
         emoji: "👀",
         isDirect: false,
         isGroup: true,
@@ -176,7 +176,7 @@ describe("shouldAckReactionForWhatsApp", () => {
     ).toBe(true);
 
     expect(
-      shouldAckReactionForWhatsApp({
+      shouldAckReactionForTelegram({
         emoji: "👀",
         isDirect: false,
         isGroup: true,
@@ -190,7 +190,7 @@ describe("shouldAckReactionForWhatsApp", () => {
 
   it("honors mentions or activation for group-mentions", () => {
     expect(
-      shouldAckReactionForWhatsApp({
+      shouldAckReactionForTelegram({
         emoji: "👀",
         isDirect: false,
         isGroup: true,
@@ -202,7 +202,7 @@ describe("shouldAckReactionForWhatsApp", () => {
     ).toBe(true);
 
     expect(
-      shouldAckReactionForWhatsApp({
+      shouldAckReactionForTelegram({
         emoji: "👀",
         isDirect: false,
         isGroup: true,
@@ -214,7 +214,7 @@ describe("shouldAckReactionForWhatsApp", () => {
     ).toBe(true);
 
     expect(
-      shouldAckReactionForWhatsApp({
+      shouldAckReactionForTelegram({
         emoji: "👀",
         isDirect: false,
         isGroup: true,

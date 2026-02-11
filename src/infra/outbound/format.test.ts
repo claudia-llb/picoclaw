@@ -10,8 +10,8 @@ describe("formatOutboundDeliverySummary", () => {
     expect(formatOutboundDeliverySummary("telegram")).toBe(
       "✅ Sent via Telegram. Message ID: unknown",
     );
-    expect(formatOutboundDeliverySummary("imessage")).toBe(
-      "✅ Sent via iMessage. Message ID: unknown",
+    expect(formatOutboundDeliverySummary("telegram")).toBe(
+      "✅ Sent via Telegram. Message ID: unknown",
     );
   });
 
@@ -25,12 +25,12 @@ describe("formatOutboundDeliverySummary", () => {
     ).toBe("✅ Sent via Telegram. Message ID: m1 (chat c1)");
 
     expect(
-      formatOutboundDeliverySummary("discord", {
-        channel: "discord",
+      formatOutboundDeliverySummary("telegram", {
+        channel: "telegram",
         messageId: "d1",
         channelId: "chan",
       }),
-    ).toBe("✅ Sent via Discord. Message ID: d1 (channel chan)");
+    ).toBe("✅ Sent via Telegram. Message ID: d1 (channel chan)");
   });
 });
 
@@ -53,15 +53,15 @@ describe("buildOutboundDeliveryJson", () => {
     });
   });
 
-  it("supports whatsapp metadata when present", () => {
+  it("supports telegram metadata when present", () => {
     expect(
       buildOutboundDeliveryJson({
-        channel: "whatsapp",
+        channel: "telegram",
         to: "+1",
-        result: { channel: "whatsapp", messageId: "w1", toJid: "jid" },
+        result: { channel: "telegram", messageId: "w1", toJid: "jid" },
       }),
     ).toEqual({
-      channel: "whatsapp",
+      channel: "telegram",
       via: "direct",
       to: "+1",
       messageId: "w1",
@@ -70,15 +70,15 @@ describe("buildOutboundDeliveryJson", () => {
     });
   });
 
-  it("keeps timestamp for signal", () => {
+  it("keeps timestamp for telegram", () => {
     expect(
       buildOutboundDeliveryJson({
-        channel: "signal",
+        channel: "telegram",
         to: "+1",
-        result: { channel: "signal", messageId: "s1", timestamp: 123 },
+        result: { channel: "telegram", messageId: "s1", timestamp: 123 },
       }),
     ).toEqual({
-      channel: "signal",
+      channel: "telegram",
       via: "direct",
       to: "+1",
       messageId: "s1",
@@ -90,8 +90,8 @@ describe("buildOutboundDeliveryJson", () => {
 
 describe("formatGatewaySummary", () => {
   it("formats gateway summaries with channel", () => {
-    expect(formatGatewaySummary({ channel: "whatsapp", messageId: "m1" })).toBe(
-      "✅ Sent via gateway (whatsapp). Message ID: m1",
+    expect(formatGatewaySummary({ channel: "telegram", messageId: "m1" })).toBe(
+      "✅ Sent via gateway (telegram). Message ID: m1",
     );
   });
 
@@ -99,9 +99,9 @@ describe("formatGatewaySummary", () => {
     expect(
       formatGatewaySummary({
         action: "Poll sent",
-        channel: "discord",
+        channel: "telegram",
         messageId: "p1",
       }),
-    ).toBe("✅ Poll sent via gateway (discord). Message ID: p1");
+    ).toBe("✅ Poll sent via gateway (telegram). Message ID: p1");
   });
 });

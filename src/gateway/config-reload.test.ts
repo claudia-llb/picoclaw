@@ -43,13 +43,13 @@ describe("buildGatewayReloadPlan", () => {
     },
     reload: { configPrefixes: ["channels.telegram"] },
   };
-  const whatsappPlugin: ChannelPlugin = {
-    id: "whatsapp",
+  const telegramPlugin: ChannelPlugin = {
+    id: "telegram",
     meta: {
-      id: "whatsapp",
-      label: "WhatsApp",
-      selectionLabel: "WhatsApp",
-      docsPath: "/channels/whatsapp",
+      id: "telegram",
+      label: "Telegram",
+      selectionLabel: "Telegram",
+      docsPath: "/channels/telegram",
       blurb: "test",
     },
     capabilities: { chatTypes: ["direct"] },
@@ -57,11 +57,11 @@ describe("buildGatewayReloadPlan", () => {
       listAccountIds: () => [],
       resolveAccount: () => ({}),
     },
-    reload: { configPrefixes: ["web"], noopPrefixes: ["channels.whatsapp"] },
+    reload: { configPrefixes: ["web"], noopPrefixes: ["channels.telegram"] },
   };
   const registry = createTestRegistry([
     { pluginId: "telegram", plugin: telegramPlugin, source: "test" },
-    { pluginId: "whatsapp", plugin: whatsappPlugin, source: "test" },
+    { pluginId: "telegram", plugin: telegramPlugin, source: "test" },
   ]);
 
   beforeEach(() => {

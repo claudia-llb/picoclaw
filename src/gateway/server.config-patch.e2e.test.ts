@@ -251,7 +251,7 @@ describe("gateway config.patch", () => {
             },
           }),
           baseHash,
-          sessionKey: "agent:main:whatsapp:dm:+15555550123",
+          sessionKey: "agent:main:telegram:dm:+15555550123",
           note: "test patch",
           restartDelayMs: 0,
         },
@@ -380,7 +380,7 @@ describe("gateway server sessions", () => {
           sessionId: "sess-home-main",
           updatedAt: Date.now(),
         },
-        "discord:group:dev": {
+        "telegram:group:dev": {
           sessionId: "sess-home-group",
           updatedAt: Date.now() - 1000,
         },
@@ -406,7 +406,7 @@ describe("gateway server sessions", () => {
     });
     expect(homeSessions.ok).toBe(true);
     expect(homeSessions.payload?.sessions.map((s) => s.key).toSorted()).toEqual([
-      "agent:home:discord:group:dev",
+      "agent:home:telegram:group:dev",
       "agent:home:main",
     ]);
 

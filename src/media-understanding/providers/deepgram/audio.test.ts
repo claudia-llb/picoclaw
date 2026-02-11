@@ -108,7 +108,7 @@ describe("transcribeDeepgramAudio", () => {
       "https://api.example.com/v1/listen?model=nova-3&language=en&punctuate=false&smart_format=true",
     );
     expect(seenInit?.method).toBe("POST");
-    expect(seenInit?.signal).toBeInstanceOf(AbortSignal);
+    expect(seenInit?.telegram).toBeInstanceOf(AbortTelegram);
 
     const headers = new Headers(seenInit?.headers);
     expect(headers.get("authorization")).toBe("Token test-key");

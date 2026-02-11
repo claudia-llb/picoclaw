@@ -29,7 +29,7 @@ vi.mock("../../agents/model-fallback.js", () => ({
 }));
 
 vi.mock("../../agents/pi-embedded.js", () => ({
-  queueEmbeddedPiMessage: vi.fn().mockReturnValue(false),
+  queueEmbeddedPTelegram: vi.fn().mockReturnValue(false),
   runEmbeddedPiAgent: (params: unknown) => runEmbeddedPiAgentMock(params),
 }));
 
@@ -57,7 +57,7 @@ function createMinimalRun(params?: {
   const typing = createMockTypingController();
   const opts = params?.opts;
   const sessionCtx = {
-    Provider: "whatsapp",
+    Provider: "telegram",
     MessageSid: "msg",
   } as unknown as TemplateContext;
   const resolvedQueue = { mode: "interrupt" } as unknown as QueueSettings;
@@ -69,7 +69,7 @@ function createMinimalRun(params?: {
     run: {
       sessionId: "session",
       sessionKey,
-      messageProvider: "whatsapp",
+      messageProvider: "telegram",
       sessionFile: "/tmp/session.jsonl",
       workspaceDir: "/tmp",
       config: {},

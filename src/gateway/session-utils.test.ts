@@ -20,13 +20,13 @@ describe("gateway session utils", () => {
   });
 
   test("parseGroupKey handles group keys", () => {
-    expect(parseGroupKey("discord:group:dev")).toEqual({
-      channel: "discord",
+    expect(parseGroupKey("telegram:group:dev")).toEqual({
+      channel: "telegram",
       kind: "group",
       id: "dev",
     });
-    expect(parseGroupKey("agent:ops:discord:group:dev")).toEqual({
-      channel: "discord",
+    expect(parseGroupKey("agent:ops:telegram:group:dev")).toEqual({
+      channel: "telegram",
       kind: "group",
       id: "dev",
     });
@@ -36,7 +36,7 @@ describe("gateway session utils", () => {
   test("classifySessionKey respects chat type + prefixes", () => {
     expect(classifySessionKey("global")).toBe("global");
     expect(classifySessionKey("unknown")).toBe("unknown");
-    expect(classifySessionKey("discord:group:dev")).toBe("group");
+    expect(classifySessionKey("telegram:group:dev")).toBe("group");
     expect(classifySessionKey("main")).toBe("direct");
     const entry = { chatType: "group" } as SessionEntry;
     expect(classifySessionKey("main", entry)).toBe("group");
@@ -57,8 +57,8 @@ describe("gateway session utils", () => {
       session: { mainKey: "main" },
       agents: { list: [{ id: "ops", default: true }] },
     } as OpenClawConfig;
-    expect(resolveSessionStoreKey({ cfg, sessionKey: "discord:group:123" })).toBe(
-      "agent:ops:discord:group:123",
+    expect(resolveSessionStoreKey({ cfg, sessionKey: "telegram:group:123" })).toBe(
+      "agent:ops:telegram:group:123",
     );
     expect(resolveSessionStoreKey({ cfg, sessionKey: "agent:alpha:main" })).toBe(
       "agent:alpha:main",
@@ -208,10 +208,10 @@ describe("listSessionsFromStore search", () => {
       displayName: "Personal Chat",
       subject: "Family Reunion Planning",
     } as SessionEntry,
-    "agent:main:discord:group:dev-team": {
-      sessionId: "sess-discord-1",
+    "agent:main:telegram:group:dev-team": {
+      sessionId: "sess-telegram-1",
       updatedAt: Date.now() - 2000,
-      label: "discord",
+      label: "telegram",
       subject: "Dev Team Discussion",
     } as SessionEntry,
   });
@@ -268,10 +268,10 @@ describe("listSessionsFromStore search", () => {
       cfg: baseCfg,
       storePath: "/tmp/sessions.json",
       store,
-      opts: { search: "discord" },
+      opts: { search: "telegram" },
     });
     expect(result.sessions.length).toBe(1);
-    expect(result.sessions[0].label).toBe("discord");
+    expect(result.sessions[0].label).toBe("telegram");
   });
 
   test("filters by sessionId", () => {
@@ -295,7 +295,7 @@ describe("listSessionsFromStore search", () => {
       opts: { search: "dev-team" },
     });
     expect(result.sessions.length).toBe(1);
-    expect(result.sessions[0].key).toBe("agent:main:discord:group:dev-team");
+    expect(result.sessions[0].key).toBe("agent:main:telegram:group:dev-team");
   });
 
   test("returns empty array when no matches", () => {

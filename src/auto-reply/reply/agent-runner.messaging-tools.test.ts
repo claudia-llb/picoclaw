@@ -26,7 +26,7 @@ vi.mock("../../agents/model-fallback.js", () => ({
 }));
 
 vi.mock("../../agents/pi-embedded.js", () => ({
-  queueEmbeddedPiMessage: vi.fn().mockReturnValue(false),
+  queueEmbeddedPTelegram: vi.fn().mockReturnValue(false),
   runEmbeddedPiAgent: (params: unknown) => runEmbeddedPiAgentMock(params),
 }));
 
@@ -42,7 +42,7 @@ vi.mock("./queue.js", async () => {
 import { runReplyAgent } from "./agent-runner.js";
 
 function createRun(
-  messageProvider = "slack",
+  messageProvider = "telegram",
   opts: { storePath?: string; sessionKey?: string } = {},
 ) {
   const typing = createMockTypingController();
@@ -109,11 +109,11 @@ describe("runReplyAgent messaging tool suppression", () => {
     runEmbeddedPiAgentMock.mockResolvedValueOnce({
       payloads: [{ text: "hello world!" }],
       messagingToolSentTexts: ["different message"],
-      messagingToolSentTargets: [{ tool: "slack", provider: "slack", to: "channel:C1" }],
+      messagingToolSentTargets: [{ tool: "telegram", provider: "telegram", to: "channel:C1" }],
       meta: {},
     });
 
-    const result = await createRun("slack");
+    const result = await createRun("telegram");
 
     expect(result).toBeUndefined();
   });
@@ -122,11 +122,11 @@ describe("runReplyAgent messaging tool suppression", () => {
     runEmbeddedPiAgentMock.mockResolvedValueOnce({
       payloads: [{ text: "hello world!" }],
       messagingToolSentTexts: ["different message"],
-      messagingToolSentTargets: [{ tool: "discord", provider: "discord", to: "channel:C1" }],
+      messagingToolSentTargets: [{ tool: "telegram", provider: "telegram", to: "channel:C1" }],
       meta: {},
     });
 
-    const result = await createRun("slack");
+    const result = await createRun("telegram");
 
     expect(result).toMatchObject({ text: "hello world!" });
   });
@@ -137,8 +137,8 @@ describe("runReplyAgent messaging tool suppression", () => {
       messagingToolSentTexts: ["different message"],
       messagingToolSentTargets: [
         {
-          tool: "slack",
-          provider: "slack",
+          tool: "telegram",
+          provider: "telegram",
           to: "channel:C1",
           accountId: "alt",
         },
@@ -146,7 +146,7 @@ describe("runReplyAgent messaging tool suppression", () => {
       meta: {},
     });
 
-    const result = await createRun("slack");
+    const result = await createRun("telegram");
 
     expect(result).toMatchObject({ text: "hello world!" });
   });
@@ -163,7 +163,7 @@ describe("runReplyAgent messaging tool suppression", () => {
     runEmbeddedPiAgentMock.mockResolvedValueOnce({
       payloads: [{ text: "hello world!" }],
       messagingToolSentTexts: ["different message"],
-      messagingToolSentTargets: [{ tool: "slack", provider: "slack", to: "channel:C1" }],
+      messagingToolSentTargets: [{ tool: "telegram", provider: "telegram", to: "channel:C1" }],
       meta: {
         agentMeta: {
           usage: { input: 10, output: 5 },
@@ -173,7 +173,7 @@ describe("runReplyAgent messaging tool suppression", () => {
       },
     });
 
-    const result = await createRun("slack", { storePath, sessionKey });
+    const result = await createRun("telegram", { storePath, sessionKey });
 
     expect(result).toBeUndefined();
     const store = loadSessionStore(storePath, { skipCache: true });

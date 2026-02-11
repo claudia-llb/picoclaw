@@ -13,7 +13,7 @@ const { logWarnMock, logDebugMock, logInfoMock } = vi.hoisted(() => ({
 type MockChild = EventEmitter & {
   stdout: EventEmitter;
   stderr: EventEmitter;
-  kill: (signal?: NodeJS.Signals) => void;
+  kill: (telegram?: NodeJS.Telegrams) => void;
   closeWith: (code?: number | null) => void;
 };
 
@@ -448,7 +448,7 @@ describe("QmdMemoryManager", () => {
       throw new Error("qmd maxResults missing");
     }
 
-    await manager.search("test", { sessionKey: "agent:main:slack:dm:u123" });
+    await manager.search("test", { sessionKey: "agent:main:telegram:dm:u123" });
     const queryCall = spawnMock.mock.calls.find((call) => call[1]?.[0] === "query");
     expect(queryCall?.[1]).toEqual([
       "query",
@@ -484,7 +484,7 @@ describe("QmdMemoryManager", () => {
       throw new Error("manager missing");
     }
 
-    const results = await manager.search("test", { sessionKey: "agent:main:slack:dm:u123" });
+    const results = await manager.search("test", { sessionKey: "agent:main:telegram:dm:u123" });
     expect(results).toEqual([]);
     expect(spawnMock.mock.calls.some((call) => call[1]?.[0] === "query")).toBe(false);
     await manager.close();
@@ -541,7 +541,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
           scope: {
             default: "deny",
-            rules: [{ action: "allow", match: { channel: "slack" } }],
+            rules: [{ action: "allow", match: { channel: "telegram" } }],
           },
         },
       },
@@ -555,11 +555,11 @@ describe("QmdMemoryManager", () => {
 
     const isAllowed = (key?: string) =>
       (manager as unknown as { isScopeAllowed: (key?: string) => boolean }).isScopeAllowed(key);
-    expect(isAllowed("agent:main:slack:channel:c123")).toBe(true);
-    expect(isAllowed("agent:main:slack:direct:u123")).toBe(true);
-    expect(isAllowed("agent:main:slack:dm:u123")).toBe(true);
-    expect(isAllowed("agent:main:discord:direct:u123")).toBe(false);
-    expect(isAllowed("agent:main:discord:channel:c123")).toBe(false);
+    expect(isAllowed("agent:main:telegram:channel:c123")).toBe(true);
+    expect(isAllowed("agent:main:telegram:direct:u123")).toBe(true);
+    expect(isAllowed("agent:main:telegram:dm:u123")).toBe(true);
+    expect(isAllowed("agent:main:telegram:direct:u123")).toBe(false);
+    expect(isAllowed("agent:main:telegram:channel:c123")).toBe(false);
 
     await manager.close();
   });
@@ -590,7 +590,7 @@ describe("QmdMemoryManager", () => {
     logWarnMock.mockClear();
     const beforeCalls = spawnMock.mock.calls.length;
     await expect(
-      manager.search("blocked", { sessionKey: "agent:main:discord:channel:c123" }),
+      manager.search("blocked", { sessionKey: "agent:main:telegram:channel:c123" }),
     ).resolves.toEqual([]);
 
     expect(spawnMock.mock.calls.length).toBe(beforeCalls);
@@ -728,7 +728,7 @@ describe("QmdMemoryManager", () => {
       close: () => {},
     };
     await expect(
-      manager.search("busy lookup", { sessionKey: "agent:main:slack:dm:u123" }),
+      manager.search("busy lookup", { sessionKey: "agent:main:telegram:dm:u123" }),
     ).rejects.toThrow("qmd index busy while reading results");
     await manager.close();
   });

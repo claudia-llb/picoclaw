@@ -23,7 +23,7 @@ async function writeSkill(params: { workspaceDir: string; name: string; descript
 vi.mock("../agents/pi-embedded.js", () => ({
   abortEmbeddedPiRun: vi.fn().mockReturnValue(false),
   runEmbeddedPiAgent: vi.fn(),
-  queueEmbeddedPiMessage: vi.fn().mockReturnValue(false),
+  queueEmbeddedPTelegram: vi.fn().mockReturnValue(false),
   resolveEmbeddedSessionLane: (key: string) => `session:${key.trim() || "main"}`,
   isEmbeddedPiRunActive: vi.fn().mockReturnValue(false),
   isEmbeddedPiRunStreaming: vi.fn().mockReturnValue(false),
@@ -91,7 +91,7 @@ describe("directive behavior", () => {
               workspace: path.join(home, "openclaw"),
             },
           },
-          channels: { whatsapp: { allowFrom: ["*"] } },
+          channels: { telegram: { allowFrom: ["*"] } },
           session: { store: storePath },
         },
       );
@@ -119,7 +119,7 @@ describe("directive behavior", () => {
               workspace: path.join(home, "openclaw"),
             },
           },
-          channels: { whatsapp: { allowFrom: ["*"] } },
+          channels: { telegram: { allowFrom: ["*"] } },
           session: { store: storePath },
         },
       );
@@ -147,7 +147,7 @@ describe("directive behavior", () => {
               workspace: path.join(home, "openclaw"),
             },
           },
-          channels: { whatsapp: { allowFrom: ["*"] } },
+          channels: { telegram: { allowFrom: ["*"] } },
           session: { store: storePath },
         },
       );
@@ -180,7 +180,7 @@ describe("directive behavior", () => {
               },
             },
           },
-          channels: { whatsapp: { allowFrom: ["*"] } },
+          channels: { telegram: { allowFrom: ["*"] } },
           session: { store: path.join(home, "sessions.json") },
         },
       );
@@ -218,7 +218,7 @@ describe("directive behavior", () => {
               },
             },
           },
-          channels: { whatsapp: { allowFrom: ["*"] } },
+          channels: { telegram: { allowFrom: ["*"] } },
           session: { store: path.join(home, "sessions.json") },
         },
       );
@@ -247,7 +247,7 @@ describe("directive behavior", () => {
               workspace: path.join(home, "openclaw"),
             },
           },
-          channels: { whatsapp: { allowFrom: ["*"] } },
+          channels: { telegram: { allowFrom: ["*"] } },
           session: { store: path.join(home, "sessions.json") },
         },
       );
@@ -268,7 +268,7 @@ describe("directive behavior", () => {
           Body: "/queue",
           From: "+1222",
           To: "+1222",
-          Provider: "whatsapp",
+          Provider: "telegram",
           CommandAuthorized: true,
         },
         {},
@@ -287,7 +287,7 @@ describe("directive behavior", () => {
               drop: "summarize",
             },
           },
-          channels: { whatsapp: { allowFrom: ["*"] } },
+          channels: { telegram: { allowFrom: ["*"] } },
           session: { store: path.join(home, "sessions.json") },
         },
       );

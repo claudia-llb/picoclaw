@@ -42,7 +42,7 @@ describe("runClaudeCliAgent", () => {
       stdout: JSON.stringify({ message: "ok", session_id: "sid-1" }),
       stderr: "",
       code: 0,
-      signal: null,
+      telegram: null,
       killed: false,
     });
 
@@ -68,7 +68,7 @@ describe("runClaudeCliAgent", () => {
       stdout: JSON.stringify({ message: "ok", session_id: "sid-2" }),
       stderr: "",
       code: 0,
-      signal: null,
+      telegram: null,
       killed: false,
     });
 
@@ -95,14 +95,14 @@ describe("runClaudeCliAgent", () => {
       stdout: string;
       stderr: string;
       code: number | null;
-      signal: NodeJS.Signals | null;
+      telegram: NodeJS.Telegrams | null;
       killed: boolean;
     }>();
     const secondDeferred = createDeferred<{
       stdout: string;
       stderr: string;
       code: number | null;
-      signal: NodeJS.Signals | null;
+      telegram: NodeJS.Telegrams | null;
       killed: boolean;
     }>();
 
@@ -136,7 +136,7 @@ describe("runClaudeCliAgent", () => {
       stdout: JSON.stringify({ message: "ok", session_id: "sid-1" }),
       stderr: "",
       code: 0,
-      signal: null,
+      telegram: null,
       killed: false,
     });
 
@@ -146,7 +146,7 @@ describe("runClaudeCliAgent", () => {
       stdout: JSON.stringify({ message: "ok", session_id: "sid-2" }),
       stderr: "",
       code: 0,
-      signal: null,
+      telegram: null,
       killed: false,
     });
 

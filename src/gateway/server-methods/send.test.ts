@@ -55,7 +55,7 @@ describe("gateway send mirroring", () => {
       params: {
         to: "channel:C1",
         message: "hi",
-        channel: "slack",
+        channel: "telegram",
         idempotencyKey: "idem-1",
         sessionKey: "agent:main:main",
       },
@@ -76,7 +76,7 @@ describe("gateway send mirroring", () => {
   });
 
   it("mirrors media filenames when delivery succeeds", async () => {
-    mocks.deliverOutboundPayloads.mockResolvedValue([{ messageId: "m1", channel: "slack" }]);
+    mocks.deliverOutboundPayloads.mockResolvedValue([{ messageId: "m1", channel: "telegram" }]);
 
     const respond = vi.fn();
     await sendHandlers.send({
@@ -84,7 +84,7 @@ describe("gateway send mirroring", () => {
         to: "channel:C1",
         message: "caption",
         mediaUrl: "https://example.com/files/report.pdf?sig=1",
-        channel: "slack",
+        channel: "telegram",
         idempotencyKey: "idem-2",
         sessionKey: "agent:main:main",
       },
@@ -107,14 +107,14 @@ describe("gateway send mirroring", () => {
   });
 
   it("mirrors MEDIA tags as attachments", async () => {
-    mocks.deliverOutboundPayloads.mockResolvedValue([{ messageId: "m2", channel: "slack" }]);
+    mocks.deliverOutboundPayloads.mockResolvedValue([{ messageId: "m2", channel: "telegram" }]);
 
     const respond = vi.fn();
     await sendHandlers.send({
       params: {
         to: "channel:C1",
         message: "Here\nMEDIA:https://example.com/image.png",
-        channel: "slack",
+        channel: "telegram",
         idempotencyKey: "idem-3",
         sessionKey: "agent:main:main",
       },
@@ -137,16 +137,18 @@ describe("gateway send mirroring", () => {
   });
 
   it("lowercases provided session keys for mirroring", async () => {
-    mocks.deliverOutboundPayloads.mockResolvedValue([{ messageId: "m-lower", channel: "slack" }]);
+    mocks.deliverOutboundPayloads.mockResolvedValue([
+      { messageId: "m-lower", channel: "telegram" },
+    ]);
 
     const respond = vi.fn();
     await sendHandlers.send({
       params: {
         to: "channel:C1",
         message: "hi",
-        channel: "slack",
+        channel: "telegram",
         idempotencyKey: "idem-lower",
-        sessionKey: "agent:main:slack:channel:C123",
+        sessionKey: "agent:main:telegram:channel:C123",
       },
       respond,
       context: makeContext(),
@@ -158,21 +160,21 @@ describe("gateway send mirroring", () => {
     expect(mocks.deliverOutboundPayloads).toHaveBeenCalledWith(
       expect.objectContaining({
         mirror: expect.objectContaining({
-          sessionKey: "agent:main:slack:channel:c123",
+          sessionKey: "agent:main:telegram:channel:c123",
         }),
       }),
     );
   });
 
   it("derives a target session key when none is provided", async () => {
-    mocks.deliverOutboundPayloads.mockResolvedValue([{ messageId: "m3", channel: "slack" }]);
+    mocks.deliverOutboundPayloads.mockResolvedValue([{ messageId: "m3", channel: "telegram" }]);
 
     const respond = vi.fn();
     await sendHandlers.send({
       params: {
         to: "channel:C1",
         message: "hello",
-        channel: "slack",
+        channel: "telegram",
         idempotencyKey: "idem-4",
       },
       respond,
@@ -186,7 +188,7 @@ describe("gateway send mirroring", () => {
     expect(mocks.deliverOutboundPayloads).toHaveBeenCalledWith(
       expect.objectContaining({
         mirror: expect.objectContaining({
-          sessionKey: "agent:main:slack:channel:resolved",
+          sessionKey: "agent:main:telegram:channel:resolved",
           agentId: "main",
         }),
       }),

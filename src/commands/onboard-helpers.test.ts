@@ -11,7 +11,7 @@ const mocks = vi.hoisted(() => ({
     stdout: "",
     stderr: "",
     code: 0,
-    signal: null,
+    telegram: null,
     killed: false,
   })),
   pickPrimaryTailnetIPv4: vi.fn(() => undefined),

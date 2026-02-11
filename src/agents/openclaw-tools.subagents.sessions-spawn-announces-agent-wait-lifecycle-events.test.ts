@@ -63,7 +63,7 @@ describe("openclaw-tools: subagents", () => {
         if (params?.lane === "subagent") {
           childRunId = runId;
           childSessionKey = params?.sessionKey ?? "";
-          expect(params?.channel).toBe("discord");
+          expect(params?.channel).toBe("telegram");
           expect(params?.timeout).toBe(1);
         }
         return {
@@ -101,8 +101,8 @@ describe("openclaw-tools: subagents", () => {
     });
 
     const tool = createOpenClawTools({
-      agentSessionKey: "discord:group:req",
-      agentChannel: "discord",
+      agentSessionKey: "telegram:group:req",
+      agentChannel: "telegram",
     }).find((candidate) => candidate.name === "sessions_spawn");
     if (!tool) {
       throw new Error("missing sessions_spawn tool");
@@ -136,7 +136,7 @@ describe("openclaw-tools: subagents", () => {
 
     // Second call: main agent trigger
     const second = agentCalls[1]?.params as { sessionKey?: string; deliver?: boolean } | undefined;
-    expect(second?.sessionKey).toBe("discord:group:req");
+    expect(second?.sessionKey).toBe("telegram:group:req");
     expect(second?.deliver).toBe(true);
 
     // No direct send to external channel (main agent handles delivery)

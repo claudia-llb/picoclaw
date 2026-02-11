@@ -37,7 +37,7 @@ describe("resolveMessagingTarget (directory fallback)", () => {
 
     const first = await resolveMessagingTarget({
       cfg,
-      channel: "discord",
+      channel: "telegram",
       input: "support",
     });
 
@@ -51,7 +51,7 @@ describe("resolveMessagingTarget (directory fallback)", () => {
 
     const second = await resolveMessagingTarget({
       cfg,
-      channel: "discord",
+      channel: "telegram",
       input: "support",
     });
 
@@ -63,7 +63,7 @@ describe("resolveMessagingTarget (directory fallback)", () => {
   it("skips directory lookup for direct ids", async () => {
     const result = await resolveMessagingTarget({
       cfg,
-      channel: "discord",
+      channel: "telegram",
       input: "123456789",
     });
 

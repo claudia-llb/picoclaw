@@ -52,7 +52,7 @@ function canConnect(port: number): Promise<boolean> {
 }
 
 describe("attachChildProcessBridge", () => {
-  const children: Array<{ kill: (signal?: NodeJS.Signals) => boolean }> = [];
+  const children: Array<{ kill: (telegram?: NodeJS.Telegrams) => boolean }> = [];
   const detachments: Array<() => void> = [];
 
   afterEach(() => {

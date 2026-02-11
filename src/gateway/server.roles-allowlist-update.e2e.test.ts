@@ -104,7 +104,7 @@ const connectNodeClient = async (params: {
   return client;
 };
 
-async function waitForSignal(check: () => boolean, timeoutMs = 2000) {
+async function waitForTelegram(check: () => boolean, timeoutMs = 2000) {
   const start = Date.now();
   while (Date.now() - start < timeoutMs) {
     if (check()) {
@@ -170,7 +170,7 @@ describe("gateway update.run", () => {
           id,
           method: "update.run",
           params: {
-            sessionKey: "agent:main:whatsapp:dm:+15555550123",
+            sessionKey: "agent:main:telegram:dm:+15555550123",
             restartDelayMs: 0,
           },
         }),
@@ -181,7 +181,7 @@ describe("gateway update.run", () => {
       );
       expect(res.ok).toBe(true);
 
-      await waitForSignal(() => sigusr1.mock.calls.length > 0);
+      await waitForTelegram(() => sigusr1.mock.calls.length > 0);
       expect(sigusr1).toHaveBeenCalled();
 
       const sentinelPath = path.join(os.homedir(), ".openclaw", "restart-sentinel.json");

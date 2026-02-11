@@ -10,7 +10,7 @@ type RunEmbeddedPiAgentParams = Parameters<RunEmbeddedPiAgent>[0];
 const piEmbeddedMock = vi.hoisted(() => ({
   abortEmbeddedPiRun: vi.fn().mockReturnValue(false),
   runEmbeddedPiAgent: vi.fn<ReturnType<RunEmbeddedPiAgent>, Parameters<RunEmbeddedPiAgent>>(),
-  queueEmbeddedPiMessage: vi.fn().mockReturnValue(false),
+  queueEmbeddedPTelegram: vi.fn().mockReturnValue(false),
   resolveEmbeddedSessionLane: (key: string) => `session:${key.trim() || "main"}`,
   isEmbeddedPiRunActive: vi.fn().mockReturnValue(false),
   isEmbeddedPiRunStreaming: vi.fn().mockReturnValue(false),
@@ -29,7 +29,7 @@ async function withTempHome<T>(fn: (home: string) => Promise<T>): Promise<T> {
 describe("block streaming", () => {
   beforeEach(() => {
     piEmbeddedMock.abortEmbeddedPiRun.mockReset().mockReturnValue(false);
-    piEmbeddedMock.queueEmbeddedPiMessage.mockReset().mockReturnValue(false);
+    piEmbeddedMock.queueEmbeddedPTelegram.mockReset().mockReturnValue(false);
     piEmbeddedMock.isEmbeddedPiRunActive.mockReset().mockReturnValue(false);
     piEmbeddedMock.isEmbeddedPiRunStreaming.mockReset().mockReturnValue(false);
     piEmbeddedMock.runEmbeddedPiAgent.mockReset();
@@ -76,7 +76,7 @@ describe("block streaming", () => {
           From: "+1004",
           To: "+2000",
           MessageSid: "msg-123",
-          Provider: "discord",
+          Provider: "telegram",
         },
         {
           onReplyStart,
@@ -90,7 +90,7 @@ describe("block streaming", () => {
               workspace: path.join(home, "openclaw"),
             },
           },
-          channels: { whatsapp: { allowFrom: ["*"] } },
+          channels: { telegram: { allowFrom: ["*"] } },
           session: { store: path.join(home, "sessions.json") },
         },
       );
@@ -185,7 +185,7 @@ describe("block streaming", () => {
           From: "+1004",
           To: "+2000",
           MessageSid: "msg-124",
-          Provider: "discord",
+          Provider: "telegram",
         },
         {
           onBlockReply,
@@ -198,7 +198,7 @@ describe("block streaming", () => {
               workspace: path.join(home, "openclaw"),
             },
           },
-          channels: { whatsapp: { allowFrom: ["*"] } },
+          channels: { telegram: { allowFrom: ["*"] } },
           session: { store: path.join(home, "sessions.json") },
         },
       );
@@ -213,7 +213,7 @@ describe("block streaming", () => {
       let sawAbort = false;
       const onBlockReply = vi.fn((_, context) => {
         return new Promise<void>((resolve) => {
-          context?.abortSignal?.addEventListener(
+          context?.abortTelegram?.addEventListener(
             "abort",
             () => {
               sawAbort = true;

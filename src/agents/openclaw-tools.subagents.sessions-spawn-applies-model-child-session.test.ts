@@ -66,8 +66,8 @@ describe("openclaw-tools: subagents", () => {
     });
 
     const tool = createOpenClawTools({
-      agentSessionKey: "discord:group:req",
-      agentSurface: "discord",
+      agentSessionKey: "telegram:group:req",
+      agentSurface: "telegram",
     }).find((candidate) => candidate.name === "sessions_spawn");
     if (!tool) {
       throw new Error("missing sessions_spawn tool");
@@ -111,8 +111,8 @@ describe("openclaw-tools: subagents", () => {
     });
 
     const tool = createOpenClawTools({
-      agentSessionKey: "discord:group:req",
-      agentChannel: "discord",
+      agentSessionKey: "telegram:group:req",
+      agentChannel: "telegram",
     }).find((candidate) => candidate.name === "sessions_spawn");
     if (!tool) {
       throw new Error("missing sessions_spawn tool");
@@ -144,8 +144,8 @@ describe("openclaw-tools: subagents", () => {
     });
 
     const tool = createOpenClawTools({
-      agentSessionKey: "discord:group:req",
-      agentChannel: "discord",
+      agentSessionKey: "telegram:group:req",
+      agentChannel: "telegram",
     }).find((candidate) => candidate.name === "sessions_spawn");
     if (!tool) {
       throw new Error("missing sessions_spawn tool");
@@ -184,7 +184,7 @@ describe("openclaw-tools: subagents", () => {
 
     const tool = createOpenClawTools({
       agentSessionKey: "agent:main:main",
-      agentChannel: "discord",
+      agentChannel: "telegram",
     }).find((candidate) => candidate.name === "sessions_spawn");
     if (!tool) {
       throw new Error("missing sessions_spawn tool");

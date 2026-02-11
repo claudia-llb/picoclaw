@@ -72,7 +72,7 @@ describe("openclaw-tools: subagents", () => {
 
     const tool = createOpenClawTools({
       agentSessionKey: "main",
-      agentChannel: "whatsapp",
+      agentChannel: "telegram",
     }).find((candidate) => candidate.name === "sessions_spawn");
     if (!tool) {
       throw new Error("missing sessions_spawn tool");
@@ -111,7 +111,7 @@ describe("openclaw-tools: subagents", () => {
 
     const tool = createOpenClawTools({
       agentSessionKey: "main",
-      agentChannel: "whatsapp",
+      agentChannel: "telegram",
     }).find((candidate) => candidate.name === "sessions_spawn");
     if (!tool) {
       throw new Error("missing sessions_spawn tool");
@@ -153,7 +153,7 @@ describe("openclaw-tools: subagents", () => {
         if (params?.lane === "subagent") {
           childRunId = runId;
           childSessionKey = params?.sessionKey ?? "";
-          expect(params?.channel).toBe("discord");
+          expect(params?.channel).toBe("telegram");
           expect(params?.timeout).toBe(1);
         }
         return {
@@ -181,8 +181,8 @@ describe("openclaw-tools: subagents", () => {
     });
 
     const tool = createOpenClawTools({
-      agentSessionKey: "discord:group:req",
-      agentChannel: "discord",
+      agentSessionKey: "telegram:group:req",
+      agentChannel: "telegram",
     }).find((candidate) => candidate.name === "sessions_spawn");
     if (!tool) {
       throw new Error("missing sessions_spawn tool");
@@ -234,7 +234,7 @@ describe("openclaw-tools: subagents", () => {
       | undefined;
     expect(first?.lane).toBe("subagent");
     expect(first?.deliver).toBe(false);
-    expect(first?.channel).toBe("discord");
+    expect(first?.channel).toBe("telegram");
     expect(first?.sessionKey?.startsWith("agent:main:subagent:")).toBe(true);
     expect(childSessionKey?.startsWith("agent:main:subagent:")).toBe(true);
 
@@ -245,7 +245,7 @@ describe("openclaw-tools: subagents", () => {
           deliver?: boolean;
         }
       | undefined;
-    expect(second?.sessionKey).toBe("discord:group:req");
+    expect(second?.sessionKey).toBe("telegram:group:req");
     expect(second?.deliver).toBe(true);
     expect(second?.message).toContain("subagent task");
 
@@ -295,7 +295,7 @@ describe("openclaw-tools: subagents", () => {
 
     const tool = createOpenClawTools({
       agentSessionKey: "main",
-      agentChannel: "whatsapp",
+      agentChannel: "telegram",
       agentAccountId: "kev",
     }).find((candidate) => candidate.name === "sessions_spawn");
     if (!tool) {
@@ -338,7 +338,7 @@ describe("openclaw-tools: subagents", () => {
       | { accountId?: string; channel?: string; deliver?: boolean }
       | undefined;
     expect(announceParams?.deliver).toBe(true);
-    expect(announceParams?.channel).toBe("whatsapp");
+    expect(announceParams?.channel).toBe("telegram");
     expect(announceParams?.accountId).toBe("kev");
   });
 });

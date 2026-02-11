@@ -45,8 +45,8 @@ function buildParams(commandBody: string, cfg: OpenClawConfig, ctxOverrides?: Pa
     CommandBody: commandBody,
     CommandSource: "text",
     CommandAuthorized: true,
-    Provider: "whatsapp",
-    Surface: "whatsapp",
+    Provider: "telegram",
+    Surface: "telegram",
     ...ctxOverrides,
   } as MsgContext;
 
@@ -70,7 +70,7 @@ function buildParams(commandBody: string, cfg: OpenClawConfig, ctxOverrides?: Pa
     resolvedVerboseLevel: "off" as const,
     resolvedReasoningLevel: "off" as const,
     resolveDefaultThinkingLevel: async () => undefined,
-    provider: "whatsapp",
+    provider: "telegram",
     model: "test-model",
     contextTokens: 0,
     isGroup: false,
@@ -82,7 +82,7 @@ describe("handleCommands gating", () => {
     resetBashChatCommandForTests();
     const cfg = {
       commands: { bash: false, text: true },
-      whatsapp: { allowFrom: ["*"] },
+      telegram: { allowFrom: ["*"] },
     } as OpenClawConfig;
     const params = buildParams("/bash echo hi", cfg);
     const result = await handleCommands(params);
@@ -94,13 +94,13 @@ describe("handleCommands gating", () => {
     resetBashChatCommandForTests();
     const cfg = {
       commands: { bash: true, text: true },
-      whatsapp: { allowFrom: ["*"] },
+      telegram: { allowFrom: ["*"] },
     } as OpenClawConfig;
     const params = buildParams("/bash echo hi", cfg);
     params.elevated = {
       enabled: true,
       allowed: false,
-      failures: [{ gate: "allowFrom", key: "tools.elevated.allowFrom.whatsapp" }],
+      failures: [{ gate: "allowFrom", key: "tools.elevated.allowFrom.telegram" }],
     };
     const result = await handleCommands(params);
     expect(result.shouldContinue).toBe(false);
@@ -110,7 +110,7 @@ describe("handleCommands gating", () => {
   it("blocks /config when disabled", async () => {
     const cfg = {
       commands: { config: false, debug: false, text: true },
-      channels: { whatsapp: { allowFrom: ["*"] } },
+      channels: { telegram: { allowFrom: ["*"] } },
     } as OpenClawConfig;
     const params = buildParams("/config show", cfg);
     const result = await handleCommands(params);
@@ -121,7 +121,7 @@ describe("handleCommands gating", () => {
   it("blocks /debug when disabled", async () => {
     const cfg = {
       commands: { config: false, debug: false, text: true },
-      channels: { whatsapp: { allowFrom: ["*"] } },
+      channels: { telegram: { allowFrom: ["*"] } },
     } as OpenClawConfig;
     const params = buildParams("/debug show", cfg);
     const result = await handleCommands(params);
@@ -135,7 +135,7 @@ describe("handleCommands bash alias", () => {
     resetBashChatCommandForTests();
     const cfg = {
       commands: { bash: true, text: true },
-      whatsapp: { allowFrom: ["*"] },
+      telegram: { allowFrom: ["*"] },
     } as OpenClawConfig;
     const params = buildParams("!poll", cfg);
     const result = await handleCommands(params);
@@ -147,7 +147,7 @@ describe("handleCommands bash alias", () => {
     resetBashChatCommandForTests();
     const cfg = {
       commands: { bash: true, text: true },
-      whatsapp: { allowFrom: ["*"] },
+      telegram: { allowFrom: ["*"] },
     } as OpenClawConfig;
     const params = buildParams("!stop", cfg);
     const result = await handleCommands(params);
@@ -168,7 +168,7 @@ describe("handleCommands plugin commands", () => {
 
     const cfg = {
       commands: { text: true },
-      channels: { whatsapp: { allowFrom: ["*"] } },
+      channels: { telegram: { allowFrom: ["*"] } },
     } as OpenClawConfig;
     const params = buildParams("/card", cfg);
     const commandResult = await handleCommands(params);
@@ -183,7 +183,7 @@ describe("handleCommands identity", () => {
   it("returns sender details for /whoami", async () => {
     const cfg = {
       commands: { text: true },
-      channels: { whatsapp: { allowFrom: ["*"] } },
+      channels: { telegram: { allowFrom: ["*"] } },
     } as OpenClawConfig;
     const params = buildParams("/whoami", cfg, {
       SenderId: "12345",
@@ -192,7 +192,7 @@ describe("handleCommands identity", () => {
     });
     const result = await handleCommands(params);
     expect(result.shouldContinue).toBe(false);
-    expect(result.reply?.text).toContain("Channel: whatsapp");
+    expect(result.reply?.text).toContain("Channel: telegram");
     expect(result.reply?.text).toContain("User id: 12345");
     expect(result.reply?.text).toContain("Username: @TestUser");
     expect(result.reply?.text).toContain("AllowFrom: 12345");
@@ -203,7 +203,7 @@ describe("handleCommands hooks", () => {
   it("triggers hooks for /new with arguments", async () => {
     const cfg = {
       commands: { text: true },
-      channels: { whatsapp: { allowFrom: ["*"] } },
+      channels: { telegram: { allowFrom: ["*"] } },
     } as OpenClawConfig;
     const params = buildParams("/new take notes", cfg);
     const spy = vi.spyOn(internalHooks, "triggerInternalHook").mockResolvedValue();
@@ -219,7 +219,7 @@ describe("handleCommands context", () => {
   it("returns context help for /context", async () => {
     const cfg = {
       commands: { text: true },
-      channels: { whatsapp: { allowFrom: ["*"] } },
+      channels: { telegram: { allowFrom: ["*"] } },
     } as OpenClawConfig;
     const params = buildParams("/context", cfg);
     const result = await handleCommands(params);
@@ -231,7 +231,7 @@ describe("handleCommands context", () => {
   it("returns a per-file breakdown for /context list", async () => {
     const cfg = {
       commands: { text: true },
-      channels: { whatsapp: { allowFrom: ["*"] } },
+      channels: { telegram: { allowFrom: ["*"] } },
     } as OpenClawConfig;
     const params = buildParams("/context list", cfg);
     const result = await handleCommands(params);
@@ -243,7 +243,7 @@ describe("handleCommands context", () => {
   it("returns a detailed breakdown for /context detail", async () => {
     const cfg = {
       commands: { text: true },
-      channels: { whatsapp: { allowFrom: ["*"] } },
+      channels: { telegram: { allowFrom: ["*"] } },
     } as OpenClawConfig;
     const params = buildParams("/context detail", cfg);
     const result = await handleCommands(params);
@@ -258,7 +258,7 @@ describe("handleCommands subagents", () => {
     resetSubagentRegistryForTests();
     const cfg = {
       commands: { text: true },
-      channels: { whatsapp: { allowFrom: ["*"] } },
+      channels: { telegram: { allowFrom: ["*"] } },
     } as OpenClawConfig;
     const params = buildParams("/subagents list", cfg);
     const result = await handleCommands(params);
@@ -271,8 +271,8 @@ describe("handleCommands subagents", () => {
     addSubagentRunForTests({
       runId: "run-1",
       childSessionKey: "agent:main:subagent:abc",
-      requesterSessionKey: "agent:main:slack:slash:u1",
-      requesterDisplayKey: "agent:main:slack:slash:u1",
+      requesterSessionKey: "agent:main:telegram:slash:u1",
+      requesterDisplayKey: "agent:main:telegram:slash:u1",
       task: "do thing",
       cleanup: "keep",
       createdAt: 1000,
@@ -280,13 +280,13 @@ describe("handleCommands subagents", () => {
     });
     const cfg = {
       commands: { text: true },
-      channels: { whatsapp: { allowFrom: ["*"] } },
+      channels: { telegram: { allowFrom: ["*"] } },
     } as OpenClawConfig;
     const params = buildParams("/subagents list", cfg, {
       CommandSource: "native",
       CommandTargetSessionKey: "agent:main:main",
     });
-    params.sessionKey = "agent:main:slack:slash:u1";
+    params.sessionKey = "agent:main:telegram:slash:u1";
     const result = await handleCommands(params);
     expect(result.shouldContinue).toBe(false);
     expect(result.reply?.text).toContain("Subagents (current session)");
@@ -297,7 +297,7 @@ describe("handleCommands subagents", () => {
     resetSubagentRegistryForTests();
     const cfg = {
       commands: { text: true },
-      channels: { whatsapp: { allowFrom: ["*"] } },
+      channels: { telegram: { allowFrom: ["*"] } },
       session: { mainKey: "main", scope: "per-sender" },
     } as OpenClawConfig;
     const params = buildParams("/status", cfg);
@@ -311,7 +311,7 @@ describe("handleCommands subagents", () => {
     resetSubagentRegistryForTests();
     const cfg = {
       commands: { text: true },
-      channels: { whatsapp: { allowFrom: ["*"] } },
+      channels: { telegram: { allowFrom: ["*"] } },
     } as OpenClawConfig;
     const params = buildParams("/subagents foo", cfg);
     const result = await handleCommands(params);
@@ -323,7 +323,7 @@ describe("handleCommands subagents", () => {
     resetSubagentRegistryForTests();
     const cfg = {
       commands: { text: true },
-      channels: { whatsapp: { allowFrom: ["*"] } },
+      channels: { telegram: { allowFrom: ["*"] } },
     } as OpenClawConfig;
     const params = buildParams("/subagents info", cfg);
     const result = await handleCommands(params);
@@ -345,7 +345,7 @@ describe("handleCommands subagents", () => {
     });
     const cfg = {
       commands: { text: true },
-      channels: { whatsapp: { allowFrom: ["*"] } },
+      channels: { telegram: { allowFrom: ["*"] } },
       session: { mainKey: "main", scope: "per-sender" },
     } as OpenClawConfig;
     const params = buildParams("/status", cfg);
@@ -380,7 +380,7 @@ describe("handleCommands subagents", () => {
     });
     const cfg = {
       commands: { text: true },
-      channels: { whatsapp: { allowFrom: ["*"] } },
+      channels: { telegram: { allowFrom: ["*"] } },
       session: { mainKey: "main", scope: "per-sender" },
     } as OpenClawConfig;
     const params = buildParams("/status", cfg);
@@ -407,7 +407,7 @@ describe("handleCommands subagents", () => {
     });
     const cfg = {
       commands: { text: true },
-      channels: { whatsapp: { allowFrom: ["*"] } },
+      channels: { telegram: { allowFrom: ["*"] } },
       session: { mainKey: "main", scope: "per-sender" },
     } as OpenClawConfig;
     const params = buildParams("/subagents info 1", cfg);
@@ -423,7 +423,7 @@ describe("handleCommands /tts", () => {
   it("returns status for bare /tts on text command surfaces", async () => {
     const cfg = {
       commands: { text: true },
-      channels: { whatsapp: { allowFrom: ["*"] } },
+      channels: { telegram: { allowFrom: ["*"] } },
       messages: { tts: { prefsPath: path.join(testWorkspaceDir, "tts.json") } },
     } as OpenClawConfig;
     const params = buildParams("/tts", cfg);

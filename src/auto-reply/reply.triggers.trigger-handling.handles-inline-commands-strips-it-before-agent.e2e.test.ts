@@ -6,7 +6,7 @@ vi.mock("../agents/pi-embedded.js", () => ({
   abortEmbeddedPiRun: vi.fn().mockReturnValue(false),
   compactEmbeddedPiSession: vi.fn(),
   runEmbeddedPiAgent: vi.fn(),
-  queueEmbeddedPiMessage: vi.fn().mockReturnValue(false),
+  queueEmbeddedPTelegram: vi.fn().mockReturnValue(false),
   resolveEmbeddedSessionLane: (key: string) => `session:${key.trim() || "main"}`,
   isEmbeddedPiRunActive: vi.fn().mockReturnValue(false),
   isEmbeddedPiRunStreaming: vi.fn().mockReturnValue(false),
@@ -80,7 +80,7 @@ function makeCfg(home: string) {
       },
     },
     channels: {
-      whatsapp: {
+      telegram: {
         allowFrom: ["*"],
       },
     },
@@ -170,7 +170,7 @@ describe("trigger handling", () => {
           },
         },
         channels: {
-          whatsapp: {
+          telegram: {
             allowFrom: ["+1000"],
           },
         },
@@ -181,7 +181,7 @@ describe("trigger handling", () => {
           Body: "/status",
           From: "+2001",
           To: "+2000",
-          Provider: "whatsapp",
+          Provider: "telegram",
           SenderE164: "+2001",
         },
         {},
@@ -201,7 +201,7 @@ describe("trigger handling", () => {
           },
         },
         channels: {
-          whatsapp: {
+          telegram: {
             allowFrom: ["+1000"],
           },
         },
@@ -212,7 +212,7 @@ describe("trigger handling", () => {
           Body: "/whoami",
           From: "+2001",
           To: "+2000",
-          Provider: "whatsapp",
+          Provider: "telegram",
           SenderE164: "+2001",
         },
         {},

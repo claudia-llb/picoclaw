@@ -7,7 +7,7 @@ vi.mock("../agents/pi-embedded.js", () => ({
   abortEmbeddedPiRun: vi.fn().mockReturnValue(false),
   compactEmbeddedPiSession: vi.fn(),
   runEmbeddedPiAgent: vi.fn(),
-  queueEmbeddedPiMessage: vi.fn().mockReturnValue(false),
+  queueEmbeddedPTelegram: vi.fn().mockReturnValue(false),
   resolveEmbeddedSessionLane: (key: string) => `session:${key.trim() || "main"}`,
   isEmbeddedPiRunActive: vi.fn().mockReturnValue(false),
   isEmbeddedPiRunStreaming: vi.fn().mockReturnValue(false),
@@ -82,7 +82,7 @@ function _makeCfg(home: string) {
       },
     },
     channels: {
-      whatsapp: {
+      telegram: {
         allowFrom: ["*"],
       },
     },
@@ -113,11 +113,11 @@ describe("trigger handling", () => {
         },
         tools: {
           elevated: {
-            allowFrom: { whatsapp: ["+1000"] },
+            allowFrom: { telegram: ["+1000"] },
           },
         },
         channels: {
-          whatsapp: {
+          telegram: {
             allowFrom: ["+1000"],
             groups: { "*": { requireMention: false } },
           },
@@ -128,9 +128,9 @@ describe("trigger handling", () => {
       const res = await getReplyFromConfig(
         {
           Body: "/elevated off",
-          From: "whatsapp:group:123@g.us",
-          To: "whatsapp:+2000",
-          Provider: "whatsapp",
+          From: "telegram:group:123@g.us",
+          To: "telegram:+2000",
+          Provider: "telegram",
           SenderE164: "+1000",
           CommandAuthorized: true,
           ChatType: "group",
@@ -143,7 +143,7 @@ describe("trigger handling", () => {
       expect(text).toContain("Elevated mode disabled.");
 
       const store = loadSessionStore(cfg.session.store);
-      expect(store["agent:main:whatsapp:group:123@g.us"]?.elevatedLevel).toBe("off");
+      expect(store["agent:main:telegram:group:123@g.us"]?.elevatedLevel).toBe("off");
     });
   });
   it("allows elevated directive in groups when mentioned", async () => {
@@ -157,11 +157,11 @@ describe("trigger handling", () => {
         },
         tools: {
           elevated: {
-            allowFrom: { whatsapp: ["+1000"] },
+            allowFrom: { telegram: ["+1000"] },
           },
         },
         channels: {
-          whatsapp: {
+          telegram: {
             allowFrom: ["+1000"],
             groups: { "*": { requireMention: true } },
           },
@@ -172,9 +172,9 @@ describe("trigger handling", () => {
       const res = await getReplyFromConfig(
         {
           Body: "/elevated on",
-          From: "whatsapp:group:123@g.us",
-          To: "whatsapp:+2000",
-          Provider: "whatsapp",
+          From: "telegram:group:123@g.us",
+          To: "telegram:+2000",
+          Provider: "telegram",
           SenderE164: "+1000",
           CommandAuthorized: true,
           ChatType: "group",
@@ -188,7 +188,7 @@ describe("trigger handling", () => {
 
       const storeRaw = await fs.readFile(cfg.session.store, "utf-8");
       const store = JSON.parse(storeRaw) as Record<string, { elevatedLevel?: string }>;
-      expect(store["agent:main:whatsapp:group:123@g.us"]?.elevatedLevel).toBe("on");
+      expect(store["agent:main:telegram:group:123@g.us"]?.elevatedLevel).toBe("on");
     });
   });
   it("allows elevated directive in direct chats without mentions", async () => {
@@ -202,11 +202,11 @@ describe("trigger handling", () => {
         },
         tools: {
           elevated: {
-            allowFrom: { whatsapp: ["+1000"] },
+            allowFrom: { telegram: ["+1000"] },
           },
         },
         channels: {
-          whatsapp: {
+          telegram: {
             allowFrom: ["+1000"],
           },
         },
@@ -218,7 +218,7 @@ describe("trigger handling", () => {
           Body: "/elevated on",
           From: "+1000",
           To: "+2000",
-          Provider: "whatsapp",
+          Provider: "telegram",
           SenderE164: "+1000",
           CommandAuthorized: true,
         },

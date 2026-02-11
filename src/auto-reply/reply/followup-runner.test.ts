@@ -30,7 +30,7 @@ vi.mock("../../agents/pi-embedded.js", () => ({
 
 import { createFollowupRunner } from "./followup-runner.js";
 
-const baseQueuedRun = (messageProvider = "whatsapp"): FollowupRun =>
+const baseQueuedRun = (messageProvider = "telegram"): FollowupRun =>
   ({
     prompt: "hello",
     summaryLine: "hello",
@@ -105,7 +105,7 @@ describe("createFollowupRunner compaction", () => {
       run: {
         sessionId: "session",
         sessionKey: "main",
-        messageProvider: "whatsapp",
+        messageProvider: "telegram",
         sessionFile: "/tmp/session.jsonl",
         workspaceDir: "/tmp",
         config: {},
@@ -179,7 +179,7 @@ describe("createFollowupRunner messaging tool dedupe", () => {
     runEmbeddedPiAgentMock.mockResolvedValueOnce({
       payloads: [{ text: "hello world!" }],
       messagingToolSentTexts: ["different message"],
-      messagingToolSentTargets: [{ tool: "slack", provider: "slack", to: "channel:C1" }],
+      messagingToolSentTargets: [{ tool: "telegram", provider: "telegram", to: "channel:C1" }],
       meta: {},
     });
 
@@ -190,7 +190,7 @@ describe("createFollowupRunner messaging tool dedupe", () => {
       defaultModel: "anthropic/claude-opus-4-5",
     });
 
-    await runner(baseQueuedRun("slack"));
+    await runner(baseQueuedRun("telegram"));
 
     expect(onBlockReply).not.toHaveBeenCalled();
   });
@@ -209,7 +209,7 @@ describe("createFollowupRunner messaging tool dedupe", () => {
     runEmbeddedPiAgentMock.mockResolvedValueOnce({
       payloads: [{ text: "hello world!" }],
       messagingToolSentTexts: ["different message"],
-      messagingToolSentTargets: [{ tool: "slack", provider: "slack", to: "channel:C1" }],
+      messagingToolSentTargets: [{ tool: "telegram", provider: "telegram", to: "channel:C1" }],
       meta: {
         agentMeta: {
           usage: { input: 10, output: 5 },
@@ -230,7 +230,7 @@ describe("createFollowupRunner messaging tool dedupe", () => {
       defaultModel: "anthropic/claude-opus-4-5",
     });
 
-    await runner(baseQueuedRun("slack"));
+    await runner(baseQueuedRun("telegram"));
 
     expect(onBlockReply).not.toHaveBeenCalled();
     const store = loadSessionStore(storePath, { skipCache: true });

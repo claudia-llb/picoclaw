@@ -26,18 +26,18 @@ describe("pairing store", () => {
   it("reuses pending code and reports created=false", async () => {
     await withTempStateDir(async () => {
       const first = await upsertChannelPairingRequest({
-        channel: "discord",
+        channel: "telegram",
         id: "u1",
       });
       const second = await upsertChannelPairingRequest({
-        channel: "discord",
+        channel: "telegram",
         id: "u1",
       });
       expect(first.created).toBe(true);
       expect(second.created).toBe(false);
       expect(second.code).toBe(first.code);
 
-      const list = await listChannelPairingRequests("discord");
+      const list = await listChannelPairingRequests("telegram");
       expect(list).toHaveLength(1);
       expect(list[0]?.code).toBe(first.code);
     });
@@ -46,13 +46,13 @@ describe("pairing store", () => {
   it("expires pending requests after TTL", async () => {
     await withTempStateDir(async (stateDir) => {
       const created = await upsertChannelPairingRequest({
-        channel: "signal",
+        channel: "telegram",
         id: "+15550001111",
       });
       expect(created.created).toBe(true);
 
       const oauthDir = resolveOAuthDir(process.env, stateDir);
-      const filePath = path.join(oauthDir, "signal-pairing.json");
+      const filePath = path.join(oauthDir, "telegram-pairing.json");
       const raw = await fs.readFile(filePath, "utf8");
       const parsed = JSON.parse(raw) as {
         requests?: Array<Record<string, unknown>>;
@@ -69,11 +69,11 @@ describe("pairing store", () => {
         "utf8",
       );
 
-      const list = await listChannelPairingRequests("signal");
+      const list = await listChannelPairingRequests("telegram");
       expect(list).toHaveLength(0);
 
       const next = await upsertChannelPairingRequest({
-        channel: "signal",
+        channel: "telegram",
         id: "+15550001111",
       });
       expect(next.created).toBe(true);
@@ -110,19 +110,19 @@ describe("pairing store", () => {
       const ids = ["+15550000001", "+15550000002", "+15550000003"];
       for (const id of ids) {
         const created = await upsertChannelPairingRequest({
-          channel: "whatsapp",
+          channel: "telegram",
           id,
         });
         expect(created.created).toBe(true);
       }
 
       const blocked = await upsertChannelPairingRequest({
-        channel: "whatsapp",
+        channel: "telegram",
         id: "+15550000004",
       });
       expect(blocked.created).toBe(false);
 
-      const list = await listChannelPairingRequests("whatsapp");
+      const list = await listChannelPairingRequests("telegram");
       const listIds = list.map((entry) => entry.id);
       expect(listIds).toHaveLength(3);
       expect(listIds).toContain("+15550000001");

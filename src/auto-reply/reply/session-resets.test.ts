@@ -16,7 +16,7 @@ vi.mock("../../agents/model-catalog.js", () => ({
   ]),
 }));
 
-describe("initSessionState reset triggers in WhatsApp groups", () => {
+describe("initSessionState reset triggers in Telegram groups", () => {
   async function createStorePath(prefix: string): Promise<string> {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), prefix));
     return path.join(root, "sessions.json");
@@ -40,7 +40,7 @@ describe("initSessionState reset triggers in WhatsApp groups", () => {
     return {
       session: { store: params.storePath, idleMinutes: 999 },
       channels: {
-        whatsapp: {
+        telegram: {
           allowFrom: params.allowFrom,
           groupPolicy: "open",
         },
@@ -48,9 +48,9 @@ describe("initSessionState reset triggers in WhatsApp groups", () => {
     } as OpenClawConfig;
   }
 
-  it("Reset trigger /new works for authorized sender in WhatsApp group", async () => {
+  it("Reset trigger /new works for authorized sender in Telegram group", async () => {
     const storePath = await createStorePath("openclaw-group-reset-");
-    const sessionKey = "agent:main:whatsapp:group:120363406150318674@g.us";
+    const sessionKey = "agent:main:telegram:group:120363406150318674@g.us";
     const existingSessionId = "existing-session-123";
     await seedSessionStore({
       storePath,
@@ -64,18 +64,18 @@ describe("initSessionState reset triggers in WhatsApp groups", () => {
     });
 
     const groupMessageCtx = {
-      Body: `[Chat messages since your last reply - for context]\\n[WhatsApp 120363406150318674@g.us 2026-01-13T07:45Z] Someone: hello\\n\\n[Current message - respond to this]\\n[WhatsApp 120363406150318674@g.us 2026-01-13T07:45Z] Peschiño: /new\\n[from: Peschiño (+41796666864)]`,
+      Body: `[Chat messages since your last reply - for context]\\n[Telegram 120363406150318674@g.us 2026-01-13T07:45Z] Someone: hello\\n\\n[Current message - respond to this]\\n[Telegram 120363406150318674@g.us 2026-01-13T07:45Z] Peschiño: /new\\n[from: Peschiño (+41796666864)]`,
       RawBody: "/new",
       CommandBody: "/new",
       From: "120363406150318674@g.us",
       To: "+41779241027",
       ChatType: "group",
       SessionKey: sessionKey,
-      Provider: "whatsapp",
-      Surface: "whatsapp",
+      Provider: "telegram",
+      Surface: "telegram",
       SenderName: "Peschiño",
       SenderE164: "+41796666864",
-      SenderId: "41796666864:0@s.whatsapp.net",
+      SenderId: "41796666864:0@s.telegram.net",
     };
 
     const result = await initSessionState({
@@ -92,7 +92,7 @@ describe("initSessionState reset triggers in WhatsApp groups", () => {
 
   it("Reset trigger /new blocked for unauthorized sender in existing session", async () => {
     const storePath = await createStorePath("openclaw-group-reset-unauth-");
-    const sessionKey = "agent:main:whatsapp:group:120363406150318674@g.us";
+    const sessionKey = "agent:main:telegram:group:120363406150318674@g.us";
     const existingSessionId = "existing-session-123";
 
     await seedSessionStore({
@@ -107,18 +107,18 @@ describe("initSessionState reset triggers in WhatsApp groups", () => {
     });
 
     const groupMessageCtx = {
-      Body: `[Context]\\n[WhatsApp ...] OtherPerson: /new\\n[from: OtherPerson (+1555123456)]`,
+      Body: `[Context]\\n[Telegram ...] OtherPerson: /new\\n[from: OtherPerson (+1555123456)]`,
       RawBody: "/new",
       CommandBody: "/new",
       From: "120363406150318674@g.us",
       To: "+41779241027",
       ChatType: "group",
       SessionKey: sessionKey,
-      Provider: "whatsapp",
-      Surface: "whatsapp",
+      Provider: "telegram",
+      Surface: "telegram",
       SenderName: "OtherPerson",
       SenderE164: "+1555123456",
-      SenderId: "1555123456:0@s.whatsapp.net",
+      SenderId: "1555123456:0@s.telegram.net",
     };
 
     const result = await initSessionState({
@@ -134,7 +134,7 @@ describe("initSessionState reset triggers in WhatsApp groups", () => {
 
   it("Reset trigger works when RawBody is clean but Body has wrapped context", async () => {
     const storePath = await createStorePath("openclaw-group-rawbody-");
-    const sessionKey = "agent:main:whatsapp:group:g1";
+    const sessionKey = "agent:main:telegram:group:g1";
     const existingSessionId = "existing-session-123";
     await seedSessionStore({
       storePath,
@@ -148,14 +148,14 @@ describe("initSessionState reset triggers in WhatsApp groups", () => {
     });
 
     const groupMessageCtx = {
-      Body: `[WhatsApp 120363406150318674@g.us 2026-01-13T07:45Z] Jake: /new\n[from: Jake (+1222)]`,
+      Body: `[Telegram 120363406150318674@g.us 2026-01-13T07:45Z] Jake: /new\n[from: Jake (+1222)]`,
       RawBody: "/new",
       CommandBody: "/new",
       From: "120363406150318674@g.us",
       To: "+1111",
       ChatType: "group",
       SessionKey: sessionKey,
-      Provider: "whatsapp",
+      Provider: "telegram",
       SenderE164: "+1222",
     };
 
@@ -173,7 +173,7 @@ describe("initSessionState reset triggers in WhatsApp groups", () => {
 
   it("Reset trigger /new works when SenderId is LID but SenderE164 is authorized", async () => {
     const storePath = await createStorePath("openclaw-group-reset-lid-");
-    const sessionKey = "agent:main:whatsapp:group:120363406150318674@g.us";
+    const sessionKey = "agent:main:telegram:group:120363406150318674@g.us";
     const existingSessionId = "existing-session-123";
     await seedSessionStore({
       storePath,
@@ -187,15 +187,15 @@ describe("initSessionState reset triggers in WhatsApp groups", () => {
     });
 
     const groupMessageCtx = {
-      Body: `[WhatsApp 120363406150318674@g.us 2026-01-13T07:45Z] Owner: /new\n[from: Owner (+41796666864)]`,
+      Body: `[Telegram 120363406150318674@g.us 2026-01-13T07:45Z] Owner: /new\n[from: Owner (+41796666864)]`,
       RawBody: "/new",
       CommandBody: "/new",
       From: "120363406150318674@g.us",
       To: "+41779241027",
       ChatType: "group",
       SessionKey: sessionKey,
-      Provider: "whatsapp",
-      Surface: "whatsapp",
+      Provider: "telegram",
+      Surface: "telegram",
       SenderName: "Owner",
       SenderE164: "+41796666864",
       SenderId: "123@lid",
@@ -215,7 +215,7 @@ describe("initSessionState reset triggers in WhatsApp groups", () => {
 
   it("Reset trigger /new blocked when SenderId is LID but SenderE164 is unauthorized", async () => {
     const storePath = await createStorePath("openclaw-group-reset-lid-unauth-");
-    const sessionKey = "agent:main:whatsapp:group:120363406150318674@g.us";
+    const sessionKey = "agent:main:telegram:group:120363406150318674@g.us";
     const existingSessionId = "existing-session-123";
     await seedSessionStore({
       storePath,
@@ -229,15 +229,15 @@ describe("initSessionState reset triggers in WhatsApp groups", () => {
     });
 
     const groupMessageCtx = {
-      Body: `[WhatsApp 120363406150318674@g.us 2026-01-13T07:45Z] Other: /new\n[from: Other (+1555123456)]`,
+      Body: `[Telegram 120363406150318674@g.us 2026-01-13T07:45Z] Other: /new\n[from: Other (+1555123456)]`,
       RawBody: "/new",
       CommandBody: "/new",
       From: "120363406150318674@g.us",
       To: "+41779241027",
       ChatType: "group",
       SessionKey: sessionKey,
-      Provider: "whatsapp",
-      Surface: "whatsapp",
+      Provider: "telegram",
+      Surface: "telegram",
       SenderName: "Other",
       SenderE164: "+1555123456",
       SenderId: "123@lid",
@@ -255,7 +255,7 @@ describe("initSessionState reset triggers in WhatsApp groups", () => {
   });
 });
 
-describe("initSessionState reset triggers in Slack channels", () => {
+describe("initSessionState reset triggers in Telegram channels", () => {
   async function createStorePath(prefix: string): Promise<string> {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), prefix));
     return path.join(root, "sessions.json");
@@ -275,9 +275,9 @@ describe("initSessionState reset triggers in Slack channels", () => {
     });
   }
 
-  it("Reset trigger /reset works when Slack message has a leading <@...> mention token", async () => {
-    const storePath = await createStorePath("openclaw-slack-channel-reset-");
-    const sessionKey = "agent:main:slack:channel:c1";
+  it("Reset trigger /reset works when Telegram message has a leading <@...> mention token", async () => {
+    const storePath = await createStorePath("openclaw-telegram-channel-reset-");
+    const sessionKey = "agent:main:telegram:channel:c1";
     const existingSessionId = "existing-session-123";
     await seedSessionStore({
       storePath,
@@ -293,12 +293,12 @@ describe("initSessionState reset triggers in Slack channels", () => {
       Body: "<@U123> /reset",
       RawBody: "<@U123> /reset",
       CommandBody: "<@U123> /reset",
-      From: "slack:channel:C1",
+      From: "telegram:channel:C1",
       To: "channel:C1",
       ChatType: "channel",
       SessionKey: sessionKey,
-      Provider: "slack",
-      Surface: "slack",
+      Provider: "telegram",
+      Surface: "telegram",
       SenderId: "U123",
       SenderName: "Owner",
     };
@@ -315,9 +315,9 @@ describe("initSessionState reset triggers in Slack channels", () => {
     expect(result.bodyStripped).toBe("");
   });
 
-  it("Reset trigger /new preserves args when Slack message has a leading <@...> mention token", async () => {
-    const storePath = await createStorePath("openclaw-slack-channel-new-");
-    const sessionKey = "agent:main:slack:channel:c2";
+  it("Reset trigger /new preserves args when Telegram message has a leading <@...> mention token", async () => {
+    const storePath = await createStorePath("openclaw-telegram-channel-new-");
+    const sessionKey = "agent:main:telegram:channel:c2";
     const existingSessionId = "existing-session-123";
     await seedSessionStore({
       storePath,
@@ -333,12 +333,12 @@ describe("initSessionState reset triggers in Slack channels", () => {
       Body: "<@U123> /new take notes",
       RawBody: "<@U123> /new take notes",
       CommandBody: "<@U123> /new take notes",
-      From: "slack:channel:C2",
+      From: "telegram:channel:C2",
       To: "channel:C2",
       ChatType: "channel",
       SessionKey: sessionKey,
-      Provider: "slack",
-      Surface: "slack",
+      Provider: "telegram",
+      Surface: "telegram",
       SenderId: "U123",
       SenderName: "Owner",
     };

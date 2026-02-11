@@ -67,7 +67,7 @@ describe("resolveChannelCapabilities", () => {
   it("matches account keys case-insensitively", () => {
     const cfg = {
       channels: {
-        slack: {
+        telegram: {
           accounts: {
             Family: { capabilities: ["threads"] },
           },
@@ -78,7 +78,7 @@ describe("resolveChannelCapabilities", () => {
     expect(
       resolveChannelCapabilities({
         cfg,
-        channel: "slack",
+        channel: "telegram",
         accountId: "family",
       }),
     ).toEqual(["threads"]);
@@ -158,7 +158,7 @@ const createStubPlugin = (id: string): ChannelPlugin => ({
 
 const baseRegistry = createRegistry([
   { pluginId: "telegram", source: "test", plugin: createStubPlugin("telegram") },
-  { pluginId: "slack", source: "test", plugin: createStubPlugin("slack") },
+  { pluginId: "telegram", source: "test", plugin: createStubPlugin("telegram") },
 ]);
 
 const createMSTeamsPlugin = (): ChannelPlugin => ({

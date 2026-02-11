@@ -30,16 +30,16 @@ describe("healthCommand (coverage)", () => {
     setActivePluginRegistry(
       createTestRegistry([
         {
-          pluginId: "whatsapp",
+          pluginId: "telegram",
           source: "test",
           plugin: {
-            id: "whatsapp",
+            id: "telegram",
             meta: {
-              id: "whatsapp",
-              label: "WhatsApp",
-              selectionLabel: "WhatsApp",
-              docsPath: "/channels/whatsapp",
-              blurb: "WhatsApp test stub.",
+              id: "telegram",
+              label: "Telegram",
+              selectionLabel: "Telegram",
+              docsPath: "/channels/telegram",
+              blurb: "Telegram test stub.",
             },
             capabilities: { chatTypes: ["direct", "group"] },
             config: {
@@ -61,7 +61,7 @@ describe("healthCommand (coverage)", () => {
       ts: Date.now(),
       durationMs: 5,
       channels: {
-        whatsapp: {
+        telegram: {
           accountId: "default",
           linked: true,
           authAgeMs: 5 * 60_000,
@@ -76,16 +76,16 @@ describe("healthCommand (coverage)", () => {
             webhook: { url: "https://example.com/h" },
           },
         },
-        discord: {
+        telegram: {
           accountId: "default",
           configured: false,
         },
       },
-      channelOrder: ["whatsapp", "telegram", "discord"],
+      channelOrder: ["telegram", "telegram", "telegram"],
       channelLabels: {
-        whatsapp: "WhatsApp",
         telegram: "Telegram",
-        discord: "Discord",
+        telegram: "Telegram",
+        telegram: "Telegram",
       },
       heartbeatSeconds: 60,
       defaultAgentId: "main",
@@ -125,7 +125,7 @@ describe("healthCommand (coverage)", () => {
 
     expect(runtime.exit).not.toHaveBeenCalled();
     expect(stripAnsi(runtime.log.mock.calls.map((c) => String(c[0])).join("\n"))).toMatch(
-      /WhatsApp: linked/i,
+      /Telegram: linked/i,
     );
     expect(logWebSelfIdMock).toHaveBeenCalled();
   });

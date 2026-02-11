@@ -106,11 +106,11 @@ describe("gateway server sessions", () => {
           outputTokens: 20,
           thinkingLevel: "low",
           verboseLevel: "on",
-          lastChannel: "whatsapp",
+          lastChannel: "telegram",
           lastTo: "+1555",
           lastAccountId: "work",
         },
-        "discord:group:dev": {
+        "telegram:group:dev": {
           sessionId: "sess-group",
           updatedAt: stale,
           totalTokens: 50,
@@ -149,7 +149,7 @@ describe("gateway server sessions", () => {
       sessionId: "sess-group",
     });
     expect(resolvedBySessionId.ok).toBe(true);
-    expect(resolvedBySessionId.payload?.key).toBe("agent:main:discord:group:dev");
+    expect(resolvedBySessionId.payload?.key).toBe("agent:main:telegram:group:dev");
 
     const list1 = await rpcReq<{
       path: string;
@@ -174,7 +174,7 @@ describe("gateway server sessions", () => {
     expect(main?.verboseLevel).toBe("on");
     expect(main?.lastAccountId).toBe("work");
     expect(main?.deliveryContext).toEqual({
-      channel: "whatsapp",
+      channel: "telegram",
       to: "+1555",
       accountId: "work",
     });
@@ -227,7 +227,7 @@ describe("gateway server sessions", () => {
     expect(labelPatched.payload?.entry.label).toBe("Briefing");
 
     const labelPatchedDuplicate = await rpcReq(ws, "sessions.patch", {
-      key: "agent:main:discord:group:dev",
+      key: "agent:main:telegram:group:dev",
       label: "Briefing",
     });
     expect(labelPatchedDuplicate.ok).toBe(false);
@@ -337,7 +337,7 @@ describe("gateway server sessions", () => {
     expect(filesAfterCompact.some((f) => f.startsWith("sess-main.jsonl.bak."))).toBe(true);
 
     const deleted = await rpcReq<{ ok: true; deleted: boolean }>(ws, "sessions.delete", {
-      key: "agent:main:discord:group:dev",
+      key: "agent:main:telegram:group:dev",
     });
     expect(deleted.ok).toBe(true);
     expect(deleted.payload?.deleted).toBe(true);
@@ -346,7 +346,7 @@ describe("gateway server sessions", () => {
     }>(ws, "sessions.list", {});
     expect(listAfterDelete.ok).toBe(true);
     expect(
-      listAfterDelete.payload?.sessions.some((s) => s.key === "agent:main:discord:group:dev"),
+      listAfterDelete.payload?.sessions.some((s) => s.key === "agent:main:telegram:group:dev"),
     ).toBe(false);
     const filesAfterDelete = await fs.readdir(dir);
     expect(filesAfterDelete.some((f) => f.startsWith("sess-group.jsonl.deleted."))).toBe(true);
@@ -436,7 +436,7 @@ describe("gateway server sessions", () => {
     await writeSessionStore({
       entries: {
         main: { sessionId: "sess-main", updatedAt: Date.now() },
-        "discord:group:dev": {
+        "telegram:group:dev": {
           sessionId: "sess-active",
           updatedAt: Date.now(),
         },
@@ -452,18 +452,22 @@ describe("gateway server sessions", () => {
     expect(mainDelete.ok).toBe(false);
 
     const deleted = await rpcReq<{ ok: true; deleted: boolean }>(ws, "sessions.delete", {
-      key: "discord:group:dev",
+      key: "telegram:group:dev",
     });
     expect(deleted.ok).toBe(true);
     expect(deleted.payload?.deleted).toBe(true);
     expect(sessionCleanupMocks.stopSubagentsForRequester).toHaveBeenCalledWith({
       cfg: expect.any(Object),
-      requesterSessionKey: "agent:main:discord:group:dev",
+      requesterSessionKey: "agent:main:telegram:group:dev",
     });
     expect(sessionCleanupMocks.clearSessionQueues).toHaveBeenCalledTimes(1);
     const clearedKeys = sessionCleanupMocks.clearSessionQueues.mock.calls[0]?.[0] as string[];
     expect(clearedKeys).toEqual(
-      expect.arrayContaining(["discord:group:dev", "agent:main:discord:group:dev", "sess-active"]),
+      expect.arrayContaining([
+        "telegram:group:dev",
+        "agent:main:telegram:group:dev",
+        "sess-active",
+      ]),
     );
     expect(embeddedRunMock.abortCalls).toEqual(["sess-active"]);
     expect(embeddedRunMock.waitCalls).toEqual(["sess-active"]);

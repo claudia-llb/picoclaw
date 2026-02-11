@@ -7,7 +7,7 @@ vi.mock("../agents/pi-embedded.js", () => ({
   abortEmbeddedPiRun: vi.fn().mockReturnValue(false),
   compactEmbeddedPiSession: vi.fn(),
   runEmbeddedPiAgent: vi.fn(),
-  queueEmbeddedPiMessage: vi.fn().mockReturnValue(false),
+  queueEmbeddedPTelegram: vi.fn().mockReturnValue(false),
   resolveEmbeddedSessionLane: (key: string) => `session:${key.trim() || "main"}`,
   isEmbeddedPiRunActive: vi.fn().mockReturnValue(false),
   isEmbeddedPiRunStreaming: vi.fn().mockReturnValue(false),
@@ -81,7 +81,7 @@ function makeCfg(home: string) {
       },
     },
     channels: {
-      whatsapp: {
+      telegram: {
         allowFrom: ["*"],
       },
     },
@@ -112,11 +112,11 @@ describe("trigger handling", () => {
         },
         tools: {
           elevated: {
-            allowFrom: { whatsapp: ["+1000"] },
+            allowFrom: { telegram: ["+1000"] },
           },
         },
         channels: {
-          whatsapp: {
+          telegram: {
             allowFrom: ["+1000"],
           },
         },
@@ -128,7 +128,7 @@ describe("trigger handling", () => {
           Body: "please /elevated on now",
           From: "+2000",
           To: "+2000",
-          Provider: "whatsapp",
+          Provider: "telegram",
           SenderE164: "+2000",
         },
         {},
@@ -139,7 +139,7 @@ describe("trigger handling", () => {
       expect(runEmbeddedPiAgent).toHaveBeenCalled();
     });
   });
-  it("uses tools.elevated.allowFrom.discord for elevated approval", async () => {
+  it("uses tools.elevated.allowFrom.telegram for elevated approval", async () => {
     await withTempHome(async (home) => {
       const cfg = {
         agents: {
@@ -148,16 +148,16 @@ describe("trigger handling", () => {
             workspace: join(home, "openclaw"),
           },
         },
-        tools: { elevated: { allowFrom: { discord: ["steipete"] } } },
+        tools: { elevated: { allowFrom: { telegram: ["steipete"] } } },
         session: { store: join(home, "sessions.json") },
       };
 
       const res = await getReplyFromConfig(
         {
           Body: "/elevated on",
-          From: "discord:123",
+          From: "telegram:123",
           To: "user:123",
-          Provider: "discord",
+          Provider: "telegram",
           SenderName: "Peter Steinberger",
           SenderUsername: "steipete",
           SenderTag: "steipete",
@@ -174,7 +174,7 @@ describe("trigger handling", () => {
       expect(store[MAIN_SESSION_KEY]?.elevatedLevel).toBe("on");
     });
   });
-  it("treats explicit discord elevated allowlist as override", async () => {
+  it("treats explicit telegram elevated allowlist as override", async () => {
     await withTempHome(async (home) => {
       const cfg = {
         agents: {
@@ -185,7 +185,7 @@ describe("trigger handling", () => {
         },
         tools: {
           elevated: {
-            allowFrom: { discord: [] },
+            allowFrom: { telegram: [] },
           },
         },
         session: { store: join(home, "sessions.json") },
@@ -194,16 +194,16 @@ describe("trigger handling", () => {
       const res = await getReplyFromConfig(
         {
           Body: "/elevated on",
-          From: "discord:123",
+          From: "telegram:123",
           To: "user:123",
-          Provider: "discord",
+          Provider: "telegram",
           SenderName: "steipete",
         },
         {},
         cfg,
       );
       const text = Array.isArray(res) ? res[0]?.text : res?.text;
-      expect(text).toContain("tools.elevated.allowFrom.discord");
+      expect(text).toContain("tools.elevated.allowFrom.telegram");
       expect(runEmbeddedPiAgent).not.toHaveBeenCalled();
     });
   });

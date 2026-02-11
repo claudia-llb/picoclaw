@@ -178,7 +178,7 @@ describe("Agent-specific sandbox config", () => {
 
     const context = await resolveSandboxContext({
       config: cfg,
-      sessionKey: "agent:family:whatsapp:group:123",
+      sessionKey: "agent:family:telegram:group:123",
       workspaceDir: "/tmp/test-family",
     });
 
@@ -211,7 +211,7 @@ describe("Agent-specific sandbox config", () => {
 
     const context = await resolveSandboxContext({
       config: cfg,
-      sessionKey: "agent:work:slack:channel:456",
+      sessionKey: "agent:work:telegram:channel:456",
       workspaceDir: "/tmp/test-work",
     });
 

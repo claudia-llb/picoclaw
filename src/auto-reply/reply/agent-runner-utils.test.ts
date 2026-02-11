@@ -6,9 +6,9 @@ import { buildThreadingToolContext } from "./agent-runner-utils.js";
 describe("buildThreadingToolContext", () => {
   const cfg = {} as OpenClawConfig;
 
-  it("uses conversation id for WhatsApp", () => {
+  it("uses conversation id for Telegram", () => {
     const sessionCtx = {
-      Provider: "whatsapp",
+      Provider: "telegram",
       From: "123@g.us",
       To: "+15550001",
     } as TemplateContext;
@@ -22,9 +22,9 @@ describe("buildThreadingToolContext", () => {
     expect(result.currentChannelId).toBe("123@g.us");
   });
 
-  it("falls back to To for WhatsApp when From is missing", () => {
+  it("falls back to To for Telegram when From is missing", () => {
     const sessionCtx = {
-      Provider: "whatsapp",
+      Provider: "telegram",
       To: "+15550001",
     } as TemplateContext;
 
@@ -53,11 +53,11 @@ describe("buildThreadingToolContext", () => {
     expect(result.currentChannelId).toBe("chat:99");
   });
 
-  it("uses the sender handle for iMessage direct chats", () => {
+  it("uses the sender handle for Telegram direct chats", () => {
     const sessionCtx = {
-      Provider: "imessage",
+      Provider: "telegram",
       ChatType: "direct",
-      From: "imessage:+15550001",
+      From: "telegram:+15550001",
       To: "chat_id:12",
     } as TemplateContext;
 
@@ -67,14 +67,14 @@ describe("buildThreadingToolContext", () => {
       hasRepliedRef: undefined,
     });
 
-    expect(result.currentChannelId).toBe("imessage:+15550001");
+    expect(result.currentChannelId).toBe("telegram:+15550001");
   });
 
-  it("uses chat_id for iMessage groups", () => {
+  it("uses chat_id for Telegram groups", () => {
     const sessionCtx = {
-      Provider: "imessage",
+      Provider: "telegram",
       ChatType: "group",
-      From: "imessage:group:7",
+      From: "telegram:group:7",
       To: "chat_id:7",
     } as TemplateContext;
 
@@ -87,16 +87,16 @@ describe("buildThreadingToolContext", () => {
     expect(result.currentChannelId).toBe("chat_id:7");
   });
 
-  it("prefers MessageThreadId for Slack tool threading", () => {
+  it("prefers MessageThreadId for Telegram tool threading", () => {
     const sessionCtx = {
-      Provider: "slack",
+      Provider: "telegram",
       To: "channel:C1",
       MessageThreadId: "123.456",
     } as TemplateContext;
 
     const result = buildThreadingToolContext({
       sessionCtx,
-      config: { channels: { slack: { replyToMode: "all" } } } as OpenClawConfig,
+      config: { channels: { telegram: { replyToMode: "all" } } } as OpenClawConfig,
       hasRepliedRef: undefined,
     });
 

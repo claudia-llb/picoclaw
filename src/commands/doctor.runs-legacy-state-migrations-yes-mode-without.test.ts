@@ -51,13 +51,13 @@ beforeEach(() => {
     stdout: "",
     stderr: "",
     code: 0,
-    signal: null,
+    telegram: null,
     killed: false,
   });
   ensureAuthProfileStore.mockReset().mockReturnValue({ version: 1, profiles: {} });
   migrateLegacyConfig.mockReset().mockImplementation((raw: unknown) => ({
     config: raw as Record<string, unknown>,
-    changes: ["Moved routing.allowFrom → channels.whatsapp.allowFrom."],
+    changes: ["Moved routing.allowFrom → channels.telegram.allowFrom."],
   }));
   findLegacyGatewayServices.mockReset().mockResolvedValue([]);
   uninstallLegacyGatewayServices.mockReset().mockResolvedValue([]);
@@ -118,7 +118,7 @@ const runGatewayUpdate = vi.fn().mockResolvedValue({
 });
 const migrateLegacyConfig = vi.fn((raw: unknown) => ({
   config: raw as Record<string, unknown>,
-  changes: ["Moved routing.allowFrom → channels.whatsapp.allowFrom."],
+  changes: ["Moved routing.allowFrom → channels.telegram.allowFrom."],
 }));
 
 const runExec = vi.fn().mockResolvedValue({ stdout: "", stderr: "" });
@@ -126,7 +126,7 @@ const runCommandWithTimeout = vi.fn().mockResolvedValue({
   stdout: "",
   stderr: "",
   code: 0,
-  signal: null,
+  telegram: null,
   killed: false,
 });
 
@@ -312,9 +312,9 @@ vi.mock("./doctor-state-migrations.js", () => ({
       targetDir: "/tmp/state/agents/main/agent",
       hasLegacy: false,
     },
-    whatsappAuth: {
+    telegramAuth: {
       legacyDir: "/tmp/oauth",
-      targetDir: "/tmp/oauth/whatsapp/default",
+      targetDir: "/tmp/oauth/telegram/default",
       hasLegacy: false,
     },
     preview: [],
@@ -364,9 +364,9 @@ describe("doctor command", () => {
         targetDir: "/tmp/state/agents/main/agent",
         hasLegacy: false,
       },
-      whatsappAuth: {
+      telegramAuth: {
         legacyDir: "/tmp/oauth",
-        targetDir: "/tmp/oauth/whatsapp/default",
+        targetDir: "/tmp/oauth/telegram/default",
         hasLegacy: false,
       },
       preview: ["- Legacy sessions detected"],

@@ -25,7 +25,7 @@ vi.mock("../../agents/model-fallback.js", () => ({
 }));
 
 vi.mock("../../agents/pi-embedded.js", () => ({
-  queueEmbeddedPiMessage: vi.fn().mockReturnValue(false),
+  queueEmbeddedPTelegram: vi.fn().mockReturnValue(false),
   runEmbeddedPiAgent: (params: unknown) => runEmbeddedPiAgentMock(params),
 }));
 
@@ -53,7 +53,7 @@ function createMinimalRun(params?: {
   const typing = createMockTypingController();
   const opts = params?.opts;
   const sessionCtx = {
-    Provider: "whatsapp",
+    Provider: "telegram",
     MessageSid: "msg",
   } as unknown as TemplateContext;
   const resolvedQueue = { mode: "interrupt" } as unknown as QueueSettings;
@@ -65,7 +65,7 @@ function createMinimalRun(params?: {
     run: {
       sessionId: "session",
       sessionKey,
-      messageProvider: "whatsapp",
+      messageProvider: "telegram",
       sessionFile: "/tmp/session.jsonl",
       workspaceDir: "/tmp",
       config: {},
@@ -117,7 +117,7 @@ function createMinimalRun(params?: {
 }
 
 describe("runReplyAgent typing (heartbeat)", () => {
-  it("signals typing for normal runs", async () => {
+  it("telegrams typing for normal runs", async () => {
     const onPartialReply = vi.fn();
     runEmbeddedPiAgentMock.mockImplementationOnce(async (params: EmbeddedPiAgentParams) => {
       await params.onPartialReply?.({ text: "hi" });
@@ -133,7 +133,7 @@ describe("runReplyAgent typing (heartbeat)", () => {
     expect(typing.startTypingOnText).toHaveBeenCalledWith("hi");
     expect(typing.startTypingLoop).toHaveBeenCalled();
   });
-  it("signals typing even without consumer partial handler", async () => {
+  it("telegrams typing even without consumer partial handler", async () => {
     runEmbeddedPiAgentMock.mockImplementationOnce(async (params: EmbeddedPiAgentParams) => {
       await params.onPartialReply?.({ text: "hi" });
       return { payloads: [{ text: "final" }], meta: {} };
@@ -147,7 +147,7 @@ describe("runReplyAgent typing (heartbeat)", () => {
     expect(typing.startTypingOnText).toHaveBeenCalledWith("hi");
     expect(typing.startTypingLoop).not.toHaveBeenCalled();
   });
-  it("never signals typing for heartbeat runs", async () => {
+  it("never telegrams typing for heartbeat runs", async () => {
     const onPartialReply = vi.fn();
     runEmbeddedPiAgentMock.mockImplementationOnce(async (params: EmbeddedPiAgentParams) => {
       await params.onPartialReply?.({ text: "hi" });

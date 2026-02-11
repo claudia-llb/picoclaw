@@ -111,7 +111,7 @@ describe("gateway server chat", () => {
           rules: [
             {
               action: "deny",
-              match: { channel: "discord", chatType: "group" },
+              match: { channel: "telegram", chatType: "group" },
             },
           ],
         },
@@ -119,17 +119,17 @@ describe("gateway server chat", () => {
 
       await writeSessionStore({
         entries: {
-          "discord:group:dev": {
-            sessionId: "sess-discord",
+          "telegram:group:dev": {
+            sessionId: "sess-telegram",
             updatedAt: Date.now(),
             chatType: "group",
-            channel: "discord",
+            channel: "telegram",
           },
         },
       });
 
       const blockedRes = await rpcReq(ws, "chat.send", {
-        sessionKey: "discord:group:dev",
+        sessionKey: "telegram:group:dev",
         message: "hello",
         idempotencyKey: "idem-1",
       });

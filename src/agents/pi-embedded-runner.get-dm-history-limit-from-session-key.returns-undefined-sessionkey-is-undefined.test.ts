@@ -111,11 +111,11 @@ describe("getDmHistoryLimitFromSessionKey", () => {
     } as OpenClawConfig;
     expect(getDmHistoryLimitFromSessionKey("telegram:dm:123", config)).toBe(15);
   });
-  it("returns dmHistoryLimit for whatsapp provider", () => {
+  it("returns dmHistoryLimit for telegram provider", () => {
     const config = {
-      channels: { whatsapp: { dmHistoryLimit: 20 } },
+      channels: { telegram: { dmHistoryLimit: 20 } },
     } as OpenClawConfig;
-    expect(getDmHistoryLimitFromSessionKey("whatsapp:dm:123", config)).toBe(20);
+    expect(getDmHistoryLimitFromSessionKey("telegram:dm:123", config)).toBe(20);
   });
   it("returns dmHistoryLimit for agent-prefixed session keys", () => {
     const config = {
@@ -147,10 +147,12 @@ describe("getDmHistoryLimitFromSessionKey", () => {
     const config = {
       channels: {
         telegram: { dmHistoryLimit: 15 },
-        slack: { dmHistoryLimit: 10 },
+        telegram: { dmHistoryLimit: 10 },
       },
     } as OpenClawConfig;
-    expect(getDmHistoryLimitFromSessionKey("agent:beta:slack:channel:c1", config)).toBeUndefined();
+    expect(
+      getDmHistoryLimitFromSessionKey("agent:beta:telegram:channel:c1", config),
+    ).toBeUndefined();
     expect(getDmHistoryLimitFromSessionKey("telegram:slash:123", config)).toBeUndefined();
   });
   it("returns undefined for unknown provider", () => {
@@ -166,11 +168,11 @@ describe("getDmHistoryLimitFromSessionKey", () => {
   it("handles all supported providers", () => {
     const providers = [
       "telegram",
-      "whatsapp",
-      "discord",
-      "slack",
-      "signal",
-      "imessage",
+      "telegram",
+      "telegram",
+      "telegram",
+      "telegram",
+      "telegram",
       "msteams",
       "nextcloud-talk",
     ] as const;
@@ -185,11 +187,11 @@ describe("getDmHistoryLimitFromSessionKey", () => {
   it("handles per-DM overrides for all supported providers", () => {
     const providers = [
       "telegram",
-      "whatsapp",
-      "discord",
-      "slack",
-      "signal",
-      "imessage",
+      "telegram",
+      "telegram",
+      "telegram",
+      "telegram",
+      "telegram",
       "msteams",
       "nextcloud-talk",
     ] as const;

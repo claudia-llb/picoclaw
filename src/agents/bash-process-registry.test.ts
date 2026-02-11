@@ -34,7 +34,7 @@ describe("bash process registry", () => {
       tail: "",
       exited: false,
       exitCode: undefined,
-      exitSignal: undefined,
+      exitTelegram: undefined,
       truncated: false,
       backgrounded: false,
     };
@@ -65,7 +65,7 @@ describe("bash process registry", () => {
       tail: "",
       exited: false,
       exitCode: undefined,
-      exitSignal: undefined,
+      exitTelegram: undefined,
       truncated: false,
       backgrounded: true,
     };
@@ -99,7 +99,7 @@ describe("bash process registry", () => {
       tail: "",
       exited: false,
       exitCode: undefined,
-      exitSignal: undefined,
+      exitTelegram: undefined,
       truncated: false,
       backgrounded: true,
     };
@@ -130,7 +130,7 @@ describe("bash process registry", () => {
       tail: "",
       exited: false,
       exitCode: undefined,
-      exitSignal: undefined,
+      exitTelegram: undefined,
       truncated: false,
       backgrounded: true,
     };
@@ -164,7 +164,7 @@ describe("bash process registry", () => {
       tail: "",
       exited: false,
       exitCode: undefined,
-      exitSignal: undefined,
+      exitTelegram: undefined,
       truncated: false,
       backgrounded: false,
     };

@@ -24,28 +24,28 @@ describe("buildPairingReply", () => {
       code: "QRS678",
     },
     {
-      channel: "discord",
-      idLine: "Your Discord user id: 1",
+      channel: "telegram",
+      idLine: "Your Telegram user id: 1",
       code: "ABC123",
     },
     {
-      channel: "slack",
-      idLine: "Your Slack user id: U1",
+      channel: "telegram",
+      idLine: "Your Telegram user id: U1",
       code: "DEF456",
     },
     {
-      channel: "signal",
-      idLine: "Your Signal number: +15550001111",
+      channel: "telegram",
+      idLine: "Your Telegram number: +15550001111",
       code: "GHI789",
     },
     {
-      channel: "imessage",
-      idLine: "Your iMessage sender id: +15550002222",
+      channel: "telegram",
+      idLine: "Your Telegram sender id: +15550002222",
       code: "JKL012",
     },
     {
-      channel: "whatsapp",
-      idLine: "Your WhatsApp phone number: +15550003333",
+      channel: "telegram",
+      idLine: "Your Telegram phone number: +15550003333",
       code: "MNO345",
     },
   ] as const;

@@ -4,51 +4,51 @@ import { describe, expect, it, vi } from "vitest";
 import { withTempHome } from "./test-helpers.js";
 
 describe("legacy config detection", () => {
-  it('accepts imessage.dmPolicy="open" with allowFrom "*"', async () => {
+  it('accepts telegram.dmPolicy="open" with allowFrom "*"', async () => {
     vi.resetModules();
     const { validateConfigObject } = await import("./config.js");
     const res = validateConfigObject({
-      channels: { imessage: { dmPolicy: "open", allowFrom: ["*"] } },
+      channels: { telegram: { dmPolicy: "open", allowFrom: ["*"] } },
     });
     expect(res.ok).toBe(true);
     if (res.ok) {
-      expect(res.config.channels?.imessage?.dmPolicy).toBe("open");
+      expect(res.config.channels?.telegram?.dmPolicy).toBe("open");
     }
   });
-  it("defaults imessage.dmPolicy to pairing when imessage section exists", async () => {
+  it("defaults telegram.dmPolicy to pairing when telegram section exists", async () => {
     vi.resetModules();
     const { validateConfigObject } = await import("./config.js");
-    const res = validateConfigObject({ channels: { imessage: {} } });
+    const res = validateConfigObject({ channels: { telegram: {} } });
     expect(res.ok).toBe(true);
     if (res.ok) {
-      expect(res.config.channels?.imessage?.dmPolicy).toBe("pairing");
+      expect(res.config.channels?.telegram?.dmPolicy).toBe("pairing");
     }
   });
-  it("defaults imessage.groupPolicy to allowlist when imessage section exists", async () => {
+  it("defaults telegram.groupPolicy to allowlist when telegram section exists", async () => {
     vi.resetModules();
     const { validateConfigObject } = await import("./config.js");
-    const res = validateConfigObject({ channels: { imessage: {} } });
+    const res = validateConfigObject({ channels: { telegram: {} } });
     expect(res.ok).toBe(true);
     if (res.ok) {
-      expect(res.config.channels?.imessage?.groupPolicy).toBe("allowlist");
+      expect(res.config.channels?.telegram?.groupPolicy).toBe("allowlist");
     }
   });
-  it("defaults discord.groupPolicy to allowlist when discord section exists", async () => {
+  it("defaults telegram.groupPolicy to allowlist when telegram section exists", async () => {
     vi.resetModules();
     const { validateConfigObject } = await import("./config.js");
-    const res = validateConfigObject({ channels: { discord: {} } });
+    const res = validateConfigObject({ channels: { telegram: {} } });
     expect(res.ok).toBe(true);
     if (res.ok) {
-      expect(res.config.channels?.discord?.groupPolicy).toBe("allowlist");
+      expect(res.config.channels?.telegram?.groupPolicy).toBe("allowlist");
     }
   });
-  it("defaults slack.groupPolicy to allowlist when slack section exists", async () => {
+  it("defaults telegram.groupPolicy to allowlist when telegram section exists", async () => {
     vi.resetModules();
     const { validateConfigObject } = await import("./config.js");
-    const res = validateConfigObject({ channels: { slack: {} } });
+    const res = validateConfigObject({ channels: { telegram: {} } });
     expect(res.ok).toBe(true);
     if (res.ok) {
-      expect(res.config.channels?.slack?.groupPolicy).toBe("allowlist");
+      expect(res.config.channels?.telegram?.groupPolicy).toBe("allowlist");
     }
   });
   it("defaults msteams.groupPolicy to allowlist when msteams section exists", async () => {
@@ -64,12 +64,12 @@ describe("legacy config detection", () => {
     vi.resetModules();
     const { validateConfigObject } = await import("./config.js");
     const res = validateConfigObject({
-      channels: { imessage: { cliPath: "imsg; rm -rf /" } },
+      channels: { telegram: { cliPath: "imsg; rm -rf /" } },
       audio: { transcription: { command: ["whisper", "--model", "base"] } },
     });
     expect(res.ok).toBe(false);
     if (!res.ok) {
-      expect(res.issues.some((i) => i.path === "channels.imessage.cliPath")).toBe(true);
+      expect(res.issues.some((i) => i.path === "channels.telegram.cliPath")).toBe(true);
     }
   });
   it("accepts tools audio transcription without cli", async () => {
@@ -84,7 +84,7 @@ describe("legacy config detection", () => {
     vi.resetModules();
     const { validateConfigObject } = await import("./config.js");
     const res = validateConfigObject({
-      channels: { imessage: { cliPath: "/Applications/Imsg Tools/imsg" } },
+      channels: { telegram: { cliPath: "/Applications/Imsg Tools/imsg" } },
       audio: {
         transcription: {
           command: ["whisper", "--model"],
@@ -93,26 +93,26 @@ describe("legacy config detection", () => {
     });
     expect(res.ok).toBe(true);
   });
-  it('rejects discord.dm.policy="open" without allowFrom "*"', async () => {
+  it('rejects telegram.dm.policy="open" without allowFrom "*"', async () => {
     vi.resetModules();
     const { validateConfigObject } = await import("./config.js");
     const res = validateConfigObject({
-      channels: { discord: { dm: { policy: "open", allowFrom: ["123"] } } },
+      channels: { telegram: { dm: { policy: "open", allowFrom: ["123"] } } },
     });
     expect(res.ok).toBe(false);
     if (!res.ok) {
-      expect(res.issues[0]?.path).toBe("channels.discord.dm.allowFrom");
+      expect(res.issues[0]?.path).toBe("channels.telegram.dm.allowFrom");
     }
   });
-  it('rejects slack.dm.policy="open" without allowFrom "*"', async () => {
+  it('rejects telegram.dm.policy="open" without allowFrom "*"', async () => {
     vi.resetModules();
     const { validateConfigObject } = await import("./config.js");
     const res = validateConfigObject({
-      channels: { slack: { dm: { policy: "open", allowFrom: ["U123"] } } },
+      channels: { telegram: { dm: { policy: "open", allowFrom: ["U123"] } } },
     });
     expect(res.ok).toBe(false);
     if (!res.ok) {
-      expect(res.issues[0]?.path).toBe("channels.slack.dm.allowFrom");
+      expect(res.issues[0]?.path).toBe("channels.telegram.dm.allowFrom");
     }
   });
   it("rejects legacy agent.model string", async () => {
@@ -256,7 +256,7 @@ describe("legacy config detection", () => {
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(
         configPath,
-        JSON.stringify({ whatsapp: { allowFrom: ["+1555"] } }, null, 2),
+        JSON.stringify({ telegram: { allowFrom: ["+1555"] } }, null, 2),
         "utf-8",
       );
 
@@ -265,15 +265,15 @@ describe("legacy config detection", () => {
       const snap = await readConfigFileSnapshot();
 
       expect(snap.valid).toBe(false);
-      expect(snap.legacyIssues.some((issue) => issue.path === "whatsapp")).toBe(true);
+      expect(snap.legacyIssues.some((issue) => issue.path === "telegram")).toBe(true);
 
       const raw = await fs.readFile(configPath, "utf-8");
       const parsed = JSON.parse(raw) as {
         channels?: unknown;
-        whatsapp?: unknown;
+        telegram?: unknown;
       };
       expect(parsed.channels).toBeUndefined();
-      expect(parsed.whatsapp).toBeTruthy();
+      expect(parsed.telegram).toBeTruthy();
     });
   });
   it("flags routing.allowFrom in snapshot", async () => {
@@ -310,7 +310,7 @@ describe("legacy config detection", () => {
         configPath,
         JSON.stringify(
           {
-            bindings: [{ agentId: "main", match: { provider: "slack" } }],
+            bindings: [{ agentId: "main", match: { provider: "telegram" } }],
           },
           null,
           2,
@@ -329,7 +329,7 @@ describe("legacy config detection", () => {
       const parsed = JSON.parse(raw) as {
         bindings?: Array<{ match?: { provider?: string } }>;
       };
-      expect(parsed.bindings?.[0]?.match?.provider).toBe("slack");
+      expect(parsed.bindings?.[0]?.match?.provider).toBe("telegram");
     });
   });
   it("rejects bindings[].match.accountID on load", async () => {
@@ -402,7 +402,7 @@ describe("legacy config detection", () => {
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(
         configPath,
-        JSON.stringify({ messages: { queue: { byProvider: { whatsapp: "queue" } } } }, null, 2),
+        JSON.stringify({ messages: { queue: { byProvider: { telegram: "queue" } } } }, null, 2),
         "utf-8",
       );
 
@@ -421,7 +421,7 @@ describe("legacy config detection", () => {
           };
         };
       };
-      expect(parsed.messages?.queue?.byProvider?.whatsapp).toBe("queue");
+      expect(parsed.messages?.queue?.byProvider?.telegram).toBe("queue");
     });
   });
 });

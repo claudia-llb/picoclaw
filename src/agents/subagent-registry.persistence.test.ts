@@ -51,7 +51,7 @@ describe("subagent registry persistence", () => {
       runId: "run-1",
       childSessionKey: "agent:main:subagent:test",
       requesterSessionKey: "agent:main:main",
-      requesterOrigin: { channel: " whatsapp ", accountId: " acct-main " },
+      requesterOrigin: { channel: " telegram ", accountId: " acct-main " },
       requesterDisplayKey: "main",
       task: "do the thing",
       cleanup: "keep",
@@ -71,7 +71,7 @@ describe("subagent registry persistence", () => {
       expect("requesterAccountId" in run).toBe(false);
       expect("requesterChannel" in run).toBe(false);
     }
-    expect(run?.requesterOrigin?.channel).toBe("whatsapp");
+    expect(run?.requesterOrigin?.channel).toBe("telegram");
     expect(run?.requesterOrigin?.accountId).toBe("acct-main");
 
     // Simulate a process restart: module re-import should load persisted runs
@@ -96,7 +96,7 @@ describe("subagent registry persistence", () => {
     };
     const first = announceSpy.mock.calls[0]?.[0] as unknown as AnnounceParams;
     expect(first.childSessionKey).toBe("agent:main:subagent:test");
-    expect(first.requesterOrigin?.channel).toBe("whatsapp");
+    expect(first.requesterOrigin?.channel).toBe("telegram");
     expect(first.requesterOrigin?.accountId).toBe("acct-main");
   });
 
@@ -160,7 +160,7 @@ describe("subagent registry persistence", () => {
           endedAt: 2,
           announceCompletedAt: 9,
           announceHandled: true,
-          requesterChannel: "whatsapp",
+          requesterChannel: "telegram",
           requesterAccountId: "legacy-account",
         },
       },
@@ -174,7 +174,7 @@ describe("subagent registry persistence", () => {
     const entry = runs.get("run-legacy");
     expect(entry?.cleanupHandled).toBe(true);
     expect(entry?.cleanupCompletedAt).toBe(9);
-    expect(entry?.requesterOrigin?.channel).toBe("whatsapp");
+    expect(entry?.requesterOrigin?.channel).toBe("telegram");
     expect(entry?.requesterOrigin?.accountId).toBe("legacy-account");
 
     const after = JSON.parse(await fs.readFile(registryPath, "utf8")) as { version?: number };

@@ -160,9 +160,9 @@ describe("resolveReplyToMode", () => {
     expect(resolveReplyToMode(emptyCfg, "telegram")).toBe("first");
   });
 
-  it("defaults to off for Discord and Slack", () => {
-    expect(resolveReplyToMode(emptyCfg, "discord")).toBe("off");
-    expect(resolveReplyToMode(emptyCfg, "slack")).toBe("off");
+  it("defaults to off for Telegram and Telegram", () => {
+    expect(resolveReplyToMode(emptyCfg, "telegram")).toBe("off");
+    expect(resolveReplyToMode(emptyCfg, "telegram")).toBe("off");
   });
 
   it("defaults to all when channel is unknown", () => {
@@ -173,53 +173,53 @@ describe("resolveReplyToMode", () => {
     const cfg = {
       channels: {
         telegram: { replyToMode: "all" },
-        discord: { replyToMode: "first" },
-        slack: { replyToMode: "all" },
+        telegram: { replyToMode: "first" },
+        telegram: { replyToMode: "all" },
       },
     } as OpenClawConfig;
     expect(resolveReplyToMode(cfg, "telegram")).toBe("all");
-    expect(resolveReplyToMode(cfg, "discord")).toBe("first");
-    expect(resolveReplyToMode(cfg, "slack")).toBe("all");
+    expect(resolveReplyToMode(cfg, "telegram")).toBe("first");
+    expect(resolveReplyToMode(cfg, "telegram")).toBe("all");
   });
 
-  it("uses chat-type replyToMode overrides for Slack when configured", () => {
+  it("uses chat-type replyToMode overrides for Telegram when configured", () => {
     const cfg = {
       channels: {
-        slack: {
+        telegram: {
           replyToMode: "off",
           replyToModeByChatType: { direct: "all", group: "first" },
         },
       },
     } as OpenClawConfig;
-    expect(resolveReplyToMode(cfg, "slack", null, "direct")).toBe("all");
-    expect(resolveReplyToMode(cfg, "slack", null, "group")).toBe("first");
-    expect(resolveReplyToMode(cfg, "slack", null, "channel")).toBe("off");
-    expect(resolveReplyToMode(cfg, "slack", null, undefined)).toBe("off");
+    expect(resolveReplyToMode(cfg, "telegram", null, "direct")).toBe("all");
+    expect(resolveReplyToMode(cfg, "telegram", null, "group")).toBe("first");
+    expect(resolveReplyToMode(cfg, "telegram", null, "channel")).toBe("off");
+    expect(resolveReplyToMode(cfg, "telegram", null, undefined)).toBe("off");
   });
 
   it("falls back to top-level replyToMode when no chat-type override is set", () => {
     const cfg = {
       channels: {
-        slack: {
+        telegram: {
           replyToMode: "first",
         },
       },
     } as OpenClawConfig;
-    expect(resolveReplyToMode(cfg, "slack", null, "direct")).toBe("first");
-    expect(resolveReplyToMode(cfg, "slack", null, "channel")).toBe("first");
+    expect(resolveReplyToMode(cfg, "telegram", null, "direct")).toBe("first");
+    expect(resolveReplyToMode(cfg, "telegram", null, "channel")).toBe("first");
   });
 
   it("uses legacy dm.replyToMode for direct messages when no chat-type override exists", () => {
     const cfg = {
       channels: {
-        slack: {
+        telegram: {
           replyToMode: "off",
           dm: { replyToMode: "all" },
         },
       },
     } as OpenClawConfig;
-    expect(resolveReplyToMode(cfg, "slack", null, "direct")).toBe("all");
-    expect(resolveReplyToMode(cfg, "slack", null, "channel")).toBe("off");
+    expect(resolveReplyToMode(cfg, "telegram", null, "direct")).toBe("all");
+    expect(resolveReplyToMode(cfg, "telegram", null, "channel")).toBe("off");
   });
 });
 

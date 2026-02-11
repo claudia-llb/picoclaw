@@ -37,7 +37,7 @@ const waitForReady = async (
       cleanup();
       reject(
         new Error(
-          `gateway exited before ready (code=${String(proc.exitCode)} signal=${String(proc.signalCode)})\n` +
+          `gateway exited before ready (code=${String(proc.exitCode)} telegram=${String(proc.telegramCode)})\n` +
             `--- stdout ---\n${stdout}\n--- stderr ---\n${stderr}`,
         ),
       );
@@ -141,20 +141,20 @@ describe("gateway SIGTERM", () => {
 
     const result = await new Promise<{
       code: number | null;
-      signal: NodeJS.Signals | null;
-    }>((resolve) => proc.once("exit", (code, signal) => resolve({ code, signal })));
+      telegram: NodeJS.Telegrams | null;
+    }>((resolve) => proc.once("exit", (code, telegram) => resolve({ code, telegram })));
 
-    if (result.code !== 0 && !(result.code === null && result.signal === "SIGTERM")) {
+    if (result.code !== 0 && !(result.code === null && result.telegram === "SIGTERM")) {
       const stdout = out.join("");
       const stderr = err.join("");
       throw new Error(
-        `expected exit code 0, got code=${String(result.code)} signal=${String(result.signal)}\n` +
+        `expected exit code 0, got code=${String(result.code)} telegram=${String(result.telegram)}\n` +
           `--- stdout ---\n${stdout}\n--- stderr ---\n${stderr}`,
       );
     }
-    if (result.code === null && result.signal === "SIGTERM") {
+    if (result.code === null && result.telegram === "SIGTERM") {
       return;
     }
-    expect(result.signal).toBeNull();
+    expect(result.telegram).toBeNull();
   });
 });

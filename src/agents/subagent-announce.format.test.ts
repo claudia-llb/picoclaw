@@ -6,7 +6,7 @@ const readLatestAssistantReplyMock = vi.fn(async () => "raw subagent reply");
 const embeddedRunMock = {
   isEmbeddedPiRunActive: vi.fn(() => false),
   isEmbeddedPiRunStreaming: vi.fn(() => false),
-  queueEmbeddedPiMessage: vi.fn(() => false),
+  queueEmbeddedPTelegram: vi.fn(() => false),
   waitForEmbeddedPiRunEnd: vi.fn(async () => true),
 };
 let sessionStore: Record<string, Record<string, unknown>> = {};
@@ -66,7 +66,7 @@ describe("subagent announce formatting", () => {
     sessionsDeleteSpy.mockClear();
     embeddedRunMock.isEmbeddedPiRunActive.mockReset().mockReturnValue(false);
     embeddedRunMock.isEmbeddedPiRunStreaming.mockReset().mockReturnValue(false);
-    embeddedRunMock.queueEmbeddedPiMessage.mockReset().mockReturnValue(false);
+    embeddedRunMock.queueEmbeddedPTelegram.mockReset().mockReturnValue(false);
     embeddedRunMock.waitForEmbeddedPiRunEnd.mockReset().mockResolvedValue(true);
     readLatestAssistantReplyMock.mockReset().mockResolvedValue("raw subagent reply");
     sessionStore = {};
@@ -133,11 +133,11 @@ describe("subagent announce formatting", () => {
     const { runSubagentAnnounceFlow } = await import("./subagent-announce.js");
     embeddedRunMock.isEmbeddedPiRunActive.mockReturnValue(true);
     embeddedRunMock.isEmbeddedPiRunStreaming.mockReturnValue(true);
-    embeddedRunMock.queueEmbeddedPiMessage.mockReturnValue(true);
+    embeddedRunMock.queueEmbeddedPTelegram.mockReturnValue(true);
     sessionStore = {
       "agent:main:main": {
         sessionId: "session-123",
-        lastChannel: "whatsapp",
+        lastChannel: "telegram",
         lastTo: "+1555",
         queueMode: "steer",
       },
@@ -158,7 +158,7 @@ describe("subagent announce formatting", () => {
     });
 
     expect(didAnnounce).toBe(true);
-    expect(embeddedRunMock.queueEmbeddedPiMessage).toHaveBeenCalledWith(
+    expect(embeddedRunMock.queueEmbeddedPTelegram).toHaveBeenCalledWith(
       "session-123",
       expect.stringContaining("subagent task"),
     );
@@ -172,7 +172,7 @@ describe("subagent announce formatting", () => {
     sessionStore = {
       "agent:main:main": {
         sessionId: "session-456",
-        lastChannel: "whatsapp",
+        lastChannel: "telegram",
         lastTo: "+1555",
         lastAccountId: "kev",
         queueMode: "collect",
@@ -198,7 +198,7 @@ describe("subagent announce formatting", () => {
     await expect.poll(() => agentSpy.mock.calls.length).toBe(1);
 
     const call = agentSpy.mock.calls[0]?.[0] as { params?: Record<string, unknown> };
-    expect(call?.params?.channel).toBe("whatsapp");
+    expect(call?.params?.channel).toBe("telegram");
     expect(call?.params?.to).toBe("+1555");
     expect(call?.params?.accountId).toBe("kev");
   });
@@ -289,7 +289,7 @@ describe("subagent announce formatting", () => {
     sessionStore = {
       "agent:main:main": {
         sessionId: "session-acc-split",
-        lastChannel: "whatsapp",
+        lastChannel: "telegram",
         lastTo: "+1555",
         queueMode: "collect",
         queueDebounceMs: 80,
@@ -344,7 +344,7 @@ describe("subagent announce formatting", () => {
       childSessionKey: "agent:main:subagent:test",
       childRunId: "run-direct",
       requesterSessionKey: "agent:main:main",
-      requesterOrigin: { channel: "whatsapp", accountId: "acct-123" },
+      requesterOrigin: { channel: "telegram", accountId: "acct-123" },
       requesterDisplayKey: "main",
       task: "do thing",
       timeoutMs: 1000,
@@ -357,7 +357,7 @@ describe("subagent announce formatting", () => {
 
     expect(didAnnounce).toBe(true);
     const call = agentSpy.mock.calls[0]?.[0] as { params?: Record<string, unknown> };
-    expect(call?.params?.channel).toBe("whatsapp");
+    expect(call?.params?.channel).toBe("telegram");
     expect(call?.params?.accountId).toBe("acct-123");
   });
 
@@ -459,7 +459,7 @@ describe("subagent announce formatting", () => {
       childSessionKey: "agent:main:subagent:test",
       childRunId: "run-direct-origin",
       requesterSessionKey: "agent:main:main",
-      requesterOrigin: { channel: " whatsapp ", accountId: " acct-987 " },
+      requesterOrigin: { channel: " telegram ", accountId: " acct-987 " },
       requesterDisplayKey: "main",
       task: "do thing",
       timeoutMs: 1000,
@@ -472,7 +472,7 @@ describe("subagent announce formatting", () => {
 
     expect(didAnnounce).toBe(true);
     const call = agentSpy.mock.calls[0]?.[0] as { params?: Record<string, unknown> };
-    expect(call?.params?.channel).toBe("whatsapp");
+    expect(call?.params?.channel).toBe("telegram");
     expect(call?.params?.accountId).toBe("acct-987");
   });
 
@@ -480,11 +480,11 @@ describe("subagent announce formatting", () => {
     const { runSubagentAnnounceFlow } = await import("./subagent-announce.js");
     embeddedRunMock.isEmbeddedPiRunActive.mockReturnValue(true);
     embeddedRunMock.isEmbeddedPiRunStreaming.mockReturnValue(false);
-    // Session store has stale whatsapp channel, but the requesterOrigin says bluebubbles.
+    // Session store has stale telegram channel, but the requesterOrigin says telegram.
     sessionStore = {
       "agent:main:main": {
         sessionId: "session-stale",
-        lastChannel: "whatsapp",
+        lastChannel: "telegram",
         queueMode: "collect",
         queueDebounceMs: 0,
       },
@@ -494,7 +494,7 @@ describe("subagent announce formatting", () => {
       childSessionKey: "agent:main:subagent:test",
       childRunId: "run-stale-channel",
       requesterSessionKey: "main",
-      requesterOrigin: { channel: "bluebubbles", to: "bluebubbles:chat_guid:123" },
+      requesterOrigin: { channel: "telegram", to: "telegram:chat_guid:123" },
       requesterDisplayKey: "main",
       task: "do thing",
       timeoutMs: 1000,
@@ -510,8 +510,8 @@ describe("subagent announce formatting", () => {
 
     const call = agentSpy.mock.calls[0]?.[0] as { params?: Record<string, unknown> };
     // The channel should match requesterOrigin, NOT the stale session entry.
-    expect(call?.params?.channel).toBe("bluebubbles");
-    expect(call?.params?.to).toBe("bluebubbles:chat_guid:123");
+    expect(call?.params?.channel).toBe("telegram");
+    expect(call?.params?.to).toBe("telegram:chat_guid:123");
   });
 
   it("splits collect-mode announces when accountId differs", async () => {
@@ -521,7 +521,7 @@ describe("subagent announce formatting", () => {
     sessionStore = {
       "agent:main:main": {
         sessionId: "session-789",
-        lastChannel: "whatsapp",
+        lastChannel: "telegram",
         lastTo: "+1555",
         queueMode: "collect",
         queueDebounceMs: 0,

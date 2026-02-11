@@ -51,13 +51,13 @@ beforeEach(() => {
     stdout: "",
     stderr: "",
     code: 0,
-    signal: null,
+    telegram: null,
     killed: false,
   });
   ensureAuthProfileStore.mockReset().mockReturnValue({ version: 1, profiles: {} });
   migrateLegacyConfig.mockReset().mockImplementation((raw: unknown) => ({
     config: raw as Record<string, unknown>,
-    changes: ["Moved routing.allowFrom → channels.whatsapp.allowFrom."],
+    changes: ["Moved routing.allowFrom → channels.telegram.allowFrom."],
   }));
   findLegacyGatewayServices.mockReset().mockResolvedValue([]);
   uninstallLegacyGatewayServices.mockReset().mockResolvedValue([]);
@@ -118,7 +118,7 @@ const runGatewayUpdate = vi.fn().mockResolvedValue({
 });
 const migrateLegacyConfig = vi.fn((raw: unknown) => ({
   config: raw as Record<string, unknown>,
-  changes: ["Moved routing.allowFrom → channels.whatsapp.allowFrom."],
+  changes: ["Moved routing.allowFrom → channels.telegram.allowFrom."],
 }));
 
 const runExec = vi.fn().mockResolvedValue({ stdout: "", stderr: "" });
@@ -126,7 +126,7 @@ const runCommandWithTimeout = vi.fn().mockResolvedValue({
   stdout: "",
   stderr: "",
   code: 0,
-  signal: null,
+  telegram: null,
   killed: false,
 });
 
@@ -312,9 +312,9 @@ vi.mock("./doctor-state-migrations.js", () => ({
       targetDir: "/tmp/state/agents/main/agent",
       hasLegacy: false,
     },
-    whatsappAuth: {
+    telegramAuth: {
       legacyDir: "/tmp/oauth",
-      targetDir: "/tmp/oauth/whatsapp/default",
+      targetDir: "/tmp/oauth/telegram/default",
       hasLegacy: false,
     },
     preview: [],
@@ -326,7 +326,7 @@ vi.mock("./doctor-state-migrations.js", () => ({
 }));
 
 describe("doctor command", () => {
-  it("migrates routing.allowFrom to channels.whatsapp.allowFrom", { timeout: 60_000 }, async () => {
+  it("migrates routing.allowFrom to channels.telegram.allowFrom", { timeout: 60_000 }, async () => {
     readConfigFileSnapshot.mockResolvedValue({
       path: "/tmp/openclaw.json",
       exists: true,
@@ -356,15 +356,15 @@ describe("doctor command", () => {
     };
 
     migrateLegacyConfig.mockReturnValue({
-      config: { channels: { whatsapp: { allowFrom: ["+15555550123"] } } },
-      changes: ["Moved routing.allowFrom → channels.whatsapp.allowFrom."],
+      config: { channels: { telegram: { allowFrom: ["+15555550123"] } } },
+      changes: ["Moved routing.allowFrom → channels.telegram.allowFrom."],
     });
 
     await doctorCommand(runtime, { nonInteractive: true, repair: true });
 
     expect(writeConfigFile).toHaveBeenCalledTimes(1);
     const written = writeConfigFile.mock.calls[0]?.[0] as Record<string, unknown>;
-    expect((written.channels as Record<string, unknown>)?.whatsapp).toEqual({
+    expect((written.channels as Record<string, unknown>)?.telegram).toEqual({
       allowFrom: ["+15555550123"],
     });
     expect(written.routing).toBeUndefined();
@@ -414,7 +414,7 @@ describe("doctor command", () => {
       stdout: `${root}\n`,
       stderr: "",
       code: 0,
-      signal: null,
+      telegram: null,
       killed: false,
     });
     runGatewayUpdate.mockResolvedValueOnce({

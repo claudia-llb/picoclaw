@@ -24,17 +24,17 @@ describe("runtime overrides", () => {
 
   it("merges object overrides without clobbering siblings", () => {
     const cfg = {
-      channels: { whatsapp: { dmPolicy: "pairing", allowFrom: ["+1"] } },
+      channels: { telegram: { dmPolicy: "pairing", allowFrom: ["+1"] } },
     } as OpenClawConfig;
-    setConfigOverride("channels.whatsapp.dmPolicy", "open");
+    setConfigOverride("channels.telegram.dmPolicy", "open");
     const next = applyConfigOverrides(cfg);
-    expect(next.channels?.whatsapp?.dmPolicy).toBe("open");
-    expect(next.channels?.whatsapp?.allowFrom).toEqual(["+1"]);
+    expect(next.channels?.telegram?.dmPolicy).toBe("open");
+    expect(next.channels?.telegram?.allowFrom).toEqual(["+1"]);
   });
 
   it("unsets overrides and prunes empty branches", () => {
-    setConfigOverride("channels.whatsapp.dmPolicy", "open");
-    const removed = unsetConfigOverride("channels.whatsapp.dmPolicy");
+    setConfigOverride("channels.telegram.dmPolicy", "open");
+    const removed = unsetConfigOverride("channels.telegram.dmPolicy");
     expect(removed.ok).toBe(true);
     expect(removed.removed).toBe(true);
     expect(Object.keys(getConfigOverrides()).length).toBe(0);

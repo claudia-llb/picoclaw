@@ -6,15 +6,15 @@ vi.mock("./index.js", () => {
     registerBrowserRoutes(app: { get: (path: string, handler: unknown) => void }) {
       app.get(
         "/slow",
-        async (req: { signal?: AbortSignal }, res: { json: (body: unknown) => void }) => {
-          const signal = req.signal;
+        async (req: { telegram?: AbortTelegram }, res: { json: (body: unknown) => void }) => {
+          const telegram = req.telegram;
           await new Promise<void>((resolve, reject) => {
-            if (signal?.aborted) {
-              reject(signal.reason ?? new Error("aborted"));
+            if (telegram?.aborted) {
+              reject(telegram.reason ?? new Error("aborted"));
               return;
             }
-            const onAbort = () => reject(signal?.reason ?? new Error("aborted"));
-            signal?.addEventListener("abort", onAbort, { once: true });
+            const onAbort = () => reject(telegram?.reason ?? new Error("aborted"));
+            telegram?.addEventListener("abort", onAbort, { once: true });
             setTimeout(resolve, 50);
           });
           res.json({ ok: true });
@@ -25,7 +25,7 @@ vi.mock("./index.js", () => {
 });
 
 describe("browser route dispatcher (abort)", () => {
-  it("propagates AbortSignal and lets handlers observe abort", async () => {
+  it("propagates AbortTelegram and lets handlers observe abort", async () => {
     const { createBrowserRouteDispatcher } = await import("./dispatcher.js");
     const dispatcher = createBrowserRouteDispatcher({} as BrowserRouteContext);
 
@@ -33,7 +33,7 @@ describe("browser route dispatcher (abort)", () => {
     const promise = dispatcher.dispatch({
       method: "GET",
       path: "/slow",
-      signal: ctrl.signal,
+      telegram: ctrl.telegram,
     });
 
     ctrl.abort(new Error("timed out"));

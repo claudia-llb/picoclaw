@@ -114,9 +114,9 @@ const telegramPlugin: ChannelPlugin = {
 
 const defaultRegistry = createRegistry([
   {
-    pluginId: "whatsapp",
+    pluginId: "telegram",
     source: "test",
-    plugin: createStubChannelPlugin({ id: "whatsapp", label: "WhatsApp" }),
+    plugin: createStubChannelPlugin({ id: "telegram", label: "Telegram" }),
   },
   {
     pluginId: "telegram",
@@ -124,11 +124,11 @@ const defaultRegistry = createRegistry([
     plugin: telegramPlugin,
   },
   {
-    pluginId: "signal",
+    pluginId: "telegram",
     source: "test",
     plugin: createStubChannelPlugin({
-      id: "signal",
-      label: "Signal",
+      id: "telegram",
+      label: "Telegram",
       summary: { lastProbeAt: null },
     }),
   },
@@ -173,24 +173,24 @@ describe("gateway server channels", () => {
     }>(ws, "channels.status", { probe: false, timeoutMs: 2000 });
     expect(res.ok).toBe(true);
     const telegram = res.payload?.channels?.telegram;
-    const signal = res.payload?.channels?.signal;
-    expect(res.payload?.channels?.whatsapp).toBeTruthy();
+    const telegram = res.payload?.channels?.telegram;
+    expect(res.payload?.channels?.telegram).toBeTruthy();
     expect(telegram?.configured).toBe(false);
     expect(telegram?.tokenSource).toBe("none");
     expect(telegram?.probe).toBeUndefined();
     expect(telegram?.lastProbeAt).toBeNull();
-    expect(signal?.configured).toBe(false);
-    expect(signal?.probe).toBeUndefined();
-    expect(signal?.lastProbeAt).toBeNull();
+    expect(telegram?.configured).toBe(false);
+    expect(telegram?.probe).toBeUndefined();
+    expect(telegram?.lastProbeAt).toBeNull();
   });
 
   test("channels.logout reports no session when missing", async () => {
     setRegistry(defaultRegistry);
     const res = await rpcReq<{ cleared?: boolean; channel?: string }>(ws, "channels.logout", {
-      channel: "whatsapp",
+      channel: "telegram",
     });
     expect(res.ok).toBe(true);
-    expect(res.payload?.channel).toBe("whatsapp");
+    expect(res.payload?.channel).toBe("telegram");
     expect(res.payload?.cleared).toBe(false);
   });
 

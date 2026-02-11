@@ -36,13 +36,13 @@ describe("redactConfigSnapshot", () => {
     const snapshot = makeSnapshot({
       channels: {
         telegram: { botToken: "123456:ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef" },
-        slack: { botToken: "fake-slack-bot-token-placeholder-value" },
+        telegram: { botToken: "fake-telegram-bot-token-placeholder-value" },
       },
     });
     const result = redactConfigSnapshot(snapshot);
     const channels = result.config.channels as Record<string, Record<string, string>>;
     expect(channels.telegram.botToken).toBe(REDACTED_SENTINEL);
-    expect(channels.slack.botToken).toBe(REDACTED_SENTINEL);
+    expect(channels.telegram.botToken).toBe(REDACTED_SENTINEL);
   });
 
   it("redacts apiKey in model providers", () => {
@@ -82,12 +82,12 @@ describe("redactConfigSnapshot", () => {
   it("redacts signingSecret fields", () => {
     const snapshot = makeSnapshot({
       channels: {
-        slack: { signingSecret: "slack-signing-secret-value-1234" },
+        telegram: { signingSecret: "telegram-signing-secret-value-1234" },
       },
     });
     const result = redactConfigSnapshot(snapshot);
     const channels = result.config.channels as Record<string, Record<string, string>>;
-    expect(channels.slack.signingSecret).toBe(REDACTED_SENTINEL);
+    expect(channels.telegram.signingSecret).toBe(REDACTED_SENTINEL);
   });
 
   it("redacts short secrets with same sentinel", () => {
@@ -126,12 +126,12 @@ describe("redactConfigSnapshot", () => {
 
   it("redacts parsed object as well", () => {
     const config = {
-      channels: { discord: { token: "MTIzNDU2Nzg5MDEyMzQ1Njc4.GaBcDe.FgH" } },
+      channels: { telegram: { token: "MTIzNDU2Nzg5MDEyMzQ1Njc4.GaBcDe.FgH" } },
     };
     const snapshot = makeSnapshot(config);
     const result = redactConfigSnapshot(snapshot);
     const parsed = result.parsed as Record<string, Record<string, Record<string, string>>>;
-    expect(parsed.channels.discord.token).toBe(REDACTED_SENTINEL);
+    expect(parsed.channels.telegram.token).toBe(REDACTED_SENTINEL);
   });
 
   it("handles null raw gracefully", () => {
@@ -154,7 +154,7 @@ describe("redactConfigSnapshot", () => {
   it("handles deeply nested tokens in accounts", () => {
     const snapshot = makeSnapshot({
       channels: {
-        slack: {
+        telegram: {
           accounts: {
             workspace1: { botToken: "fake-workspace1-token-abcdefghij" },
             workspace2: { appToken: "fake-workspace2-token-abcdefghij" },
@@ -167,8 +167,8 @@ describe("redactConfigSnapshot", () => {
       string,
       Record<string, Record<string, Record<string, string>>>
     >;
-    expect(channels.slack.accounts.workspace1.botToken).toBe(REDACTED_SENTINEL);
-    expect(channels.slack.accounts.workspace2.appToken).toBe(REDACTED_SENTINEL);
+    expect(channels.telegram.accounts.workspace1.botToken).toBe(REDACTED_SENTINEL);
+    expect(channels.telegram.accounts.workspace2.appToken).toBe(REDACTED_SENTINEL);
   });
 
   it("handles webhookSecret field", () => {
@@ -266,7 +266,7 @@ describe("restoreRedactedValues", () => {
   it("handles deeply nested sentinel restoration", () => {
     const incoming = {
       channels: {
-        slack: {
+        telegram: {
           accounts: {
             ws1: { botToken: REDACTED_SENTINEL },
             ws2: { botToken: "user-typed-new-token-value" },
@@ -276,7 +276,7 @@ describe("restoreRedactedValues", () => {
     };
     const original = {
       channels: {
-        slack: {
+        telegram: {
           accounts: {
             ws1: { botToken: "original-ws1-token-value" },
             ws2: { botToken: "original-ws2-token-value" },
@@ -285,8 +285,8 @@ describe("restoreRedactedValues", () => {
       },
     };
     const result = restoreRedactedValues(incoming, original) as typeof incoming;
-    expect(result.channels.slack.accounts.ws1.botToken).toBe("original-ws1-token-value");
-    expect(result.channels.slack.accounts.ws2.botToken).toBe("user-typed-new-token-value");
+    expect(result.channels.telegram.accounts.ws1.botToken).toBe("original-ws1-token-value");
+    expect(result.channels.telegram.accounts.ws2.botToken).toBe("user-typed-new-token-value");
   });
 
   it("handles missing original gracefully", () => {
@@ -306,7 +306,7 @@ describe("restoreRedactedValues", () => {
     const originalConfig = {
       gateway: { auth: { token: "gateway-auth-secret-token-value" }, port: 18789 },
       channels: {
-        slack: { botToken: "fake-slack-token-placeholder-value" },
+        telegram: { botToken: "fake-telegram-token-placeholder-value" },
         telegram: {
           botToken: "fake-telegram-token-placeholder-value",
           webhookSecret: "fake-tg-secret-placeholder-value",

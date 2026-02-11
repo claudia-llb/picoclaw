@@ -35,7 +35,7 @@ function createRun(params: {
 }
 
 describe("followup queue deduplication", () => {
-  it("deduplicates messages with same Discord message_id", async () => {
+  it("deduplicates messages with same Telegram message_id", async () => {
     const key = `test-dedup-message-id-${Date.now()}`;
     const calls: FollowupRun[] = [];
     const runFollowup = async (run: FollowupRun) => {
@@ -52,9 +52,9 @@ describe("followup queue deduplication", () => {
     const first = enqueueFollowupRun(
       key,
       createRun({
-        prompt: "[Discord Guild #test channel id:123] Hello",
+        prompt: "[Telegram Guild #test channel id:123] Hello",
         messageId: "m1",
-        originatingChannel: "discord",
+        originatingChannel: "telegram",
         originatingTo: "channel:123",
       }),
       settings,
@@ -65,9 +65,9 @@ describe("followup queue deduplication", () => {
     const second = enqueueFollowupRun(
       key,
       createRun({
-        prompt: "[Discord Guild #test channel id:123] Hello (dupe)",
+        prompt: "[Telegram Guild #test channel id:123] Hello (dupe)",
         messageId: "m1",
-        originatingChannel: "discord",
+        originatingChannel: "telegram",
         originatingTo: "channel:123",
       }),
       settings,
@@ -78,9 +78,9 @@ describe("followup queue deduplication", () => {
     const third = enqueueFollowupRun(
       key,
       createRun({
-        prompt: "[Discord Guild #test channel id:123] World",
+        prompt: "[Telegram Guild #test channel id:123] World",
         messageId: "m2",
-        originatingChannel: "discord",
+        originatingChannel: "telegram",
         originatingTo: "channel:123",
       }),
       settings,
@@ -94,7 +94,7 @@ describe("followup queue deduplication", () => {
   });
 
   it("deduplicates exact prompt when routing matches and no message id", async () => {
-    const key = `test-dedup-whatsapp-${Date.now()}`;
+    const key = `test-dedup-telegram-${Date.now()}`;
     const settings: QueueSettings = {
       mode: "collect",
       debounceMs: 0,
@@ -107,7 +107,7 @@ describe("followup queue deduplication", () => {
       key,
       createRun({
         prompt: "Hello world",
-        originatingChannel: "whatsapp",
+        originatingChannel: "telegram",
         originatingTo: "+1234567890",
       }),
       settings,
@@ -119,7 +119,7 @@ describe("followup queue deduplication", () => {
       key,
       createRun({
         prompt: "Hello world",
-        originatingChannel: "whatsapp",
+        originatingChannel: "telegram",
         originatingTo: "+1234567890",
       }),
       settings,
@@ -131,7 +131,7 @@ describe("followup queue deduplication", () => {
       key,
       createRun({
         prompt: "Hello world 2",
-        originatingChannel: "whatsapp",
+        originatingChannel: "telegram",
         originatingTo: "+1234567890",
       }),
       settings,
@@ -152,7 +152,7 @@ describe("followup queue deduplication", () => {
       key,
       createRun({
         prompt: "Same text",
-        originatingChannel: "whatsapp",
+        originatingChannel: "telegram",
         originatingTo: "+1234567890",
       }),
       settings,
@@ -163,7 +163,7 @@ describe("followup queue deduplication", () => {
       key,
       createRun({
         prompt: "Same text",
-        originatingChannel: "discord",
+        originatingChannel: "telegram",
         originatingTo: "channel:123",
       }),
       settings,
@@ -184,7 +184,7 @@ describe("followup queue deduplication", () => {
       key,
       createRun({
         prompt: "Hello world",
-        originatingChannel: "whatsapp",
+        originatingChannel: "telegram",
         originatingTo: "+1234567890",
       }),
       settings,
@@ -196,7 +196,7 @@ describe("followup queue deduplication", () => {
       key,
       createRun({
         prompt: "Hello world",
-        originatingChannel: "whatsapp",
+        originatingChannel: "telegram",
         originatingTo: "+1234567890",
       }),
       settings,
@@ -224,7 +224,7 @@ describe("followup queue collect routing", () => {
       key,
       createRun({
         prompt: "one",
-        originatingChannel: "slack",
+        originatingChannel: "telegram",
         originatingTo: "channel:A",
       }),
       settings,
@@ -233,7 +233,7 @@ describe("followup queue collect routing", () => {
       key,
       createRun({
         prompt: "two",
-        originatingChannel: "slack",
+        originatingChannel: "telegram",
         originatingTo: "channel:B",
       }),
       settings,
@@ -262,7 +262,7 @@ describe("followup queue collect routing", () => {
       key,
       createRun({
         prompt: "one",
-        originatingChannel: "slack",
+        originatingChannel: "telegram",
         originatingTo: "channel:A",
       }),
       settings,
@@ -271,7 +271,7 @@ describe("followup queue collect routing", () => {
       key,
       createRun({
         prompt: "two",
-        originatingChannel: "slack",
+        originatingChannel: "telegram",
         originatingTo: "channel:A",
       }),
       settings,
@@ -280,7 +280,7 @@ describe("followup queue collect routing", () => {
     scheduleFollowupDrain(key, runFollowup);
     await expect.poll(() => calls.length).toBe(1);
     expect(calls[0]?.prompt).toContain("[Queued messages while agent was busy]");
-    expect(calls[0]?.originatingChannel).toBe("slack");
+    expect(calls[0]?.originatingChannel).toBe("telegram");
     expect(calls[0]?.originatingTo).toBe("channel:A");
   });
 });

@@ -1,20 +1,20 @@
 import { describe, expect, it } from "vitest";
 import {
-  listDiscordDirectoryGroupsFromConfig,
-  listDiscordDirectoryPeersFromConfig,
-  listSlackDirectoryGroupsFromConfig,
-  listSlackDirectoryPeersFromConfig,
   listTelegramDirectoryGroupsFromConfig,
   listTelegramDirectoryPeersFromConfig,
-  listWhatsAppDirectoryGroupsFromConfig,
-  listWhatsAppDirectoryPeersFromConfig,
+  listTelegramDirectoryGroupsFromConfig,
+  listTelegramDirectoryPeersFromConfig,
+  listTelegramDirectoryGroupsFromConfig,
+  listTelegramDirectoryPeersFromConfig,
+  listTelegramDirectoryGroupsFromConfig,
+  listTelegramDirectoryPeersFromConfig,
 } from "./directory-config.js";
 
 describe("directory (config-backed)", () => {
-  it("lists Slack peers/groups from config", async () => {
+  it("lists Telegram peers/groups from config", async () => {
     const cfg = {
       channels: {
-        slack: {
+        telegram: {
           botToken: "xoxb-test",
           appToken: "xapp-test",
           dm: { allowFrom: ["U123", "user:U999"] },
@@ -25,7 +25,7 @@ describe("directory (config-backed)", () => {
       // oxlint-disable-next-line typescript/no-explicit-any
     } as any;
 
-    const peers = await listSlackDirectoryPeersFromConfig({
+    const peers = await listTelegramDirectoryPeersFromConfig({
       cfg,
       accountId: "default",
       query: null,
@@ -38,7 +38,7 @@ describe("directory (config-backed)", () => {
       "user:u999",
     ]);
 
-    const groups = await listSlackDirectoryGroupsFromConfig({
+    const groups = await listTelegramDirectoryGroupsFromConfig({
       cfg,
       accountId: "default",
       query: null,
@@ -47,11 +47,11 @@ describe("directory (config-backed)", () => {
     expect(groups?.map((e) => e.id)).toEqual(["channel:c111"]);
   });
 
-  it("lists Discord peers/groups from config (numeric ids only)", async () => {
+  it("lists Telegram peers/groups from config (numeric ids only)", async () => {
     const cfg = {
       channels: {
-        discord: {
-          token: "discord-test",
+        telegram: {
+          token: "telegram-test",
           dm: { allowFrom: ["<@111>", "nope"] },
           dms: { "222": {} },
           guilds: {
@@ -69,7 +69,7 @@ describe("directory (config-backed)", () => {
       // oxlint-disable-next-line typescript/no-explicit-any
     } as any;
 
-    const peers = await listDiscordDirectoryPeersFromConfig({
+    const peers = await listTelegramDirectoryPeersFromConfig({
       cfg,
       accountId: "default",
       query: null,
@@ -77,7 +77,7 @@ describe("directory (config-backed)", () => {
     });
     expect(peers?.map((e) => e.id).toSorted()).toEqual(["user:111", "user:12345", "user:222"]);
 
-    const groups = await listDiscordDirectoryGroupsFromConfig({
+    const groups = await listTelegramDirectoryGroupsFromConfig({
       cfg,
       accountId: "default",
       query: null,
@@ -116,10 +116,10 @@ describe("directory (config-backed)", () => {
     expect(groups?.map((e) => e.id)).toEqual(["-1001"]);
   });
 
-  it("lists WhatsApp peers/groups from config", async () => {
+  it("lists Telegram peers/groups from config", async () => {
     const cfg = {
       channels: {
-        whatsapp: {
+        telegram: {
           allowFrom: ["+15550000000", "*", "123@g.us"],
           groups: { "999@g.us": { requireMention: true }, "*": {} },
         },
@@ -127,7 +127,7 @@ describe("directory (config-backed)", () => {
       // oxlint-disable-next-line typescript/no-explicit-any
     } as any;
 
-    const peers = await listWhatsAppDirectoryPeersFromConfig({
+    const peers = await listTelegramDirectoryPeersFromConfig({
       cfg,
       accountId: "default",
       query: null,
@@ -135,7 +135,7 @@ describe("directory (config-backed)", () => {
     });
     expect(peers?.map((e) => e.id)).toEqual(["+15550000000"]);
 
-    const groups = await listWhatsAppDirectoryGroupsFromConfig({
+    const groups = await listTelegramDirectoryGroupsFromConfig({
       cfg,
       accountId: "default",
       query: null,

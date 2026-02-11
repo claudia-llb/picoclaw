@@ -107,14 +107,14 @@ describe("message tool path passthrough", () => {
 });
 
 describe("message tool description", () => {
-  const bluebubblesPlugin: ChannelPlugin = {
-    id: "bluebubbles",
+  const telegramPlugin: ChannelPlugin = {
+    id: "telegram",
     meta: {
-      id: "bluebubbles",
-      label: "BlueBubbles",
-      selectionLabel: "BlueBubbles",
-      docsPath: "/channels/bluebubbles",
-      blurb: "BlueBubbles test plugin.",
+      id: "telegram",
+      label: "Telegram",
+      selectionLabel: "Telegram",
+      docsPath: "/channels/telegram",
+      blurb: "Telegram test plugin.",
     },
     capabilities: { chatTypes: ["direct", "group"], media: true },
     config: {
@@ -123,7 +123,7 @@ describe("message tool description", () => {
     },
     messaging: {
       normalizeTarget: (raw) => {
-        const trimmed = raw.trim().replace(/^bluebubbles:/i, "");
+        const trimmed = raw.trim().replace(/^telegram:/i, "");
         const lower = trimmed.toLowerCase();
         if (lower.startsWith("chat_guid:")) {
           const guid = trimmed.slice("chat_guid:".length);
@@ -142,15 +142,15 @@ describe("message tool description", () => {
     },
   };
 
-  it("hides BlueBubbles group actions for DM targets", () => {
+  it("hides Telegram group actions for DM targets", () => {
     setActivePluginRegistry(
-      createTestRegistry([{ pluginId: "bluebubbles", source: "test", plugin: bluebubblesPlugin }]),
+      createTestRegistry([{ pluginId: "telegram", source: "test", plugin: telegramPlugin }]),
     );
 
     const tool = createMessageTool({
       config: {} as never,
-      currentChannelProvider: "bluebubbles",
-      currentChannelId: "bluebubbles:chat_guid:iMessage;-;+15551234567",
+      currentChannelProvider: "telegram",
+      currentChannelId: "telegram:chat_guid:Telegram;-;+15551234567",
     });
 
     expect(tool.description).not.toContain("renameGroup");
@@ -168,8 +168,8 @@ describe("message tool reasoning tag sanitization", () => {
     mocks.runMessageAction.mockResolvedValue({
       kind: "send",
       action: "send",
-      channel: "signal",
-      to: "signal:+15551234567",
+      channel: "telegram",
+      to: "telegram:+15551234567",
       handledBy: "plugin",
       payload: {},
       dryRun: true,
@@ -179,7 +179,7 @@ describe("message tool reasoning tag sanitization", () => {
 
     await tool.execute("1", {
       action: "send",
-      target: "signal:+15551234567",
+      target: "telegram:+15551234567",
       text: "<think>internal reasoning</think>Hello!",
     });
 
@@ -192,8 +192,8 @@ describe("message tool reasoning tag sanitization", () => {
     mocks.runMessageAction.mockResolvedValue({
       kind: "send",
       action: "send",
-      channel: "discord",
-      to: "discord:123",
+      channel: "telegram",
+      to: "telegram:123",
       handledBy: "plugin",
       payload: {},
       dryRun: true,
@@ -203,7 +203,7 @@ describe("message tool reasoning tag sanitization", () => {
 
     await tool.execute("1", {
       action: "send",
-      target: "discord:123",
+      target: "telegram:123",
       content: "<think>reasoning here</think>Reply text",
     });
 
@@ -216,8 +216,8 @@ describe("message tool reasoning tag sanitization", () => {
     mocks.runMessageAction.mockResolvedValue({
       kind: "send",
       action: "send",
-      channel: "signal",
-      to: "signal:+15551234567",
+      channel: "telegram",
+      to: "telegram:+15551234567",
       handledBy: "plugin",
       payload: {},
       dryRun: true,
@@ -227,7 +227,7 @@ describe("message tool reasoning tag sanitization", () => {
 
     await tool.execute("1", {
       action: "send",
-      target: "signal:+15551234567",
+      target: "telegram:+15551234567",
       text: "Normal message without any tags",
     });
 

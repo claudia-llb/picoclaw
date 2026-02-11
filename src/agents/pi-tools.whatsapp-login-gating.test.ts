@@ -10,26 +10,26 @@ vi.mock("./channel-tools.js", () => {
     execute: vi.fn(),
   });
   return {
-    listChannelAgentTools: () => [stubTool("whatsapp_login")],
+    listChannelAgentTools: () => [stubTool("telegram_login")],
   };
 });
 
-describe("whatsapp_login tool gating", () => {
-  it("removes whatsapp_login for unauthorized senders", () => {
+describe("telegram_login tool gating", () => {
+  it("removes telegram_login for unauthorized senders", () => {
     const tools = createOpenClawCodingTools({ senderIsOwner: false });
     const toolNames = tools.map((tool) => tool.name);
-    expect(toolNames).not.toContain("whatsapp_login");
+    expect(toolNames).not.toContain("telegram_login");
   });
 
-  it("keeps whatsapp_login for authorized senders", () => {
+  it("keeps telegram_login for authorized senders", () => {
     const tools = createOpenClawCodingTools({ senderIsOwner: true });
     const toolNames = tools.map((tool) => tool.name);
-    expect(toolNames).toContain("whatsapp_login");
+    expect(toolNames).toContain("telegram_login");
   });
 
-  it("defaults to removing whatsapp_login when owner status is unknown", () => {
+  it("defaults to removing telegram_login when owner status is unknown", () => {
     const tools = createOpenClawCodingTools();
     const toolNames = tools.map((tool) => tool.name);
-    expect(toolNames).not.toContain("whatsapp_login");
+    expect(toolNames).not.toContain("telegram_login");
   });
 });

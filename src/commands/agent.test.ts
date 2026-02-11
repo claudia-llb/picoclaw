@@ -325,10 +325,10 @@ describe("agentCommand", () => {
         createTestRegistry([{ pluginId: "telegram", plugin: telegramPlugin, source: "test" }]),
       );
       const deps = {
-        sendMessageWhatsApp: vi.fn(),
+        sendMessageTelegram: vi.fn(),
         sendMessageTelegram: vi.fn().mockResolvedValue({ messageId: "t1", chatId: "123" }),
-        sendMessageDiscord: vi.fn(),
-        sendMessageSignal: vi.fn(),
+        sendMessageTelegram: vi.fn(),
+        sendMessageTelegram: vi.fn(),
         sendMessageIMessage: vi.fn(),
       };
 
@@ -366,10 +366,10 @@ describe("agentCommand", () => {
       const store = path.join(home, "sessions.json");
       mockConfig(home, store, undefined, undefined, [{ id: "ops" }]);
 
-      await agentCommand({ message: "hi", agentId: "ops", replyChannel: "slack" }, runtime);
+      await agentCommand({ message: "hi", agentId: "ops", replyChannel: "telegram" }, runtime);
 
       const callArgs = vi.mocked(runEmbeddedPiAgent).mock.calls.at(-1)?.[0];
-      expect(callArgs?.messageChannel).toBe("slack");
+      expect(callArgs?.messageChannel).toBe("telegram");
     });
   });
 
@@ -382,14 +382,14 @@ describe("agentCommand", () => {
         {
           message: "hi",
           to: "+1555",
-          channel: "whatsapp",
-          runContext: { messageChannel: "slack", accountId: "acct-2" },
+          channel: "telegram",
+          runContext: { messageChannel: "telegram", accountId: "acct-2" },
         },
         runtime,
       );
 
       const callArgs = vi.mocked(runEmbeddedPiAgent).mock.calls.at(-1)?.[0];
-      expect(callArgs?.messageChannel).toBe("slack");
+      expect(callArgs?.messageChannel).toBe("telegram");
       expect(callArgs?.agentAccountId).toBe("acct-2");
     });
   });

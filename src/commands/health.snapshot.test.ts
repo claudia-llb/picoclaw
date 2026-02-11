@@ -251,7 +251,7 @@ describe("getHealthSnapshot", () => {
         },
         list: [
           { id: "main", default: true },
-          { id: "ops", heartbeat: { every: "1h", target: "whatsapp" } },
+          { id: "ops", heartbeat: { every: "1h", target: "telegram" } },
         ],
       },
     };

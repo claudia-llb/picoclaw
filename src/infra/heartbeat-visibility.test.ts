@@ -185,10 +185,10 @@ describe("resolveHeartbeatVisibility", () => {
     expect(result.showOk).toBe(true);
   });
 
-  it("works with whatsapp channel", () => {
+  it("works with telegram channel", () => {
     const cfg = {
       channels: {
-        whatsapp: {
+        telegram: {
           heartbeat: {
             showOk: true,
             showAlerts: false,
@@ -197,7 +197,7 @@ describe("resolveHeartbeatVisibility", () => {
       },
     } as OpenClawConfig;
 
-    const result = resolveHeartbeatVisibility({ cfg, channel: "whatsapp" });
+    const result = resolveHeartbeatVisibility({ cfg, channel: "telegram" });
 
     expect(result).toEqual({
       showOk: true,
@@ -206,10 +206,10 @@ describe("resolveHeartbeatVisibility", () => {
     });
   });
 
-  it("works with discord channel", () => {
+  it("works with telegram channel", () => {
     const cfg = {
       channels: {
-        discord: {
+        telegram: {
           heartbeat: {
             useIndicator: false,
           },
@@ -217,7 +217,7 @@ describe("resolveHeartbeatVisibility", () => {
       },
     } as OpenClawConfig;
 
-    const result = resolveHeartbeatVisibility({ cfg, channel: "discord" });
+    const result = resolveHeartbeatVisibility({ cfg, channel: "telegram" });
 
     expect(result).toEqual({
       showOk: false,
@@ -226,10 +226,10 @@ describe("resolveHeartbeatVisibility", () => {
     });
   });
 
-  it("works with slack channel", () => {
+  it("works with telegram channel", () => {
     const cfg = {
       channels: {
-        slack: {
+        telegram: {
           heartbeat: {
             showOk: true,
             showAlerts: true,
@@ -239,7 +239,7 @@ describe("resolveHeartbeatVisibility", () => {
       },
     } as OpenClawConfig;
 
-    const result = resolveHeartbeatVisibility({ cfg, channel: "slack" });
+    const result = resolveHeartbeatVisibility({ cfg, channel: "telegram" });
 
     expect(result).toEqual({
       showOk: true,

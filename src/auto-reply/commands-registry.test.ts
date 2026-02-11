@@ -88,11 +88,11 @@ describe("commands registry", () => {
   it("applies provider-specific native names", () => {
     const native = listNativeCommandSpecsForConfig(
       { commands: { native: true } },
-      { provider: "discord" },
+      { provider: "telegram" },
     );
     expect(native.find((spec) => spec.name === "voice")).toBeTruthy();
-    expect(findCommandByNativeName("voice", "discord")?.key).toBe("tts");
-    expect(findCommandByNativeName("tts", "discord")).toBeUndefined();
+    expect(findCommandByNativeName("voice", "telegram")?.key).toBe("tts");
+    expect(findCommandByNativeName("tts", "telegram")).toBeUndefined();
   });
 
   it("detects known text commands", () => {
@@ -125,21 +125,21 @@ describe("commands registry", () => {
     expect(
       shouldHandleTextCommands({
         cfg,
-        surface: "discord",
+        surface: "telegram",
         commandSource: "text",
       }),
     ).toBe(false);
     expect(
       shouldHandleTextCommands({
         cfg,
-        surface: "whatsapp",
+        surface: "telegram",
         commandSource: "text",
       }),
     ).toBe(true);
     expect(
       shouldHandleTextCommands({
         cfg,
-        surface: "discord",
+        surface: "telegram",
         commandSource: "native",
       }),
     ).toBe(true);

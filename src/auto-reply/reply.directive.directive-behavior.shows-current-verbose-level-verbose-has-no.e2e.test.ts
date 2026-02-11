@@ -11,7 +11,7 @@ const MAIN_SESSION_KEY = "agent:main:main";
 vi.mock("../agents/pi-embedded.js", () => ({
   abortEmbeddedPiRun: vi.fn().mockReturnValue(false),
   runEmbeddedPiAgent: vi.fn(),
-  queueEmbeddedPiMessage: vi.fn().mockReturnValue(false),
+  queueEmbeddedPTelegram: vi.fn().mockReturnValue(false),
   resolveEmbeddedSessionLane: (key: string) => `session:${key.trim() || "main"}`,
   isEmbeddedPiRunActive: vi.fn().mockReturnValue(false),
   isEmbeddedPiRunStreaming: vi.fn().mockReturnValue(false),
@@ -118,7 +118,7 @@ describe("directive behavior", () => {
           Body: "/elevated",
           From: "+1222",
           To: "+1222",
-          Provider: "whatsapp",
+          Provider: "telegram",
           SenderE164: "+1222",
           CommandAuthorized: true,
         },
@@ -133,10 +133,10 @@ describe("directive behavior", () => {
           },
           tools: {
             elevated: {
-              allowFrom: { whatsapp: ["+1222"] },
+              allowFrom: { telegram: ["+1222"] },
             },
           },
-          channels: { whatsapp: { allowFrom: ["+1222"] } },
+          channels: { telegram: { allowFrom: ["+1222"] } },
           session: { store: path.join(home, "sessions.json") },
         },
       );
@@ -198,7 +198,7 @@ describe("directive behavior", () => {
           Body: "/elevated off\n/status",
           From: "+1222",
           To: "+1222",
-          Provider: "whatsapp",
+          Provider: "telegram",
           SenderE164: "+1222",
           CommandAuthorized: true,
         },
@@ -213,10 +213,10 @@ describe("directive behavior", () => {
           },
           tools: {
             elevated: {
-              allowFrom: { whatsapp: ["+1222"] },
+              allowFrom: { telegram: ["+1222"] },
             },
           },
-          channels: { whatsapp: { allowFrom: ["+1222"] } },
+          channels: { telegram: { allowFrom: ["+1222"] } },
           session: { store: storePath },
         },
       );
@@ -248,7 +248,7 @@ describe("directive behavior", () => {
           Body: "hello there /elevated off",
           From: "+1222",
           To: "+1222",
-          Provider: "whatsapp",
+          Provider: "telegram",
           SenderE164: "+1222",
         },
         {},
@@ -262,10 +262,10 @@ describe("directive behavior", () => {
           },
           tools: {
             elevated: {
-              allowFrom: { whatsapp: ["+1222"] },
+              allowFrom: { telegram: ["+1222"] },
             },
           },
-          channels: { whatsapp: { allowFrom: ["+1222"] } },
+          channels: { telegram: { allowFrom: ["+1222"] } },
           session: { store: storePath },
         },
       );

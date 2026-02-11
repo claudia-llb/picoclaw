@@ -61,7 +61,7 @@ describe("openclaw-tools: subagents", () => {
 
     const tool = createOpenClawTools({
       agentSessionKey: "agent:research:main",
-      agentChannel: "discord",
+      agentChannel: "telegram",
     }).find((candidate) => candidate.name === "sessions_spawn");
     if (!tool) {
       throw new Error("missing sessions_spawn tool");
@@ -112,7 +112,7 @@ describe("openclaw-tools: subagents", () => {
 
     const tool = createOpenClawTools({
       agentSessionKey: "main",
-      agentChannel: "whatsapp",
+      agentChannel: "telegram",
     }).find((candidate) => candidate.name === "sessions_spawn");
     if (!tool) {
       throw new Error("missing sessions_spawn tool");
@@ -149,7 +149,7 @@ describe("openclaw-tools: subagents", () => {
 
     const tool = createOpenClawTools({
       agentSessionKey: "main",
-      agentChannel: "whatsapp",
+      agentChannel: "telegram",
     }).find((candidate) => candidate.name === "sessions_spawn");
     if (!tool) {
       throw new Error("missing sessions_spawn tool");

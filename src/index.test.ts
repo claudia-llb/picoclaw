@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import { assertWebChannel, normalizeE164, toWhatsappJid } from "./index.js";
 
 describe("normalizeE164", () => {
-  it("strips whatsapp prefix and whitespace", () => {
-    expect(normalizeE164("whatsapp:+1 555 555 0123")).toBe("+15555550123");
+  it("strips telegram prefix and whitespace", () => {
+    expect(normalizeE164("telegram:+1 555 555 0123")).toBe("+15555550123");
   });
 
   it("adds plus when missing", () => {
@@ -13,7 +13,7 @@ describe("normalizeE164", () => {
 
 describe("toWhatsappJid", () => {
   it("converts E164 to jid", () => {
-    expect(toWhatsappJid("+1 555 555 0123")).toBe("15555550123@s.whatsapp.net");
+    expect(toWhatsappJid("+1 555 555 0123")).toBe("15555550123@s.telegram.net");
   });
 
   it("keeps group JIDs intact", () => {

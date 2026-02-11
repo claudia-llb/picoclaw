@@ -81,16 +81,16 @@ describe("cli program (smoke)", () => {
     expect(messageCommand).toHaveBeenCalled();
   });
 
-  it("runs message react with signal author fields", async () => {
+  it("runs message react with telegram author fields", async () => {
     const program = buildProgram();
     await program.parseAsync(
       [
         "message",
         "react",
         "--channel",
-        "signal",
+        "telegram",
         "--target",
-        "signal:group:abc123",
+        "telegram:group:abc123",
         "--message-id",
         "1737630212345",
         "--emoji",

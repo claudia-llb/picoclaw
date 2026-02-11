@@ -41,7 +41,9 @@ describe("shell env fallback", () => {
 
   it("imports expected keys without overriding existing env", () => {
     const env: NodeJS.ProcessEnv = {};
-    const exec = vi.fn(() => Buffer.from("OPENAI_API_KEY=from-shell\0DISCORD_BOT_TOKEN=discord\0"));
+    const exec = vi.fn(() =>
+      Buffer.from("OPENAI_API_KEY=from-shell\0DISCORD_BOT_TOKEN=telegram\0"),
+    );
 
     const res1 = loadShellEnvFallback({
       enabled: true,
@@ -52,12 +54,12 @@ describe("shell env fallback", () => {
 
     expect(res1.ok).toBe(true);
     expect(env.OPENAI_API_KEY).toBe("from-shell");
-    expect(env.DISCORD_BOT_TOKEN).toBe("discord");
+    expect(env.DISCORD_BOT_TOKEN).toBe("telegram");
     expect(exec).toHaveBeenCalledTimes(1);
 
     env.OPENAI_API_KEY = "from-parent";
     const exec2 = vi.fn(() =>
-      Buffer.from("OPENAI_API_KEY=from-shell\0DISCORD_BOT_TOKEN=discord2\0"),
+      Buffer.from("OPENAI_API_KEY=from-shell\0DISCORD_BOT_TOKEN=telegram2\0"),
     );
     const res2 = loadShellEnvFallback({
       enabled: true,
@@ -68,7 +70,7 @@ describe("shell env fallback", () => {
 
     expect(res2.ok).toBe(true);
     expect(env.OPENAI_API_KEY).toBe("from-parent");
-    expect(env.DISCORD_BOT_TOKEN).toBe("discord");
+    expect(env.DISCORD_BOT_TOKEN).toBe("telegram");
     expect(exec2).not.toHaveBeenCalled();
   });
 });

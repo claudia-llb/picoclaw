@@ -47,7 +47,7 @@ describe("waitForTransportReady", () => {
       label: "test transport",
       timeoutMs: 200,
       runtime,
-      abortSignal: controller.signal,
+      abortTelegram: controller.telegram,
       check: async () => ({ ok: false, error: "still down" }),
     });
     expect(runtime.error).not.toHaveBeenCalled();

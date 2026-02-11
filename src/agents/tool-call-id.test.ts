@@ -146,7 +146,7 @@ describe("sanitizeToolCallIdsForCloudCodeAssist", () => {
           content: [
             {
               type: "toolCall",
-              id: "whatsapp_login_1768799841527_1",
+              id: "telegram_login_1768799841527_1",
               name: "login",
               arguments: {},
             },
@@ -154,7 +154,7 @@ describe("sanitizeToolCallIdsForCloudCodeAssist", () => {
         },
         {
           role: "toolResult",
-          toolCallId: "whatsapp_login_1768799841527_1",
+          toolCallId: "telegram_login_1768799841527_1",
           toolName: "login",
           content: [{ type: "text", text: "ok" }],
         },
@@ -166,7 +166,7 @@ describe("sanitizeToolCallIdsForCloudCodeAssist", () => {
       const assistant = out[0] as Extract<AgentMessage, { role: "assistant" }>;
       const toolCall = assistant.content?.[0] as { id?: string };
       // Strict mode strips all non-alphanumeric characters
-      expect(toolCall.id).toBe("whatsapplogin17687998415271");
+      expect(toolCall.id).toBe("telegramlogin17687998415271");
       expect(isValidCloudCodeAssistToolId(toolCall.id as string, "strict")).toBe(true);
 
       const result = out[1] as Extract<AgentMessage, { role: "toolResult" }>;

@@ -340,8 +340,8 @@ describe("real-world config patterns", () => {
       [configPath("gateway.json")]: {
         gateway: { port: 18789, bind: "loopback" },
       },
-      [configPath("channels", "whatsapp.json")]: {
-        channels: { whatsapp: { dmPolicy: "pairing", allowFrom: ["+49123"] } },
+      [configPath("channels", "telegram.json")]: {
+        channels: { telegram: { dmPolicy: "pairing", allowFrom: ["+49123"] } },
       },
       [configPath("agents", "defaults.json")]: {
         agents: { defaults: { sandbox: { mode: "all" } } },
@@ -349,12 +349,12 @@ describe("real-world config patterns", () => {
     };
 
     const obj = {
-      $include: ["./gateway.json", "./channels/whatsapp.json", "./agents/defaults.json"],
+      $include: ["./gateway.json", "./channels/telegram.json", "./agents/defaults.json"],
     };
 
     expect(resolve(obj, files)).toEqual({
       gateway: { port: 18789, bind: "loopback" },
-      channels: { whatsapp: { dmPolicy: "pairing", allowFrom: ["+49123"] } },
+      channels: { telegram: { dmPolicy: "pairing", allowFrom: ["+49123"] } },
       agents: { defaults: { sandbox: { mode: "all" } } },
     });
   });

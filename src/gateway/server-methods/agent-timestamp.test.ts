@@ -59,7 +59,7 @@ describe("injectTimestamp", () => {
   });
 
   it("does NOT double-stamp messages with channel envelope timestamps", () => {
-    const enveloped = "[Discord user1 2026-01-28 20:30 EST] hello there";
+    const enveloped = "[Telegram user1 2026-01-28 20:30 EST] hello there";
     const result = injectTimestamp(enveloped, { timezone: "America/New_York" });
 
     expect(result).toBe(enveloped);

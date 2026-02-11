@@ -92,7 +92,7 @@ describe("gateway hooks helpers", () => {
     setActivePluginRegistry(
       createTestRegistry([
         {
-          pluginId: "imessage",
+          pluginId: "telegram",
           source: "test",
           plugin: createIMessageTestPlugin(),
         },
@@ -104,7 +104,7 @@ describe("gateway hooks helpers", () => {
     );
     expect(imsg.ok).toBe(true);
     if (imsg.ok) {
-      expect(imsg.value.channel).toBe("imessage");
+      expect(imsg.value.channel).toBe("telegram");
     }
 
     setActivePluginRegistry(

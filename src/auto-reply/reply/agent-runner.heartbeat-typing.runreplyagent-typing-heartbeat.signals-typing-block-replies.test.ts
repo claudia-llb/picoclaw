@@ -28,7 +28,7 @@ vi.mock("../../agents/model-fallback.js", () => ({
 }));
 
 vi.mock("../../agents/pi-embedded.js", () => ({
-  queueEmbeddedPiMessage: vi.fn().mockReturnValue(false),
+  queueEmbeddedPTelegram: vi.fn().mockReturnValue(false),
   runEmbeddedPiAgent: (params: unknown) => runEmbeddedPiAgentMock(params),
 }));
 
@@ -56,7 +56,7 @@ function createMinimalRun(params?: {
   const typing = createMockTypingController();
   const opts = params?.opts;
   const sessionCtx = {
-    Provider: "whatsapp",
+    Provider: "telegram",
     MessageSid: "msg",
   } as unknown as TemplateContext;
   const resolvedQueue = { mode: "interrupt" } as unknown as QueueSettings;
@@ -68,7 +68,7 @@ function createMinimalRun(params?: {
     run: {
       sessionId: "session",
       sessionKey,
-      messageProvider: "whatsapp",
+      messageProvider: "telegram",
       sessionFile: "/tmp/session.jsonl",
       workspaceDir: "/tmp",
       config: {},
@@ -120,7 +120,7 @@ function createMinimalRun(params?: {
 }
 
 describe("runReplyAgent typing (heartbeat)", () => {
-  it("signals typing on block replies", async () => {
+  it("telegrams typing on block replies", async () => {
     const onBlockReply = vi.fn();
     runEmbeddedPiAgentMock.mockImplementationOnce(async (params: EmbeddedPiAgentParams) => {
       await params.onBlockReply?.({ text: "chunk", mediaUrls: [] });
@@ -139,11 +139,11 @@ describe("runReplyAgent typing (heartbeat)", () => {
     const [blockPayload, blockOpts] = onBlockReply.mock.calls[0] ?? [];
     expect(blockPayload).toMatchObject({ text: "chunk", audioAsVoice: false });
     expect(blockOpts).toMatchObject({
-      abortSignal: expect.any(AbortSignal),
+      abortTelegram: expect.any(AbortTelegram),
       timeoutMs: expect.any(Number),
     });
   });
-  it("signals typing on tool results", async () => {
+  it("telegrams typing on tool results", async () => {
     const onToolResult = vi.fn();
     runEmbeddedPiAgentMock.mockImplementationOnce(async (params: EmbeddedPiAgentParams) => {
       await params.onToolResult?.({ text: "tooling", mediaUrls: [] });

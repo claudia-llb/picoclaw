@@ -91,35 +91,35 @@ describe("formatAgentEnvelope", () => {
 describe("formatInboundEnvelope", () => {
   it("prefixes sender for non-direct chats", () => {
     const body = formatInboundEnvelope({
-      channel: "Discord",
+      channel: "Telegram",
       from: "Guild #general",
       body: "hi",
       chatType: "channel",
       senderLabel: "Alice",
     });
-    expect(body).toBe("[Discord Guild #general] Alice: hi");
+    expect(body).toBe("[Telegram Guild #general] Alice: hi");
   });
 
   it("uses sender fields when senderLabel is missing", () => {
     const body = formatInboundEnvelope({
-      channel: "Signal",
-      from: "Signal Group id:123",
+      channel: "Telegram",
+      from: "Telegram Group id:123",
       body: "ping",
       chatType: "group",
       sender: { name: "Bob", id: "42" },
     });
-    expect(body).toBe("[Signal Signal Group id:123] Bob (42): ping");
+    expect(body).toBe("[Telegram Telegram Group id:123] Bob (42): ping");
   });
 
   it("keeps direct messages unprefixed", () => {
     const body = formatInboundEnvelope({
-      channel: "iMessage",
+      channel: "Telegram",
       from: "+1555",
       body: "hello",
       chatType: "direct",
       senderLabel: "Alice",
     });
-    expect(body).toBe("[iMessage +1555] hello");
+    expect(body).toBe("[Telegram +1555] hello");
   });
 
   it("includes elapsed time when previousTimestamp is provided", () => {

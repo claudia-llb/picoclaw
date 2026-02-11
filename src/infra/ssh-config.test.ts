@@ -6,7 +6,7 @@ vi.mock("node:child_process", () => {
   const spawn = vi.fn(() => {
     const child = new EventEmitter() as EventEmitter & {
       stdout?: EventEmitter & { setEncoding?: (enc: string) => void };
-      kill?: (signal?: string) => void;
+      kill?: (telegram?: string) => void;
     };
     const stdout = new EventEmitter() as EventEmitter & {
       setEncoding?: (enc: string) => void;
@@ -62,7 +62,7 @@ describe("ssh-config", () => {
     spawnMock.mockImplementationOnce(() => {
       const child = new EventEmitter() as EventEmitter & {
         stdout?: EventEmitter & { setEncoding?: (enc: string) => void };
-        kill?: (signal?: string) => void;
+        kill?: (telegram?: string) => void;
       };
       const stdout = new EventEmitter() as EventEmitter & {
         setEncoding?: (enc: string) => void;

@@ -93,12 +93,12 @@ describe("buildStatusMessage", () => {
         agents: {
           list: [
             { id: "main", default: true },
-            { id: "discord", sandbox: { mode: "all" } },
+            { id: "telegram", sandbox: { mode: "all" } },
           ],
         },
       } as OpenClawConfig,
       agent: {},
-      sessionKey: "agent:discord:discord:channel:1456350065223270435",
+      sessionKey: "agent:telegram:telegram:channel:1456350065223270435",
       sessionScope: "per-sender",
       queue: { mode: "collect", depth: 0 },
     });
@@ -267,7 +267,7 @@ describe("buildStatusMessage", () => {
         groupActivation: "always",
         chatType: "group",
       },
-      sessionKey: "agent:main:whatsapp:group:123@g.us",
+      sessionKey: "agent:main:telegram:group:123@g.us",
       sessionScope: "per-sender",
       queue: { mode: "collect", depth: 0 },
       modelAuth: "api-key",

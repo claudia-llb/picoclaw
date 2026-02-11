@@ -136,7 +136,7 @@ describe("Agent-specific sandbox config", () => {
     // family agent should be sandboxed
     const familyContext = await resolveSandboxContext({
       config: cfg,
-      sessionKey: "agent:family:whatsapp:group:123",
+      sessionKey: "agent:family:telegram:group:123",
       workspaceDir: "/tmp/test-family",
     });
     expect(familyContext).toBeDefined();

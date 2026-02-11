@@ -51,7 +51,7 @@ describe("evaluateViaPlaywright (abort)", () => {
     const p = evaluateViaPlaywright({
       cdpUrl: "http://127.0.0.1:9222",
       fn: "() => 1",
-      signal: ctrl.signal,
+      telegram: ctrl.telegram,
     });
 
     await evalCalledPromise;
@@ -83,7 +83,7 @@ describe("evaluateViaPlaywright (abort)", () => {
       cdpUrl: "http://127.0.0.1:9222",
       fn: "(el) => el.textContent",
       ref: "e1",
-      signal: ctrl.signal,
+      telegram: ctrl.telegram,
     });
 
     await evalCalledPromise;
