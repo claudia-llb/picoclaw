@@ -22,10 +22,8 @@ export type ChannelSetupInput = {
   tokenFile?: string;
   botToken?: string;
   appToken?: string;
-  signalNumber?: string;
   cliPath?: string;
   dbPath?: string;
-  service?: "imessage" | "sms" | "auto";
   region?: string;
   authDir?: string;
   httpUrl?: string;
@@ -33,21 +31,8 @@ export type ChannelSetupInput = {
   httpPort?: string;
   webhookPath?: string;
   webhookUrl?: string;
-  audienceType?: string;
-  audience?: string;
   useEnv?: boolean;
-  homeserver?: string;
-  userId?: string;
-  accessToken?: string;
-  password?: string;
-  deviceName?: string;
-  initialSyncLimit?: number;
-  ship?: string;
   url?: string;
-  code?: string;
-  groupChannels?: string[];
-  dmAllowlist?: string[];
-  autoDiscoverChannels?: boolean;
 };
 
 export type ChannelStatusIssue = {

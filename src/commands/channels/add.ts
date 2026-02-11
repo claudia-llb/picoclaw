@@ -23,10 +23,8 @@ export type ChannelsAddOptions = {
   tokenFile?: string;
   botToken?: string;
   appToken?: string;
-  signalNumber?: string;
   cliPath?: string;
   dbPath?: string;
-  service?: "imessage" | "sms" | "auto";
   region?: string;
   authDir?: string;
   httpUrl?: string;
@@ -34,33 +32,9 @@ export type ChannelsAddOptions = {
   httpPort?: string;
   webhookPath?: string;
   webhookUrl?: string;
-  audienceType?: string;
-  audience?: string;
   useEnv?: boolean;
-  homeserver?: string;
-  userId?: string;
-  accessToken?: string;
-  password?: string;
-  deviceName?: string;
-  initialSyncLimit?: number | string;
-  ship?: string;
   url?: string;
-  code?: string;
-  groupChannels?: string;
-  dmAllowlist?: string;
-  autoDiscoverChannels?: boolean;
 };
-
-function parseList(value: string | undefined): string[] | undefined {
-  if (!value?.trim()) {
-    return undefined;
-  }
-  const parsed = value
-    .split(/[\n,;]+/g)
-    .map((entry) => entry.trim())
-    .filter(Boolean);
-  return parsed.length > 0 ? parsed : undefined;
-}
 
 function resolveCatalogChannelEntry(raw: string, cfg: OpenClawConfig | null) {
   const trimmed = raw.trim().toLowerCase();
@@ -183,14 +157,6 @@ export async function channelsAddCommand(
     plugin.setup.resolveAccountId?.({ cfg: nextConfig, accountId: opts.account }) ??
     normalizeAccountId(opts.account);
   const useEnv = opts.useEnv === true;
-  const initialSyncLimit =
-    typeof opts.initialSyncLimit === "number"
-      ? opts.initialSyncLimit
-      : typeof opts.initialSyncLimit === "string" && opts.initialSyncLimit.trim()
-        ? Number.parseInt(opts.initialSyncLimit, 10)
-        : undefined;
-  const groupChannels = parseList(opts.groupChannels);
-  const dmAllowlist = parseList(opts.dmAllowlist);
 
   const validationError = plugin.setup.validateInput?.({
     cfg: nextConfig,
@@ -201,10 +167,8 @@ export async function channelsAddCommand(
       tokenFile: opts.tokenFile,
       botToken: opts.botToken,
       appToken: opts.appToken,
-      signalNumber: opts.signalNumber,
       cliPath: opts.cliPath,
       dbPath: opts.dbPath,
-      service: opts.service,
       region: opts.region,
       authDir: opts.authDir,
       httpUrl: opts.httpUrl,
@@ -212,21 +176,8 @@ export async function channelsAddCommand(
       httpPort: opts.httpPort,
       webhookPath: opts.webhookPath,
       webhookUrl: opts.webhookUrl,
-      audienceType: opts.audienceType,
-      audience: opts.audience,
-      homeserver: opts.homeserver,
-      userId: opts.userId,
-      accessToken: opts.accessToken,
-      password: opts.password,
-      deviceName: opts.deviceName,
-      initialSyncLimit,
       useEnv,
-      ship: opts.ship,
       url: opts.url,
-      code: opts.code,
-      groupChannels,
-      dmAllowlist,
-      autoDiscoverChannels: opts.autoDiscoverChannels,
     },
   });
   if (validationError) {
@@ -244,10 +195,8 @@ export async function channelsAddCommand(
     tokenFile: opts.tokenFile,
     botToken: opts.botToken,
     appToken: opts.appToken,
-    signalNumber: opts.signalNumber,
     cliPath: opts.cliPath,
     dbPath: opts.dbPath,
-    service: opts.service,
     region: opts.region,
     authDir: opts.authDir,
     httpUrl: opts.httpUrl,
@@ -255,21 +204,8 @@ export async function channelsAddCommand(
     httpPort: opts.httpPort,
     webhookPath: opts.webhookPath,
     webhookUrl: opts.webhookUrl,
-    audienceType: opts.audienceType,
-    audience: opts.audience,
-    homeserver: opts.homeserver,
-    userId: opts.userId,
-    accessToken: opts.accessToken,
-    password: opts.password,
-    deviceName: opts.deviceName,
-    initialSyncLimit,
     useEnv,
-    ship: opts.ship,
     url: opts.url,
-    code: opts.code,
-    groupChannels,
-    dmAllowlist,
-    autoDiscoverChannels: opts.autoDiscoverChannels,
   });
 
   await writeConfigFile(nextConfig);

@@ -25,10 +25,8 @@ const optionNamesAdd = [
   "tokenFile",
   "botToken",
   "appToken",
-  "signalNumber",
   "cliPath",
   "dbPath",
-  "service",
   "region",
   "authDir",
   "httpUrl",
@@ -39,13 +37,11 @@ const optionNamesAdd = [
   "audienceType",
   "audience",
   "useEnv",
-  "homeserver",
   "userId",
   "accessToken",
   "password",
   "deviceName",
   "initialSyncLimit",
-  "ship",
   "url",
   "code",
   "groupChannels",
@@ -171,23 +167,8 @@ export function registerChannelsCli(program: Command) {
     .option("--http-url <url>", "Signal HTTP daemon base URL")
     .option("--http-host <host>", "Signal HTTP host")
     .option("--http-port <port>", "Signal HTTP port")
-    .option("--webhook-path <path>", "Webhook path (Google Chat/BlueBubbles)")
-    .option("--webhook-url <url>", "Google Chat webhook URL")
-    .option("--audience-type <type>", "Google Chat audience type (app-url|project-number)")
-    .option("--audience <value>", "Google Chat audience value (app URL or project number)")
-    .option("--homeserver <url>", "Matrix homeserver URL")
-    .option("--user-id <id>", "Matrix user ID")
-    .option("--access-token <token>", "Matrix access token")
-    .option("--password <password>", "Matrix password")
-    .option("--device-name <name>", "Matrix device name")
-    .option("--initial-sync-limit <n>", "Matrix initial sync limit")
-    .option("--ship <ship>", "Tlon ship name (~sampel-palnet)")
-    .option("--url <url>", "Tlon ship URL")
-    .option("--code <code>", "Tlon login code")
-    .option("--group-channels <list>", "Tlon group channels (comma-separated)")
-    .option("--dm-allowlist <list>", "Tlon DM allowlist (comma-separated ships)")
-    .option("--auto-discover-channels", "Tlon auto-discover group channels")
-    .option("--no-auto-discover-channels", "Disable Tlon auto-discovery")
+    .option("--webhook-path <path>", "Webhook path")
+    .option("--webhook-url <url>", "Webhook URL")
     .option("--use-env", "Use env token (default account only)", false)
     .action(async (opts, command) => {
       await runChannelsCommand(async () => {
