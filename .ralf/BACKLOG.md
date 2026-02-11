@@ -72,7 +72,7 @@
 
 ## Phase 2 — Suppression Apps Natives
 
-### [ ] 2.1 — Supprimer les dossiers apps
+### [x] 2.1 — Supprimer les dossiers apps
 
 **Pourquoi :** Ces apps iOS/Android/macOS ne sont pas utilisées.
 
@@ -88,7 +88,7 @@
 
 ---
 
-### [ ] 2.2 — Supprimer les fichiers config Swift
+### [x] 2.2 — Supprimer les fichiers config Swift
 
 **Pourquoi :** Plus de code Swift = plus besoin de config Swift.
 
@@ -102,7 +102,7 @@
 
 ---
 
-### [ ] 2.3 — Nettoyer package.json scripts
+### [x] 2.3 — Nettoyer package.json scripts
 
 **Pourquoi :** Supprimer les scripts iOS/Android/macOS inutiles.
 
@@ -117,7 +117,7 @@
 
 ---
 
-### [ ] 2.4 — Vérifier la compilation Phase 2
+### [x] 2.4 — Vérifier la compilation Phase 2
 
 **Pourquoi :** S'assurer que les suppressions n'ont rien cassé.
 
@@ -132,7 +132,7 @@
 
 ---
 
-### [ ] 2.5 — Commit Phase 2
+### [x] 2.5 — Commit Phase 2
 
 **Pourquoi :** Sauvegarder le travail de cette phase.
 
@@ -149,7 +149,7 @@
 
 ## Phase 3 — Modifications Code CRITIQUES + Suppression Channels
 
-### [ ] 3.1 — Modifier src/plugins/runtime/index.ts
+### [x] 3.1 — Modifier src/plugins/runtime/index.ts
 
 **Pourquoi :** Hub central avec imports de tous les channels. Doit être nettoyé AVANT suppression des dossiers.
 
@@ -168,7 +168,7 @@
 
 ---
 
-### [ ] 3.2 — Modifier src/channels/dock.ts
+### [x] 3.2 — Modifier src/channels/dock.ts
 
 **Pourquoi :** Contient les références à tous les channels dans DOCKS.
 
@@ -184,7 +184,7 @@
 
 ---
 
-### [ ] 3.3 — Modifier src/channels/registry.ts
+### [x] 3.3 — Modifier src/channels/registry.ts
 
 **Pourquoi :** Définit l'ordre et la config des channels.
 

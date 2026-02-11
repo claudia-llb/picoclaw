@@ -19,6 +19,7 @@ import {
 import { parseReplyDirectives } from "../../auto-reply/reply/reply-directives.js";
 import { dispatchChannelMessageAction } from "../../channels/plugins/message-actions.js";
 import { extensionForMime } from "../../media/mime.js";
+import { loadWebMedia } from "../../media/web-fetch.js";
 import { parseSlackTarget } from "../../slack/targets.js";
 import { parseTelegramTarget } from "../../telegram/targets.js";
 import {
@@ -27,7 +28,6 @@ import {
   type GatewayClientMode,
   type GatewayClientName,
 } from "../../utils/message-channel.js";
-import { loadWebMedia } from "../../web/media.js";
 import { throwIfAborted } from "./abort.js";
 import {
   listConfiguredMessageChannels,

@@ -11,7 +11,7 @@ import { mediaKindFromMime } from "../../media/constants.js";
 import { fetchRemoteMedia } from "../../media/fetch.js";
 import { isGifMedia } from "../../media/mime.js";
 import { saveMediaBuffer } from "../../media/store.js";
-import { loadWebMedia } from "../../web/media.js";
+import { loadWebMedia } from "../../media/web-fetch.js";
 import { withTelegramApiErrorLogging } from "../api-logging.js";
 import { splitTelegramCaption } from "../caption.js";
 import {
