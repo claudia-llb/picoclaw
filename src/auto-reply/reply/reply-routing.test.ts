@@ -173,8 +173,6 @@ describe("resolveReplyToMode", () => {
     const cfg = {
       channels: {
         telegram: { replyToMode: "all" },
-        telegram: { replyToMode: "first" },
-        telegram: { replyToMode: "all" },
       },
     } as OpenClawConfig;
     expect(resolveReplyToMode(cfg, "telegram")).toBe("all");

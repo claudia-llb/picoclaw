@@ -28,10 +28,6 @@ describe("security fix", () => {
         {
           channels: {
             telegram: { groupPolicy: "open" },
-            telegram: { groupPolicy: "open" },
-            telegram: { groupPolicy: "open" },
-            telegram: { groupPolicy: "open" },
-            telegram: { groupPolicy: "open" },
           },
           logging: { redactSensitive: "off" },
         },

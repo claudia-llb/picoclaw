@@ -326,9 +326,6 @@ describe("agentCommand", () => {
       );
       const deps = {
         sendMessageTelegram: vi.fn(),
-        sendMessageTelegram: vi.fn().mockResolvedValue({ messageId: "t1", chatId: "123" }),
-        sendMessageTelegram: vi.fn(),
-        sendMessageTelegram: vi.fn(),
         sendMessageIMessage: vi.fn(),
       };
 

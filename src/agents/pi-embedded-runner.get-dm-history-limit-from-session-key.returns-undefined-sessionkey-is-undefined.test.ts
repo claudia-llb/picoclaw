@@ -147,7 +147,6 @@ describe("getDmHistoryLimitFromSessionKey", () => {
     const config = {
       channels: {
         telegram: { dmHistoryLimit: 15 },
-        telegram: { dmHistoryLimit: 10 },
       },
     } as OpenClawConfig;
     expect(

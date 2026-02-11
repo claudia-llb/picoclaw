@@ -36,7 +36,6 @@ describe("redactConfigSnapshot", () => {
     const snapshot = makeSnapshot({
       channels: {
         telegram: { botToken: "123456:ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef" },
-        telegram: { botToken: "fake-telegram-bot-token-placeholder-value" },
       },
     });
     const result = redactConfigSnapshot(snapshot);
@@ -307,10 +306,6 @@ describe("restoreRedactedValues", () => {
       gateway: { auth: { token: "gateway-auth-secret-token-value" }, port: 18789 },
       channels: {
         telegram: { botToken: "fake-telegram-token-placeholder-value" },
-        telegram: {
-          botToken: "fake-telegram-token-placeholder-value",
-          webhookSecret: "fake-tg-secret-placeholder-value",
-        },
       },
       models: {
         providers: {

@@ -83,8 +83,6 @@ describe("resolveResponsePrefix with per-channel override", () => {
       const cfg = makeConfig({
         channels: {
           telegram: { responsePrefix: "[WA Bot] " },
-          telegram: { responsePrefix: "" },
-          telegram: { responsePrefix: "🤖 " },
         },
       } satisfies OpenClawConfig);
       expect(resolveResponsePrefix(cfg, "main", { channel: "telegram" })).toBe("[WA Bot] ");
@@ -242,7 +240,6 @@ describe("resolveResponsePrefix with per-channel override", () => {
             default: {},
           },
         },
-        telegram: {},
       },
     } satisfies OpenClawConfig);
 

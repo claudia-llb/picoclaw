@@ -480,12 +480,7 @@ describe("legacy config detection", () => {
       messages: { groupChat: { historyLimit: 12 } },
       channels: {
         telegram: { historyLimit: 9, accounts: { work: { historyLimit: 4 } } },
-        telegram: { historyLimit: 8, accounts: { ops: { historyLimit: 3 } } },
-        telegram: { historyLimit: 7, accounts: { ops: { historyLimit: 2 } } },
-        telegram: { historyLimit: 6 },
-        telegram: { historyLimit: 5 },
         msteams: { historyLimit: 4 },
-        telegram: { historyLimit: 3 },
       },
     });
     expect(res.ok).toBe(true);

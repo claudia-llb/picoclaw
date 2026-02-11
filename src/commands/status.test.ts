@@ -394,15 +394,6 @@ describe("statusCommand", () => {
             lastError: "telegram-cli unreachable",
           },
         ],
-        telegram: [
-          {
-            accountId: "default",
-            enabled: true,
-            configured: true,
-            running: false,
-            lastError: "telegram permission denied",
-          },
-        ],
       },
     });
 

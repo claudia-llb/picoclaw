@@ -107,9 +107,6 @@ describe("runCronIsolatedAgentTurn", () => {
       const storePath = await writeSessionStore(home);
       const deps: CliDeps = {
         sendMessageTelegram: vi.fn(),
-        sendMessageTelegram: vi.fn(),
-        sendMessageTelegram: vi.fn(),
-        sendMessageTelegram: vi.fn(),
         sendMessageIMessage: vi.fn(),
       };
       vi.mocked(runEmbeddedPiAgent).mockResolvedValue({
@@ -148,9 +145,6 @@ describe("runCronIsolatedAgentTurn", () => {
     await withTempHome(async (home) => {
       const storePath = await writeSessionStore(home);
       const deps: CliDeps = {
-        sendMessageTelegram: vi.fn(),
-        sendMessageTelegram: vi.fn(),
-        sendMessageTelegram: vi.fn(),
         sendMessageTelegram: vi.fn(),
         sendMessageIMessage: vi.fn(),
       };
@@ -208,9 +202,6 @@ describe("runCronIsolatedAgentTurn", () => {
       );
       const deps: CliDeps = {
         sendMessageTelegram: vi.fn(),
-        sendMessageTelegram: vi.fn(),
-        sendMessageTelegram: vi.fn(),
-        sendMessageTelegram: vi.fn(),
         sendMessageIMessage: vi.fn(),
       };
       vi.mocked(runEmbeddedPiAgent).mockResolvedValue({
@@ -250,9 +241,6 @@ describe("runCronIsolatedAgentTurn", () => {
       const storePath = await writeSessionStore(home);
       const deps: CliDeps = {
         sendMessageTelegram: vi.fn(),
-        sendMessageTelegram: vi.fn(),
-        sendMessageTelegram: vi.fn(),
-        sendMessageTelegram: vi.fn(),
         sendMessageIMessage: vi.fn(),
       };
       vi.mocked(runEmbeddedPiAgent).mockResolvedValue({
@@ -290,9 +278,6 @@ describe("runCronIsolatedAgentTurn", () => {
       const storePath = await writeSessionStore(home);
       const deps: CliDeps = {
         sendMessageTelegram: vi.fn(),
-        sendMessageTelegram: vi.fn(),
-        sendMessageTelegram: vi.fn(),
-        sendMessageTelegram: vi.fn(),
         sendMessageIMessage: vi.fn(),
       };
       vi.mocked(runEmbeddedPiAgent).mockResolvedValue({
@@ -328,9 +313,6 @@ describe("runCronIsolatedAgentTurn", () => {
       const storePath = await writeSessionStore(home);
       const deps: CliDeps = {
         sendMessageTelegram: vi.fn(),
-        sendMessageTelegram: vi.fn().mockRejectedValue(new Error("boom")),
-        sendMessageTelegram: vi.fn(),
-        sendMessageTelegram: vi.fn(),
         sendMessageIMessage: vi.fn(),
       };
       vi.mocked(runEmbeddedPiAgent).mockResolvedValue({
@@ -364,9 +346,6 @@ describe("runCronIsolatedAgentTurn", () => {
     await withTempHome(async (home) => {
       const storePath = await writeSessionStore(home);
       const deps: CliDeps = {
-        sendMessageTelegram: vi.fn(),
-        sendMessageTelegram: vi.fn().mockRejectedValue(new Error("boom")),
-        sendMessageTelegram: vi.fn(),
         sendMessageTelegram: vi.fn(),
         sendMessageIMessage: vi.fn(),
       };

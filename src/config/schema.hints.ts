@@ -624,13 +624,6 @@ const FIELD_HELP: Record<string, string> = {
     "Override Node autoSelectFamily for Telegram (true=enable, false=disable).",
   "channels.telegram.timeoutSeconds":
     "Max seconds before Telegram API requests are aborted (default: 500 per grammY).",
-  "gateway.remote.url": "ws://host:18789",
-  "gateway.remote.tlsFingerprint": "sha256:ab12cd34…",
-  "gateway.remote.sshTarget": "user@host",
-  "gateway.controlUi.basePath": "/openclaw",
-  "gateway.controlUi.root": "dist/control-ui",
-  "gateway.controlUi.allowedOrigins": "https://control.example.com",
-  "agents.list[].identity.avatar": "avatars/openclaw.png",
 };
 
 const SENSITIVE_PATTERNS = [/token/i, /password/i, /secret/i, /api.?key/i];

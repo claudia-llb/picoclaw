@@ -15,12 +15,6 @@ const telegramConfig = {
   },
 } as OpenClawConfig;
 
-const telegramConfig = {
-  channels: {
-    telegram: {},
-  },
-} as OpenClawConfig;
-
 describe("outbound policy", () => {
   it("blocks cross-provider sends by default", () => {
     expect(() =>

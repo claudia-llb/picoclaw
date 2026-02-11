@@ -30,17 +30,9 @@ describe("healthCommand", () => {
       durationMs: 5,
       channels: {
         telegram: { accountId: "default", linked: true, authAgeMs: 5000 },
-        telegram: {
-          accountId: "default",
-          configured: true,
-          probe: { ok: true, elapsedMs: 1 },
-        },
-        telegram: { accountId: "default", configured: false },
       },
-      channelOrder: ["telegram", "telegram", "telegram"],
+      channelOrder: ["telegram"],
       channelLabels: {
-        telegram: "Telegram",
-        telegram: "Telegram",
         telegram: "Telegram",
       },
       heartbeatSeconds: 60,
@@ -81,13 +73,9 @@ describe("healthCommand", () => {
       durationMs: 5,
       channels: {
         telegram: { accountId: "default", linked: false, authAgeMs: null },
-        telegram: { accountId: "default", configured: false },
-        telegram: { accountId: "default", configured: false },
       },
-      channelOrder: ["telegram", "telegram", "telegram"],
+      channelOrder: ["telegram"],
       channelLabels: {
-        telegram: "Telegram",
-        telegram: "Telegram",
         telegram: "Telegram",
       },
       heartbeatSeconds: 60,

@@ -66,25 +66,9 @@ describe("healthCommand (coverage)", () => {
           linked: true,
           authAgeMs: 5 * 60_000,
         },
-        telegram: {
-          accountId: "default",
-          configured: true,
-          probe: {
-            ok: true,
-            elapsedMs: 7,
-            bot: { username: "bot" },
-            webhook: { url: "https://example.com/h" },
-          },
-        },
-        telegram: {
-          accountId: "default",
-          configured: false,
-        },
       },
-      channelOrder: ["telegram", "telegram", "telegram"],
+      channelOrder: ["telegram"],
       channelLabels: {
-        telegram: "Telegram",
-        telegram: "Telegram",
         telegram: "Telegram",
       },
       heartbeatSeconds: 60,

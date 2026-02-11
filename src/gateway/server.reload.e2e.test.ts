@@ -50,40 +50,6 @@ const hoisted = vi.hoisted(() => {
           lastEventAt: null,
           lastError: null,
         },
-        telegram: {
-          running: false,
-          lastStartAt: null,
-          lastStopAt: null,
-          lastError: null,
-          mode: null,
-        },
-        telegram: {
-          running: false,
-          lastStartAt: null,
-          lastStopAt: null,
-          lastError: null,
-        },
-        telegram: {
-          running: false,
-          lastStartAt: null,
-          lastStopAt: null,
-          lastError: null,
-        },
-        telegram: {
-          running: false,
-          lastStartAt: null,
-          lastStopAt: null,
-          lastError: null,
-          baseUrl: null,
-        },
-        telegram: {
-          running: false,
-          lastStartAt: null,
-          lastStopAt: null,
-          lastError: null,
-          cliPath: null,
-          dbPath: null,
-        },
         msteams: {
           running: false,
           lastStartAt: null,
@@ -92,11 +58,6 @@ const hoisted = vi.hoisted(() => {
         },
       },
       providerAccounts: {
-        telegram: {},
-        telegram: {},
-        telegram: {},
-        telegram: {},
-        telegram: {},
         telegram: {},
         msteams: {},
       },
@@ -210,9 +171,6 @@ describe("gateway hot reload", () => {
       web: { enabled: true },
       channels: {
         telegram: { botToken: "token" },
-        telegram: { token: "token" },
-        telegram: { account: "+15550000000" },
-        telegram: { enabled: true },
       },
     };
 
@@ -237,7 +195,7 @@ describe("gateway hot reload", () => {
         restartBrowserControl: true,
         restartCron: true,
         restartHeartbeat: true,
-        restartChannels: new Set(["telegram", "telegram", "telegram", "telegram", "telegram"]),
+        restartChannels: new Set(["telegram"]),
         noopPaths: [],
       },
       nextConfig,

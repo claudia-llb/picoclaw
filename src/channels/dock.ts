@@ -10,12 +10,7 @@ import type {
   ChannelPlugin,
   ChannelThreadingAdapter,
 } from "./plugins/types.js";
-import {
-  resolveChannelGroupRequireMention,
-  resolveChannelGroupToolsPolicy,
-} from "../config/group-policy.js";
 import { requireActivePluginRegistry } from "../plugins/runtime.js";
-import { normalizeAccountId } from "../routing/session-key.js";
 import { resolveTelegramAccount } from "../telegram/accounts.js";
 import {
   resolveTelegramGroupRequireMention,

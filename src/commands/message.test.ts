@@ -34,23 +34,7 @@ vi.mock("../agents/tools/telegram-actions.js", () => ({
   handleTelegramAction: (...args: unknown[]) => handleTelegramAction(...args),
 }));
 
-const handleTelegramAction = vi.fn(async () => ({ details: { ok: true } }));
-vi.mock("../agents/tools/telegram-actions.js", () => ({
-  handleTelegramAction: (...args: unknown[]) => handleTelegramAction(...args),
-}));
-
-const handleTelegramAction = vi.fn(async () => ({ details: { ok: true } }));
-vi.mock("../agents/tools/telegram-actions.js", () => ({
-  handleTelegramAction: (...args: unknown[]) => handleTelegramAction(...args),
-}));
-
-const handleTelegramAction = vi.fn(async () => ({ details: { ok: true } }));
-vi.mock("../agents/tools/telegram-actions.js", () => ({
-  handleTelegramAction: (...args: unknown[]) => handleTelegramAction(...args),
-}));
-
 const originalTelegramToken = process.env.TELEGRAM_BOT_TOKEN;
-const originalTelegramToken = process.env.DISCORD_BOT_TOKEN;
 
 const setRegistry = async (registry: ReturnType<typeof createTestRegistry>) => {
   const { setActivePluginRegistry } = await import("../plugins/runtime.js");
@@ -85,10 +69,6 @@ const runtime: RuntimeEnv = {
 };
 
 const makeDeps = (overrides: Partial<CliDeps> = {}): CliDeps => ({
-  sendMessageTelegram: vi.fn(),
-  sendMessageTelegram: vi.fn(),
-  sendMessageTelegram: vi.fn(),
-  sendMessageTelegram: vi.fn(),
   sendMessageTelegram: vi.fn(),
   sendMessageIMessage: vi.fn(),
   ...overrides,

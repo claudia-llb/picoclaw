@@ -173,13 +173,9 @@ describe("gateway server channels", () => {
     }>(ws, "channels.status", { probe: false, timeoutMs: 2000 });
     expect(res.ok).toBe(true);
     const telegram = res.payload?.channels?.telegram;
-    const telegram = res.payload?.channels?.telegram;
     expect(res.payload?.channels?.telegram).toBeTruthy();
     expect(telegram?.configured).toBe(false);
     expect(telegram?.tokenSource).toBe("none");
-    expect(telegram?.probe).toBeUndefined();
-    expect(telegram?.lastProbeAt).toBeNull();
-    expect(telegram?.configured).toBe(false);
     expect(telegram?.probe).toBeUndefined();
     expect(telegram?.lastProbeAt).toBeNull();
   });

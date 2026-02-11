@@ -147,7 +147,6 @@ describe("resolveTextChunkLimit", () => {
     const cfg = {
       channels: {
         telegram: { textChunkLimit: 111 },
-        telegram: { textChunkLimit: 222 },
       },
     };
     expect(resolveTextChunkLimit(cfg, "telegram")).toBe(111);

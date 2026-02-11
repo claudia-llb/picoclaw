@@ -168,14 +168,6 @@ describe("config identity defaults", () => {
             },
             channels: {
               telegram: { allowFrom: ["+15555550123"], textChunkLimit: 4444 },
-              telegram: { enabled: true, textChunkLimit: 3333 },
-              telegram: {
-                enabled: true,
-                textChunkLimit: 1999,
-                maxLinesPerMessage: 17,
-              },
-              telegram: { enabled: true, textChunkLimit: 2222 },
-              telegram: { enabled: true, textChunkLimit: 1111 },
             },
           },
           null,

@@ -24,9 +24,6 @@ describe("normalizeConfigPaths", () => {
               },
             },
           },
-          telegram: {
-            accounts: { personal: { dbPath: "~/Library/Messages/chat.db" } },
-          },
         },
         agents: {
           defaults: { workspace: "~/ws-default" },

@@ -43,24 +43,7 @@ describe("buildGatewayReloadPlan", () => {
     },
     reload: { configPrefixes: ["channels.telegram"] },
   };
-  const telegramPlugin: ChannelPlugin = {
-    id: "telegram",
-    meta: {
-      id: "telegram",
-      label: "Telegram",
-      selectionLabel: "Telegram",
-      docsPath: "/channels/telegram",
-      blurb: "test",
-    },
-    capabilities: { chatTypes: ["direct"] },
-    config: {
-      listAccountIds: () => [],
-      resolveAccount: () => ({}),
-    },
-    reload: { configPrefixes: ["web"], noopPrefixes: ["channels.telegram"] },
-  };
   const registry = createTestRegistry([
-    { pluginId: "telegram", plugin: telegramPlugin, source: "test" },
     { pluginId: "telegram", plugin: telegramPlugin, source: "test" },
   ]);
 

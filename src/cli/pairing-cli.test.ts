@@ -6,7 +6,6 @@ const approveChannelPairingCode = vi.fn();
 const notifyPairingApproved = vi.fn();
 const pairingIdLabels: Record<string, string> = {
   telegram: "telegramUserId",
-  telegram: "telegramUserId",
 };
 const normalizeChannelId = vi.fn((raw: string) => {
   if (!raw) {
@@ -15,7 +14,7 @@ const normalizeChannelId = vi.fn((raw: string) => {
   if (raw === "imsg") {
     return "telegram";
   }
-  if (["telegram", "telegram", "telegram"].includes(raw)) {
+  if (["telegram"].includes(raw)) {
     return raw;
   }
   return null;
@@ -23,7 +22,7 @@ const normalizeChannelId = vi.fn((raw: string) => {
 const getPairingAdapter = vi.fn((channel: string) => ({
   idLabel: pairingIdLabels[channel] ?? "userId",
 }));
-const listPairingChannels = vi.fn(() => ["telegram", "telegram", "telegram"]);
+const listPairingChannels = vi.fn(() => ["telegram"]);
 
 vi.mock("../pairing/pairing-store.js", () => ({
   listChannelPairingRequests,

@@ -12,7 +12,7 @@ describe("applyPluginAutoEnable", () => {
     });
 
     expect(result.config.plugins?.entries?.telegram?.enabled).toBe(false);
-    expect(result.config.plugins?.allow).toEqual(["telegram", "telegram"]);
+    expect(result.config.plugins?.allow).toEqual(["telegram"]);
     expect(result.changes.join("\n")).toContain("Telegram configured, not enabled yet.");
   });
 
@@ -79,7 +79,6 @@ describe("applyPluginAutoEnable", () => {
         config: {
           channels: {
             telegram: { serverUrl: "http://localhost:1234", password: "x" },
-            telegram: { cliPath: "/usr/local/bin/imsg" },
           },
         },
         env: {},
@@ -96,7 +95,6 @@ describe("applyPluginAutoEnable", () => {
         config: {
           channels: {
             telegram: { serverUrl: "http://localhost:1234", password: "x" },
-            telegram: { cliPath: "/usr/local/bin/imsg" },
           },
           plugins: { entries: { telegram: { enabled: true } } },
         },
@@ -112,7 +110,6 @@ describe("applyPluginAutoEnable", () => {
         config: {
           channels: {
             telegram: { serverUrl: "http://localhost:1234", password: "x" },
-            telegram: { cliPath: "/usr/local/bin/imsg" },
           },
           plugins: { entries: { telegram: { enabled: false } } },
         },
@@ -129,7 +126,6 @@ describe("applyPluginAutoEnable", () => {
         config: {
           channels: {
             telegram: { serverUrl: "http://localhost:1234", password: "x" },
-            telegram: { cliPath: "/usr/local/bin/imsg" },
           },
           plugins: { deny: ["telegram"] },
         },

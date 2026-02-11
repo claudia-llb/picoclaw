@@ -107,12 +107,6 @@ describe("runCronIsolatedAgentTurn", () => {
       const storePath = await writeSessionStore(home);
       const deps: CliDeps = {
         sendMessageTelegram: vi.fn(),
-        sendMessageTelegram: vi.fn().mockResolvedValue({
-          messageId: "t1",
-          chatId: "123",
-        }),
-        sendMessageTelegram: vi.fn(),
-        sendMessageTelegram: vi.fn(),
         sendMessageIMessage: vi.fn(),
       };
       // Media should still be delivered even if text is just HEARTBEAT_OK.
@@ -149,12 +143,6 @@ describe("runCronIsolatedAgentTurn", () => {
     await withTempHome(async (home) => {
       const storePath = await writeSessionStore(home);
       const deps: CliDeps = {
-        sendMessageTelegram: vi.fn(),
-        sendMessageTelegram: vi.fn().mockResolvedValue({
-          messageId: "t1",
-          chatId: "123",
-        }),
-        sendMessageTelegram: vi.fn(),
         sendMessageTelegram: vi.fn(),
         sendMessageIMessage: vi.fn(),
       };
