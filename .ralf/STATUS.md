@@ -1,6 +1,6 @@
 # 📊 STATUS — PicoClaw
 
-> Dernière mise à jour : 2026-02-11 18:20
+> Dernière mise à jour : 2026-02-11 18:45
 
 ## Progression
 
@@ -11,28 +11,33 @@
 | Phase 3 — Suppression channels        | ✅ Terminée | 23/23       |
 | Phase 4 — Suppression TTS/Voice       | ✅ Terminée | 6/6         |
 | Phase 5 — Réduction skills/extensions | ✅ Terminée | 8/8         |
-| Phase 6 — Nettoyage final             | 🔄 En cours | 3/7         |
+| Phase 6 — Nettoyage final             | ✅ Terminée | 7/7         |
 
-## Total : 49/53 tâches (92%)
+## Total : 53/53 tâches (100%) 🎉
 
 ```
-[██████████████████████░░] 92%
+[████████████████████████] 100%
 ```
 
-## Prochaine tâche
+## Métriques finales
 
-**Phase 6.4** — Build complet (déjà validé)
-
-## Métriques actuelles
-
-| Métrique   | Avant | Actuel | Target |
-| ---------- | ----- | ------ | ------ |
-| LOC        | 569K  | ~400K  | ~150K  |
-| Skills     | 48    | 3      | 3-5 ✅ |
-| Extensions | 14    | 2      | 2 ✅   |
-| Channels   | 17    | 1      | 1 ✅   |
-| Deps       | 72    | ~50    | ~35    |
+| Métrique   | Avant | Après | Réduction |
+| ---------- | ----- | ----- | --------- |
+| LOC        | 569K  | 454K  | -20%      |
+| Skills     | 48    | 3     | -94%      |
+| Extensions | 14    | 2     | -86%      |
+| Channels   | 17    | 1     | -94%      |
+| Deps       | 72    | 40    | -44%      |
 
 ## Commits Phase 6
 
 - `65e44f9` — refactor: Phase 6 cleanup (deps, docs, reinstall)
+- `4bc29bb` — chore: update RALF status
+
+## Validation
+
+- ✅ Build complet
+- ✅ Tests Telegram (11/11)
+- ✅ Tests Gateway (6/6)
+- ✅ Tests Routing (26/26)
+- ✅ CLI fonctionnel
