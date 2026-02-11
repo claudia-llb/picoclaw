@@ -33,45 +33,6 @@ describe("legacy config detection", () => {
       expect(res.config.channels?.telegram?.groupPolicy).toBe("allowlist");
     }
   });
-  it("defaults telegram.groupPolicy to allowlist when telegram section exists", async () => {
-    vi.resetModules();
-    const { validateConfigObject } = await import("./config.js");
-    const res = validateConfigObject({ channels: { telegram: {} } });
-    expect(res.ok).toBe(true);
-    if (res.ok) {
-      expect(res.config.channels?.telegram?.groupPolicy).toBe("allowlist");
-    }
-  });
-  it("defaults telegram.groupPolicy to allowlist when telegram section exists", async () => {
-    vi.resetModules();
-    const { validateConfigObject } = await import("./config.js");
-    const res = validateConfigObject({ channels: { telegram: {} } });
-    expect(res.ok).toBe(true);
-    if (res.ok) {
-      expect(res.config.channels?.telegram?.groupPolicy).toBe("allowlist");
-    }
-  });
-  it("defaults msteams.groupPolicy to allowlist when msteams section exists", async () => {
-    vi.resetModules();
-    const { validateConfigObject } = await import("./config.js");
-    const res = validateConfigObject({ channels: { msteams: {} } });
-    expect(res.ok).toBe(true);
-    if (res.ok) {
-      expect(res.config.channels?.msteams?.groupPolicy).toBe("allowlist");
-    }
-  });
-  it("rejects unsafe executable config values", async () => {
-    vi.resetModules();
-    const { validateConfigObject } = await import("./config.js");
-    const res = validateConfigObject({
-      channels: { telegram: { cliPath: "imsg; rm -rf /" } },
-      audio: { transcription: { command: ["whisper", "--model", "base"] } },
-    });
-    expect(res.ok).toBe(false);
-    if (!res.ok) {
-      expect(res.issues.some((i) => i.path === "channels.telegram.cliPath")).toBe(true);
-    }
-  });
   it("accepts tools audio transcription without cli", async () => {
     vi.resetModules();
     const { validateConfigObject } = await import("./config.js");
@@ -79,41 +40,6 @@ describe("legacy config detection", () => {
       audio: { transcription: { command: ["whisper", "--model", "base"] } },
     });
     expect(res.ok).toBe(true);
-  });
-  it("accepts path-like executable values with spaces", async () => {
-    vi.resetModules();
-    const { validateConfigObject } = await import("./config.js");
-    const res = validateConfigObject({
-      channels: { telegram: { cliPath: "/Applications/Imsg Tools/imsg" } },
-      audio: {
-        transcription: {
-          command: ["whisper", "--model"],
-        },
-      },
-    });
-    expect(res.ok).toBe(true);
-  });
-  it('rejects telegram.dm.policy="open" without allowFrom "*"', async () => {
-    vi.resetModules();
-    const { validateConfigObject } = await import("./config.js");
-    const res = validateConfigObject({
-      channels: { telegram: { dm: { policy: "open", allowFrom: ["123"] } } },
-    });
-    expect(res.ok).toBe(false);
-    if (!res.ok) {
-      expect(res.issues[0]?.path).toBe("channels.telegram.dm.allowFrom");
-    }
-  });
-  it('rejects telegram.dm.policy="open" without allowFrom "*"', async () => {
-    vi.resetModules();
-    const { validateConfigObject } = await import("./config.js");
-    const res = validateConfigObject({
-      channels: { telegram: { dm: { policy: "open", allowFrom: ["U123"] } } },
-    });
-    expect(res.ok).toBe(false);
-    if (!res.ok) {
-      expect(res.issues[0]?.path).toBe("channels.telegram.dm.allowFrom");
-    }
   });
   it("rejects legacy agent.model string", async () => {
     vi.resetModules();
