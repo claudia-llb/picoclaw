@@ -83,12 +83,7 @@ export default defineConfig({
         "src/tui/**",
         "src/wizard/**",
         // Channel surfaces are largely integration-tested (or manually validated).
-        "src/discord/**",
-        "src/imessage/**",
-        "src/signal/**",
-        "src/slack/**",
         "src/browser/**",
-        "src/channels/web/**",
         "src/telegram/index.ts",
         "src/telegram/proxy.ts",
         "src/telegram/webhook-set.ts",

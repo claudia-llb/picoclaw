@@ -1,12 +1,8 @@
 import type { OpenClawConfig } from "../../config/config.js";
-import type {
-  GroupToolPolicyBySenderConfig,
-  GroupToolPolicyConfig,
-} from "../../config/types.tools.js";
+import type { GroupToolPolicyConfig } from "../../config/types.tools.js";
 import {
   resolveChannelGroupRequireMention,
   resolveChannelGroupToolsPolicy,
-  resolveToolsBySender,
 } from "../../config/group-policy.js";
 
 type GroupMentionParams = {
@@ -94,63 +90,4 @@ export function resolveTelegramGroupToolPolicy(
   });
 }
 
-// Stub functions for removed channels
-export function resolveWhatsAppGroupRequireMention(_params: GroupMentionParams): boolean {
-  return true;
-}
-
-export function resolveIMessageGroupRequireMention(_params: GroupMentionParams): boolean {
-  return true;
-}
-
-export function resolveDiscordGroupRequireMention(_params: GroupMentionParams): boolean {
-  return true;
-}
-
-export function resolveGoogleChatGroupRequireMention(_params: GroupMentionParams): boolean {
-  return true;
-}
-
-export function resolveSlackGroupRequireMention(_params: GroupMentionParams): boolean {
-  return true;
-}
-
-export function resolveBlueBubblesGroupRequireMention(_params: GroupMentionParams): boolean {
-  return true;
-}
-
-export function resolveGoogleChatGroupToolPolicy(
-  _params: GroupMentionParams,
-): GroupToolPolicyConfig | undefined {
-  return undefined;
-}
-
-export function resolveWhatsAppGroupToolPolicy(
-  _params: GroupMentionParams,
-): GroupToolPolicyConfig | undefined {
-  return undefined;
-}
-
-export function resolveIMessageGroupToolPolicy(
-  _params: GroupMentionParams,
-): GroupToolPolicyConfig | undefined {
-  return undefined;
-}
-
-export function resolveDiscordGroupToolPolicy(
-  _params: GroupMentionParams,
-): GroupToolPolicyConfig | undefined {
-  return undefined;
-}
-
-export function resolveSlackGroupToolPolicy(
-  _params: GroupMentionParams,
-): GroupToolPolicyConfig | undefined {
-  return undefined;
-}
-
-export function resolveBlueBubblesGroupToolPolicy(
-  _params: GroupMentionParams,
-): GroupToolPolicyConfig | undefined {
-  return undefined;
-}
+// Removed: stub functions for deleted channels (WhatsApp, Discord, Slack, iMessage, GoogleChat, BlueBubbles)
