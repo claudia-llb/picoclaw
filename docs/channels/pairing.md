@@ -3,13 +3,13 @@ summary: "Pairing overview: approve who can DM you + which nodes can join"
 read_when:
   - Setting up DM access control
   - Pairing a new iOS/Android node
-  - Reviewing OpenClaw security posture
+  - Reviewing PicoClaw security posture
 title: "Pairing"
 ---
 
 # Pairing
 
-“Pairing” is OpenClaw’s explicit **owner approval** step.
+"Pairing" is PicoClaw's explicit **owner approval** step.
 It is used in two places:
 
 1. **DM pairing** (who is allowed to talk to the bot)
@@ -32,18 +32,16 @@ Pairing codes:
 ### Approve a sender
 
 ```bash
-openclaw pairing list telegram
-openclaw pairing approve telegram <CODE>
+picoclaw pairing list telegram
+picoclaw pairing approve telegram <CODE>
 ```
-
-Supported channels: `telegram`, `whatsapp`, `signal`, `imessage`, `discord`, `slack`.
 
 ### Where the state lives
 
-Stored under `~/.openclaw/credentials/`:
+Stored under `~/.picoclaw/credentials/`:
 
-- Pending requests: `<channel>-pairing.json`
-- Approved allowlist store: `<channel>-allowFrom.json`
+- Pending requests: `telegram-pairing.json`
+- Approved allowlist store: `telegram-allowFrom.json`
 
 Treat these as sensitive (they gate access to your assistant).
 
@@ -58,7 +56,7 @@ If you use the `device-pair` plugin, you can do first-time device pairing entire
 
 1. In Telegram, message your bot: `/pair`
 2. The bot replies with two messages: an instruction message and a separate **setup code** message (easy to copy/paste in Telegram).
-3. On your phone, open the OpenClaw iOS app → Settings → Gateway.
+3. On your phone, open the PicoClaw iOS app → Settings → Gateway.
 4. Paste the setup code and connect.
 5. Back in Telegram: `/pair approve`
 
@@ -72,32 +70,20 @@ Treat the setup code like a password while it is valid.
 ### Approve a node device
 
 ```bash
-openclaw devices list
-openclaw devices approve <requestId>
-openclaw devices reject <requestId>
+picoclaw devices list
+picoclaw devices approve <requestId>
+picoclaw devices reject <requestId>
 ```
 
 ### Node pairing state storage
 
-Stored under `~/.openclaw/devices/`:
+Stored under `~/.picoclaw/devices/`:
 
 - `pending.json` (short-lived; pending requests expire)
 - `paired.json` (paired devices + tokens)
-
-### Notes
-
-- The legacy `node.pair.*` API (CLI: `openclaw nodes pending/approve`) is a
-  separate gateway-owned pairing store. WS nodes still require device pairing.
 
 ## Related docs
 
 - Security model + prompt injection: [Security](/gateway/security)
 - Updating safely (run doctor): [Updating](/install/updating)
-- Channel configs:
-  - Telegram: [Telegram](/channels/telegram)
-  - WhatsApp: [WhatsApp](/channels/whatsapp)
-  - Signal: [Signal](/channels/signal)
-  - BlueBubbles (iMessage): [BlueBubbles](/channels/bluebubbles)
-  - iMessage (legacy): [iMessage](/channels/imessage)
-  - Discord: [Discord](/channels/discord)
-  - Slack: [Slack](/channels/slack)
+- Telegram config: [Telegram](/channels/telegram)
