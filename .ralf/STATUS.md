@@ -1,39 +1,42 @@
 # 📊 STATUS — PicoClaw
 
+> Dernière mise à jour : 2026-02-11 18:10
+
 ## Progression
 
+| Phase                                 | Status      | Progression |
+| ------------------------------------- | ----------- | ----------- |
+| Phase 1 — Préparation                 | ✅ Terminée | 4/4         |
+| Phase 2 — Suppression apps/           | ✅ Terminée | 5/5         |
+| Phase 3 — Suppression channels        | ✅ Terminée | 23/23       |
+| Phase 4 — Suppression TTS/Voice       | ✅ Terminée | 6/6         |
+| Phase 5 — Réduction skills/extensions | ✅ Terminée | 8/8         |
+| Phase 6 — Nettoyage final             | 🔄 En cours | 0/7         |
+
+## Total : 46/53 tâches (87%)
+
 ```
-[████████████████░░░░] 42/50 (84%)
+[████████████████████░░░] 87%
 ```
 
-## Phases
+## Prochaine tâche
 
-| Phase                  | Statut      | Tâches |
-| ---------------------- | ----------- | ------ |
-| Phase 1 — Préparation  | ✅ Terminée | 4/4    |
-| Phase 2 — Apps Natives | ✅ Terminée | 5/5    |
-| Phase 3 — Channels     | ✅ Terminée | 23/23  |
-| Phase 4 — Voice/TTS    | ✅ Terminée | 6/6    |
-| Phase 5 — Skills       | 🔄 En cours | 4/4    |
-| Phase 6 — Final        | ⏳ À faire  | 0/8    |
+**Phase 6.1** — Nettoyer package.json - Dépendances restantes
 
-## Dernière mise à jour
+## Métriques actuelles
 
-- **Date :** 2026-02-11 17:05
-- **Tâche :** Phase 5 — Suppression skills et extensions
-- **Statut :** Nettoyage imports en cours (sub-agent)
+| Métrique   | Avant | Actuel | Target |
+| ---------- | ----- | ------ | ------ |
+| LOC        | 569K  | 454K   | ~150K  |
+| Skills     | 48    | 3      | 3-5 ✅ |
+| Extensions | 14    | 2      | 2 ✅   |
+| Channels   | 17    | 1      | 1 ✅   |
 
-## Commits
+## Branches
 
-- `891e506` — chore: init RALF + snapshot before minimal refactoring
-- `f5d96b2` — refactor: remove native apps (iOS/Android/macOS)
-- `726adea` — refactor: remove all channels except Telegram
-- `bf53e21` — refactor: remove voice and TTS features
-
-## Phase 5 — Actions effectuées
-
-- [x] Skills réduits : 48 → 3 (coding-agent, github, weather)
-- [x] Extensions réduites : 14 → 2 (telegram, memory-core)
-- [x] Nettoyage imports en cours (sub-agent actif)
-- [ ] Build validation
-- [ ] Commit Phase 5
+- `phase-1-prep` → merged
+- `phase-2-apps` → merged
+- `phase-3-channels` → merged
+- `phase-4-tts` → merged
+- `phase-5-skills` → pushed
+- `phase-6-final` → **active**
