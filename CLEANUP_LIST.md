@@ -1,6 +1,6 @@
 # 🧹 CLEANUP_LIST — PicoClaw Phase 7
 
-> Généré le 2026-02-11 par essaim d'agents (3/5 terminés)
+> Généré le 2026-02-11 par essaim d'agents (5/5 complétés)
 
 ---
 
@@ -114,14 +114,42 @@ Lignes 98-103 : Mêmes liens à supprimer
 
 ---
 
+## 🧪 TESTS — Références channels supprimés (~20 fichiers)
+
+Tests mentionnant des channels supprimés (vérifier si cassés) :
+
+- src/pairing/pairing-messages.test.ts
+- src/pairing/pairing-store.test.ts
+- src/infra/outbound/message.test.ts
+- src/infra/outbound/target-resolver.test.ts
+- src/channels/ack-reactions.test.ts
+- src/channels/registry.test.ts
+- - ~14 autres fichiers
+
+**Action** : Vérifier si tests passent, sinon adapter/supprimer
+
+---
+
+## 📦 EXPORTS WhatsApp (⚠️ GARDER)
+
+Fonctions utilisées pour migrations legacy :
+
+- `isLegacyWhatsAppAuthFile()` → migrations
+- `mergeWhatsAppConfig()` → merge-config
+- `withWhatsAppPrefix()` → utils
+
+**Action** : NE PAS SUPPRIMER (compatibilité)
+
+---
+
 ## 📊 RÉSUMÉ
 
 | Priorité   | Items | Est. lignes |
 | ---------- | ----- | ----------- |
 | 🔴 Haute   | 3     | ~200        |
 | 🟠 Moyenne | 3     | ~300        |
-| 🟡 Basse   | 3     | ~100        |
-| **TOTAL**  | 9     | **~600**    |
+| 🟡 Basse   | 4     | ~150        |
+| **TOTAL**  | 10    | **~650**    |
 
 ---
 
