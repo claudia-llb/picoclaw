@@ -83,20 +83,17 @@ function inferPeerKind(params: {
 }
 
 function buildBaseSessionKey(params: {
-  cfg: OpenClawConfig;
   agentId: string;
   channel: ChannelId;
   accountId?: string | null;
   peer: RoutePeer;
 }): string {
-  const { sessionKey } = buildAgentSessionKey({
-    cfg: params.cfg,
+  return buildAgentSessionKey({
     agentId: params.agentId,
     channel: params.channel,
     accountId: params.accountId ?? undefined,
     peer: params.peer,
   });
-  return sessionKey;
 }
 
 function resolveTelegramSession(
@@ -123,7 +120,6 @@ function resolveTelegramSession(
     id: peerId,
   };
   const baseSessionKey = buildBaseSessionKey({
-    cfg: params.cfg,
     agentId: params.agentId,
     channel: "telegram",
     accountId: params.accountId,
@@ -157,7 +153,6 @@ function resolveFallbackSession(
   }
   const peer: RoutePeer = { kind: peerKind, id: peerId };
   const baseSessionKey = buildBaseSessionKey({
-    cfg: params.cfg,
     agentId: params.agentId,
     channel: params.channel,
     peer,

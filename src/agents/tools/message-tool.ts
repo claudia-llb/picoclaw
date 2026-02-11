@@ -1,7 +1,6 @@
 import { Type } from "@sinclair/typebox";
 import type { OpenClawConfig } from "../../config/config.js";
 import type { AnyAgentTool } from "./common.js";
-import { BLUEBUBBLES_GROUP_ACTIONS } from "../../channels/plugins/bluebubbles-actions.js";
 import {
   listChannelMessageActions,
   supportsChannelMessageButtons,
@@ -337,16 +336,8 @@ function filterActionsForContext(params: {
   }
   const normalizedTarget =
     normalizeTargetForProvider(channel, currentChannelId) ?? currentChannelId;
-  const lowered = normalizedTarget.trim().toLowerCase();
-  const isGroupTarget =
-    lowered.startsWith("chat_guid:") ||
-    lowered.startsWith("chat_id:") ||
-    lowered.startsWith("chat_identifier:") ||
-    lowered.startsWith("group:");
-  if (isGroupTarget) {
-    return params.actions;
-  }
-  return params.actions.filter((action) => !BLUEBUBBLES_GROUP_ACTIONS.has(action));
+  // No iMessage/BlueBubbles specific filtering needed anymore
+  return params.actions;
 }
 
 function buildMessageToolDescription(options?: {

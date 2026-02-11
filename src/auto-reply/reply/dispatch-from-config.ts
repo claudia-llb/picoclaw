@@ -57,24 +57,11 @@ const isInboundAudioContext = (ctx: FinalizedMsgContext): boolean => {
 };
 
 const resolveSessionTtsAuto = (
-  ctx: FinalizedMsgContext,
-  cfg: OpenClawConfig,
+  _ctx: FinalizedMsgContext,
+  _cfg: OpenClawConfig,
 ): string | undefined => {
-  const targetSessionKey =
-    ctx.CommandSource === "native" ? ctx.CommandTargetSessionKey?.trim() : undefined;
-  const sessionKey = (targetSessionKey ?? ctx.SessionKey)?.trim();
-  if (!sessionKey) {
-    return undefined;
-  }
-  const agentId = resolveSessionAgentId({ sessionKey, config: cfg });
-  const storePath = resolveStorePath(cfg.session?.store, { agentId });
-  try {
-    const store = loadSessionStore(storePath);
-    const entry = store[sessionKey.toLowerCase()] ?? store[sessionKey];
-    return normalizeTtsAutoMode(entry?.ttsAuto);
-  } catch {
-    return undefined;
-  }
+  // TTS removed in PicoClaw
+  return undefined;
 };
 
 export type DispatchFromConfigResult = {
@@ -389,7 +376,7 @@ export async function dispatchReplyFromConfig(params: {
       }
     }
 
-    const ttsMode = resolveTtsConfig(cfg).mode ?? "final";
+    const ttsMode = "final"; // TTS removed in PicoClaw
     // Generate TTS-only reply after block streaming completes (when there's no final reply).
     // This handles the case where block streaming succeeds and drops final payloads,
     // but we still want TTS audio to be generated from the accumulated block content.

@@ -65,6 +65,7 @@ import { fetchRemoteMedia } from "../../media/fetch.js";
 import { getImageMetadata, resizeToJpeg } from "../../media/image-ops.js";
 import { detectMime } from "../../media/mime.js";
 import { saveMediaBuffer } from "../../media/store.js";
+import { loadWebMedia } from "../../media/web-fetch.js";
 import { buildPairingReply } from "../../pairing/pairing-messages.js";
 import {
   readChannelAllowFromStore,
@@ -112,6 +113,7 @@ export function createPluginRuntime(): PluginRuntime {
       formatNativeDependencyHint,
     },
     media: {
+      loadWebMedia,
       detectMime,
       mediaKindFromMime,
       isVoiceCompatibleAudio,
