@@ -1,0 +1,24 @@
+{
+  "project": {
+    "name": "PicoClaw",
+    "path": "/Users/dev/clawd/projects/openClaw",
+    "createdAt": "2026-02-11"
+  },
+  "ralf": {
+    "maxFixAttempts": 3,
+    "taskTimeout": 600,
+    "fixTimeout": 300,
+    "verifyTimeout": 120,
+    "architectTimeout": 120,
+    "sleepBetweenTasks": 5
+  },
+  "verify": {
+    "typecheck": "pnpm build",
+    "test": "pnpm test:unit",
+    "lint": null
+  },
+  "git": {
+    "autoCommit": true,
+    "commitPrefix": "🔄 RALF:"
+  }
+}
