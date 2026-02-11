@@ -16,7 +16,6 @@ type UpsertChannelPairingRequest =
   typeof import("../../pairing/pairing-store.js").upsertChannelPairingRequest;
 type FetchRemoteMedia = typeof import("../../media/fetch.js").fetchRemoteMedia;
 type SaveMediaBuffer = typeof import("../../media/store.js").saveMediaBuffer;
-type TextToSpeechTelephony = typeof import("../../tts/tts.js").textToSpeechTelephony;
 type BuildMentionRegexes = typeof import("../../auto-reply/reply/mentions.js").buildMentionRegexes;
 type MatchesMentionPatterns =
   typeof import("../../auto-reply/reply/mentions.js").matchesMentionPatterns;
@@ -193,9 +192,6 @@ export type PluginRuntime = {
     isVoiceCompatibleAudio: IsVoiceCompatibleAudio;
     getImageMetadata: GetImageMetadata;
     resizeToJpeg: ResizeToJpeg;
-  };
-  tts: {
-    textToSpeechTelephony: TextToSpeechTelephony;
   };
   tools: {
     createMemoryGetTool: CreateMemoryGetTool;

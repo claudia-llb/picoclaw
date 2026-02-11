@@ -1,5 +1,4 @@
 import type { QueueDropPolicy, QueueMode, QueueModeByProvider } from "./types.queue.js";
-import type { TtsConfig } from "./types.tts.js";
 
 export type GroupChatConfig = {
   mentionPatterns?: string[];
@@ -82,8 +81,6 @@ export type MessagesConfig = {
   ackReactionScope?: "group-mentions" | "group-all" | "direct" | "all";
   /** Remove ack reaction after reply is sent (default: false). */
   removeAckAfterReply?: boolean;
-  /** Text-to-speech settings for outbound replies. */
-  tts?: TtsConfig;
 };
 
 export type NativeCommandsSetting = boolean | "auto";

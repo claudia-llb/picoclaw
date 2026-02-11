@@ -30,7 +30,8 @@ import {
   handleUsageCommand,
 } from "./commands-session.js";
 import { handleSubagentsCommand } from "./commands-subagents.js";
-import { handleTtsCommands } from "./commands-tts.js";
+// TTS commands removed
+const handleTtsCommands = async () => null;
 import { routeReply } from "./route-reply.js";
 
 let HANDLERS: CommandHandler[] | null = null;

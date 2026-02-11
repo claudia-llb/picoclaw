@@ -12,7 +12,10 @@ import {
   logSessionStateChange,
 } from "../../logging/diagnostic.js";
 import { getGlobalHookRunner } from "../../plugins/hook-runner-global.js";
-import { maybeApplyTtsToPayload, normalizeTtsAutoMode, resolveTtsConfig } from "../../tts/tts.js";
+// TTS removed in minimal build
+const maybeApplyTtsToPayload = async (p: any) => p;
+const normalizeTtsAutoMode = () => "off";
+const resolveTtsConfig = () => ({});
 import { getReplyFromConfig } from "../reply.js";
 import { formatAbortReplyText, tryFastAbortFromMessage } from "./abort.js";
 import { shouldSkipDuplicateInbound } from "./inbound-dedupe.js";

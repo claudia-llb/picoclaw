@@ -14,7 +14,7 @@ import { buildSystemPromptReport } from "../../agents/system-prompt-report.js";
 import { buildAgentSystemPrompt } from "../../agents/system-prompt.js";
 import { buildToolSummaryMap } from "../../agents/tool-summaries.js";
 import { getRemoteSkillEligibility } from "../../infra/skills-remote.js";
-import { buildTtsSystemPromptHint } from "../../tts/tts.js";
+// TTS removed
 
 function estimateTokensFromChars(chars: number): number {
   return Math.ceil(Math.max(0, chars) / 4);
@@ -136,7 +136,7 @@ async function resolveContextReport(
         },
       }
     : { enabled: false };
-  const ttsHint = params.cfg ? buildTtsSystemPromptHint(params.cfg) : undefined;
+  const ttsHint = undefined; // TTS removed
 
   const systemPrompt = buildAgentSystemPrompt({
     workspaceDir,

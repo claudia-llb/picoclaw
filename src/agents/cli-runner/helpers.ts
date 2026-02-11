@@ -9,7 +9,7 @@ import type { OpenClawConfig } from "../../config/config.js";
 import type { CliBackendConfig } from "../../config/types.js";
 import type { EmbeddedContextFile } from "../pi-embedded-helpers.js";
 import { runExec } from "../../process/exec.js";
-import { buildTtsSystemPromptHint } from "../../tts/tts.js";
+// TTS removed
 import { escapeRegExp, isRecord } from "../../utils.js";
 import { resolveDefaultModelForAgent } from "../model-selection.js";
 import { detectRuntimeShell } from "../shell-utils.js";
@@ -227,7 +227,7 @@ export function buildSystemPrompt(params: {
       shell: detectRuntimeShell(),
     },
   });
-  const ttsHint = params.config ? buildTtsSystemPromptHint(params.config) : undefined;
+  const ttsHint = undefined; // TTS removed
   return buildAgentSystemPrompt({
     workspaceDir: params.workspaceDir,
     defaultThinkLevel: params.defaultThinkLevel,
