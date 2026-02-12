@@ -98,7 +98,7 @@ describe("describeGeminiVideo", () => {
     expect(result.text).toBe("first\nsecond");
     expect(seenUrl).toBe("https://example.com/v1beta/models/gemini-3-pro-preview:generateContent");
     expect(seenInit?.method).toBe("POST");
-    expect(seenInit?.telegram).toBeInstanceOf(AbortTelegram);
+    expect(seenInit?.signal).toBeInstanceOf(AbortSignal);
 
     const headers = new Headers(seenInit?.headers);
     expect(headers.get("x-goog-api-key")).toBe("test-key");

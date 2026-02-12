@@ -363,7 +363,7 @@ describe("browser control server", () => {
           targetId: "abcd1234",
           fn: "() => 1",
           ref: undefined,
-          telegram: expect.any(AbortTelegram),
+          telegram: expect.any(AbortSignal),
         }),
       );
     },

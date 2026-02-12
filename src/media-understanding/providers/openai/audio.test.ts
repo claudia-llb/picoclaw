@@ -93,7 +93,7 @@ describe("transcribeOpenAiCompatibleAudio", () => {
     expect(result.text).toBe("hello");
     expect(seenUrl).toBe("https://api.example.com/v1/audio/transcriptions");
     expect(seenInit?.method).toBe("POST");
-    expect(seenInit?.telegram).toBeInstanceOf(AbortTelegram);
+    expect(seenInit?.signal).toBeInstanceOf(AbortSignal);
 
     const headers = new Headers(seenInit?.headers);
     expect(headers.get("authorization")).toBe("Bearer test-key");

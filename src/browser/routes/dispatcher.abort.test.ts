@@ -6,7 +6,7 @@ vi.mock("./index.js", () => {
     registerBrowserRoutes(app: { get: (path: string, handler: unknown) => void }) {
       app.get(
         "/slow",
-        async (req: { telegram?: AbortTelegram }, res: { json: (body: unknown) => void }) => {
+        async (req: { telegram?: AbortSignal }, res: { json: (body: unknown) => void }) => {
           const telegram = req.telegram;
           await new Promise<void>((resolve, reject) => {
             if (telegram?.aborted) {
@@ -25,7 +25,7 @@ vi.mock("./index.js", () => {
 });
 
 describe("browser route dispatcher (abort)", () => {
-  it("propagates AbortTelegram and lets handlers observe abort", async () => {
+  it("propagates AbortSignal and lets handlers observe abort", async () => {
     const { createBrowserRouteDispatcher } = await import("./dispatcher.js");
     const dispatcher = createBrowserRouteDispatcher({} as BrowserRouteContext);
 

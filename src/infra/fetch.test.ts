@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
-import { wrapFetchWithAbortTelegram } from "./fetch.js";
+import { wrapFetchWithAbortSignal } from "./fetch.js";
 
-describe("wrapFetchWithAbortTelegram", () => {
+describe("wrapFetchWithAbortSignal", () => {
   it("adds duplex for requests with a body", async () => {
     let seenInit: RequestInit | undefined;
     const fetchImpl = vi.fn(async (_input: RequestInfo | URL, init?: RequestInit) => {
@@ -9,24 +9,24 @@ describe("wrapFetchWithAbortTelegram", () => {
       return {} as Response;
     });
 
-    const wrapped = wrapFetchWithAbortTelegram(fetchImpl);
+    const wrapped = wrapFetchWithAbortSignal(fetchImpl);
 
     await wrapped("https://example.com", { method: "POST", body: "hi" });
 
     expect(seenInit?.duplex).toBe("half");
   });
 
-  it("converts foreign abort telegrams to native controllers", async () => {
-    let seenTelegram: AbortTelegram | undefined;
+  it("converts foreign abort signals to native controllers", async () => {
+    let seenSignal: AbortSignal | undefined;
     const fetchImpl = vi.fn(async (_input: RequestInfo | URL, init?: RequestInit) => {
-      seenTelegram = init?.telegram as AbortTelegram | undefined;
+      seenSignal = init?.signal as AbortSignal | undefined;
       return {} as Response;
     });
 
-    const wrapped = wrapFetchWithAbortTelegram(fetchImpl);
+    const wrapped = wrapFetchWithAbortSignal(fetchImpl);
 
     let abortHandler: (() => void) | null = null;
-    const fakeTelegram = {
+    const fakeSignal = {
       aborted: false,
       addEventListener: (event: string, handler: () => void) => {
         if (event === "abort") {
@@ -38,15 +38,15 @@ describe("wrapFetchWithAbortTelegram", () => {
           abortHandler = null;
         }
       },
-    } as AbortTelegram;
+    } as AbortSignal;
 
-    const promise = wrapped("https://example.com", { telegram: fakeTelegram });
+    const promise = wrapped("https://example.com", { signal: fakeSignal });
     expect(fetchImpl).toHaveBeenCalledOnce();
-    expect(seenTelegram).toBeInstanceOf(AbortTelegram);
-    expect(seenTelegram).not.toBe(fakeTelegram);
+    expect(seenSignal).toBeInstanceOf(AbortSignal);
+    expect(seenSignal).not.toBe(fakeSignal);
 
     abortHandler?.();
-    expect(seenTelegram?.aborted).toBe(true);
+    expect(seenSignal?.aborted).toBe(true);
 
     await promise;
   });

@@ -139,7 +139,7 @@ describe("runReplyAgent typing (heartbeat)", () => {
     const [blockPayload, blockOpts] = onBlockReply.mock.calls[0] ?? [];
     expect(blockPayload).toMatchObject({ text: "chunk", audioAsVoice: false });
     expect(blockOpts).toMatchObject({
-      abortTelegram: expect.any(AbortTelegram),
+      abortTelegram: expect.any(AbortSignal),
       timeoutMs: expect.any(Number),
     });
   });
